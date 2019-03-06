@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "88314986807",
+    "firebase_url": "https://haters-f9398.firebaseio.com",
+    "project_id": "haters-f9398",
+    "storage_bucket": "haters-f9398.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88314986807:android:885a764eba4ef69e",
+        "android_client_info": {
+          "package_name": "com.jiec.basketball"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "88314986807-okqsm38cifs764m08r9g930i6qkm6cv3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAroNv32Cf76LJhX0ahBAcMClrnpzWvs50"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

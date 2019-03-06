@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primary">@color/red</color>
+    <color name="primary_dark">@color/red</color>
+    <color name="primary_light">@color/red</color>
+    <color name="accent">@color/red</color>
+
+    <color name="background">#f4f4f4</color>
+    <color name="divider">#c0c0c0</color>
+
+
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#FFFFFF</color>
+
+    <color name="red">#fc562e</color>
+    <color name="red_dark">#ff502e</color>
+
+    <color name="black_overlay">#66000000</color>
+</resources>

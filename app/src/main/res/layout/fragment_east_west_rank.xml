@@ -1,0 +1,49 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.jiec.basketball.ui.game.detail.statistic.GameStatisticMainFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="東部"
+            android:textStyle="bold"
+            android:textColor="@color/red_dark"
+            android:textSize="@dimen/sp_16" />
+
+        <include layout="@layout/layout_divider" />
+
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/st_team_rank_east"
+            android:layout_width="match_parent"
+            android:layout_height="420dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="西部"
+            android:textStyle="bold"
+            android:textColor="@color/red_dark"
+            android:textSize="@dimen/sp_16" />
+
+        <include layout="@layout/layout_divider" />
+
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/st_team_rank_west"
+            android:layout_width="match_parent"
+            android:layout_height="420dp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,821 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.jiec.basketball.ui.game.detail.statistic.GameStatisticMainFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical|left"
+                android:paddingLeft="15dp"
+                android:text="球隊"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="Q1"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="Q2"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="Q3"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="Q4"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_ot1"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="OT1"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_ot2"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="OT2"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_ot3"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="OT3"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="總分"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <include layout="@layout/layout_divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_home"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical|left"
+                android:paddingLeft="15dp"
+                android:text="主隊"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_home_q1"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/tv_home_q2"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/tv_home_q3"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/tv_home_q4"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/tv_home_ot1"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_home_ot2"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_home_ot3"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_home_sum"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="0"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_away"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical|left"
+                android:paddingLeft="15dp"
+                android:text="客隊"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_away_q1"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/tv_away_q2"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/tv_away_q3"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/tv_away_q4"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/tv_away_ot1"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_away_ot2"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_away_ot3"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_away_sum"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="0"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="#eeeeee" />
+
+        <TextView
+            style="@style/MainText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="球隊本場數據對比" />
+
+        <include layout="@layout/layout_divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_pts"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="得分" />
+
+
+            <TextView
+                android:id="@+id/tv_away_pts"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_reb"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="籃板" />
+
+
+            <TextView
+                android:id="@+id/tv_away_reb"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_ass"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="助攻" />
+
+
+            <TextView
+                android:id="@+id/tv_away_ass"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_blk"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="蓋帽" />
+
+
+            <TextView
+                android:id="@+id/tv_away_blk"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_stl"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/data_tab_stl" />
+
+
+            <TextView
+                android:id="@+id/tv_away_stl"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+
+        <include layout="@layout/layout_divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_rate_shoot"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="投籃命中率" />
+
+
+            <TextView
+                android:id="@+id/tv_away_rate_shoot"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_rate_3shoot"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:lines="1"
+                android:text="3分投籃命中率" />
+
+
+            <TextView
+                android:id="@+id/tv_away_rate_3shoot"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_rate_fshoot"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:lines="1"
+                android:text="罰籃命中率" />
+
+
+            <TextView
+                android:id="@+id/tv_away_rate_fshoot"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="#eeeeee" />
+
+        <TextView
+            style="@style/MainText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="球員本場數據對比" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_max_pts"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:lines="1"
+                android:text="@string/data_tab_pts" />
+
+
+            <TextView
+                android:id="@+id/tv_away_max_pts"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_max_pts_name"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+
+            <TextView
+                android:id="@+id/tv_away_max_pts_name"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <include layout="@layout/layout_divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_max_ass"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:lines="1"
+                android:text="@string/data_tab_ast" />
+
+
+            <TextView
+                android:id="@+id/tv_away_max_ass"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_max_ass_name"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+
+            <TextView
+                android:id="@+id/tv_away_max_ass_name"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <include layout="@layout/layout_divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_max_reb"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+            <TextView
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:lines="1"
+                android:text="@string/data_tab_reb" />
+
+
+            <TextView
+                android:id="@+id/tv_away_max_reb"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_home_max_reb_name"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/green" />
+
+
+            <TextView
+                android:id="@+id/tv_away_max_reb_name"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="--"
+                android:textColor="@color/red_dark" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

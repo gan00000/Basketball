@@ -1,0 +1,135 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/divider"
+    android:orientation="vertical"
+    tools:context="com.jiec.basketball.ui.home.HomePageFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <com.youth.banner.Banner
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_view_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <com.wangcj.common.widget.PressTextView
+                    android:id="@+id/load_more_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:clickable="true"
+                    android:text="@string/load_more"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/sp_20" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_view_move"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <com.wangcj.common.widget.PressTextView
+                    android:id="@+id/load_more_move"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:clickable="true"
+                    android:text="@string/load_more"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/sp_20" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_view_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <com.wangcj.common.widget.PressTextView
+                    android:id="@+id/load_more_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:clickable="true"
+                    android:text="@string/load_more"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/sp_20" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_view_teach"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <com.wangcj.common.widget.PressTextView
+                    android:id="@+id/load_more_teach"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:clickable="true"
+                    android:text="@string/load_more"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/sp_20" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,117 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.jiec.basketball.ui.game.detail.statistic.GameStatisticMainFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="大西洋賽區 - 東部"
+            android:textStyle="bold"
+            android:textColor="@color/red_dark"
+            android:textSize="@dimen/sp_16" />
+
+        <include layout="@layout/layout_divider" />
+
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/st_eastern_atlantic"
+            android:layout_width="match_parent"
+            android:layout_height="160dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="中部賽區 - 東部"
+            android:textStyle="bold"
+            android:textColor="@color/red_dark"
+            android:textSize="@dimen/sp_16" />
+
+        <include layout="@layout/layout_divider" />
+
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/st_eastern_central"
+            android:layout_width="match_parent"
+            android:layout_height="160dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="東南賽區 - 東部"
+            android:textStyle="bold"
+            android:textColor="@color/red_dark"
+            android:textSize="@dimen/sp_16" />
+
+        <include layout="@layout/layout_divider" />
+
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/st_eastern_southeast"
+            android:layout_width="match_parent"
+            android:layout_height="160dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="西南賽區 - 西部"
+            android:textStyle="bold"
+            android:textColor="@color/red_dark"
+            android:textSize="@dimen/sp_16" />
+
+        <include layout="@layout/layout_divider" />
+
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/st_western_northwest"
+            android:layout_width="match_parent"
+            android:layout_height="160dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="太平洋賽區 - 西部"
+            android:textStyle="bold"
+            android:textColor="@color/red_dark"
+            android:textSize="@dimen/sp_16" />
+
+        <include layout="@layout/layout_divider" />
+
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/st_western_pacific"
+            android:layout_width="match_parent"
+            android:layout_height="160dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="西北賽區 - 西部"
+            android:textStyle="bold"
+            android:textColor="@color/red_dark"
+            android:textSize="@dimen/sp_16" />
+
+        <include layout="@layout/layout_divider" />
+
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/st_western_southwest"
+            android:layout_width="match_parent"
+            android:layout_height="160dp" />
+
+    </LinearLayout>
+</ScrollView>
