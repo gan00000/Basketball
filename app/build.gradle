@@ -24,6 +24,7 @@ android {
 
     signingConfigs {
         config {
+            //打包签名信息
             keyAlias 'haters'
             keyPassword 'woshiwbjso'
             storeFile file('keystore.jks')
