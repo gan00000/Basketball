@@ -5,8 +5,11 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import com.blankj.utilcode.util.Utils;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.jiec.basketball.bean.UserInfoBean;
+import com.jiec.basketball.dao.UserDao;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
@@ -18,7 +21,7 @@ import com.wangcj.common.utils.ToastUtil;
 public class BallApplication extends MultiDexApplication {
 
     private static final String TAG = "BallApplication";
-
+    public static UserInfoBean userInfo;
     private static Context sContext;
 
     @Override
@@ -26,7 +29,7 @@ public class BallApplication extends MultiDexApplication {
         super.onCreate();
 
         sContext = this;
-
+        Utils.init(this);
         ToastUtil.init(sContext);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -52,6 +55,16 @@ public class BallApplication extends MultiDexApplication {
                 Log.e(TAG, "注册失败：-------->  " + "s:" + s + ",s1:" + s1);
             }
         });
+
+        initUserInfo(getApplicationContext());
+    }
+
+    /**
+     * 初始化用户信息
+     * @param applicationContext
+     */
+    private void initUserInfo(Context applicationContext) {
+        userInfo = UserDao.getInstance().decodeUserInfo(applicationContext);
     }
 
     public static Context getContext() {

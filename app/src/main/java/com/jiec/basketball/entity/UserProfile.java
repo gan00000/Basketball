@@ -42,10 +42,19 @@ public class UserProfile extends CommResponse {
          * user_img : http://test.ballgametime.com/img/no-img.png
          */
 
+        private String user_id;
         private String display_name;
         private String user_email;
         private String user_status;
         private String user_img;
+
+        public String getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
+        }
 
         public String getDisplay_name() {
             return display_name;

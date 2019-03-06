@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseActivity;
 import com.jiec.basketball.core.UserManager;
@@ -19,7 +20,10 @@ import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.UserApi;
+import com.jiec.basketball.utils.BallPreferencesUtils;
+import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
+import com.jiec.basketball.utils.InputCheckUtils;
 import com.jiec.basketball.widget.CircleSImageView;
 import com.wangcj.common.utils.ThreadUtils;
 import com.wangcj.common.utils.ToastUtil;
@@ -29,6 +33,8 @@ import java.io.ByteArrayOutputStream;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.jiec.basketball.core.BallApplication.userInfo;
 
 /**
  * Created by Jiec on 2019/1/13.
@@ -57,11 +63,17 @@ public class UserInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_user_info);
         ButterKnife.bind(this);
 
-        UserProfile userProfile = UserManager.instance().getUserProfile();
-        mTvName.setText("用戶名（" + userProfile.getResult().getDisplay_name() + "）");
-        if (!TextUtils.isEmpty(userProfile.getResult().getUser_email())) {
-            mTvEmail.setText("郵件（" + userProfile.getResult().getUser_email() + "）");
+        //是否可以更改，默认可以
+        boolean isModify = SPUtils.getInstance().getBoolean("isModify", true);
+        if( !isModify){
+            mEtName.setVisibility(View.GONE);
         }
+        mTvName.setText("用戶名（" + userInfo.display_name + "）");
+        if (!TextUtils.isEmpty(userInfo.user_email)) {
+            mTvEmail.setText("郵件（" + userInfo.user_email+ "）");
+        }
+        ImageLoaderUtils.display(this, mIvHead, EmptyUtils.emptyOfString(userInfo.user_img) ? " " : userInfo.user_img,
+                R.drawable.img_default_head, R.drawable.img_default_head);
     }
 
     @OnClick({R.id.tv_save, R.id.iv_head})
@@ -116,15 +128,22 @@ public class UserInfoActivity extends BaseActivity {
         return bmp;
     }
 
+    /**
+     * 更新用户信息
+     */
     public void updateInfo() {
         String email = mEtEmail.getText().toString().trim();
         String name = mEtName.getText().toString().trim();
-        if (TextUtils.isEmpty(email) || !email.contains("@")) email = null;
-        if (TextUtils.isEmpty(name) || name.equals("請填寫用戶名")) name = null;
-
+        if (TextUtils.isEmpty(email) || !email.contains("@")){
+            email = userInfo.user_email;
+        }
+        if (TextUtils.isEmpty(name)){
+            name = userInfo.display_name;
+        }
 
         showLoading();
         UserApi userApi = RetrofitClient.getInstance().create(UserApi.class);
+        String finalName = name;
         userApi.updateProfile(UserManager.instance().getToken(), email, name, mHeadBase64)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<UserProfile>() {
@@ -132,6 +151,9 @@ public class UserInfoActivity extends BaseActivity {
                     protected void onSuccess(UserProfile result) {
                         UserManager.instance().updateProfile(result);
                         mIsSaving = false;
+                        if( !InputCheckUtils.compareIsEqual(finalName, userInfo.display_name)){
+                            SPUtils.getInstance().put("isModify", true);
+                        }
                         hideLoading();
                         ToastUtil.showMsg("更新成功");
                         finish();

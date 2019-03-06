@@ -5,22 +5,26 @@ import android.text.TextUtils;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.jiec.basketball.R;
+import com.jiec.basketball.bean.UserInfoBean;
+import com.jiec.basketball.dao.UserDao;
 import com.jiec.basketball.entity.LoginResult;
 import com.jiec.basketball.entity.UserProfile;
 import com.jiec.basketball.event.LoginEvent;
-import com.jiec.basketball.event.LogoutEvent;
-import com.jiec.basketball.event.UserProfileRefreshEvent;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.UserApi;
 import com.jiec.basketball.utils.BallPreferencesUtils;
+import com.jiec.basketball.utils.ConstantUtils;
 import com.jiec.basketball.utils.Constants;
+import com.jiec.basketball.utils.EventBusEvent;
 import com.linecorp.linesdk.api.LineApiClient;
 import com.linecorp.linesdk.api.LineApiClientBuilder;
 import com.wangcj.common.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by Jiec on 2019/1/6.
@@ -57,7 +61,6 @@ public class UserManager {
         if (mLoginResult != null) {
             return mLoginResult.getResult().getUser_token();
         }
-
         return null;
     }
 
@@ -83,6 +86,9 @@ public class UserManager {
         return false;
     }
 
+    /**
+     * 注销登录
+     */
     public void logout() {
         LineApiClientBuilder apiClientBuilder = new LineApiClientBuilder(BallApplication.getContext(), Constants.LINE_CHANNEL_ID);
         LineApiClient lineApiClient = apiClientBuilder.build();
@@ -92,13 +98,13 @@ public class UserManager {
         }
 
         LoginManager.getInstance().logOut();
-
         mUserProfile = null;
         mLoginResult = null;
+        UserDao.getInstance().exitLogin(getApplicationContext());
+        EventBus.getDefault()
+                .post(new EventBusEvent(ConstantUtils.EVENT_LOGIN_OUT, UserManager.class, null));
 
-        EventBus.getDefault().post(new LogoutEvent());
-
-        ToastUtil.showMsg("退出登陸成功");
+        ToastUtil.showMsg("退出登錄成功");
     }
 
     /**
@@ -131,7 +137,6 @@ public class UserManager {
                     protected void onSuccess(LoginResult result) {
                         mLoginResult = result;
                         EventBus.getDefault().post(new LoginEvent());
-
                         refreshProfile();
                     }
 
@@ -166,9 +171,24 @@ public class UserManager {
                 });
     }
 
+    /**
+     * 更新用户信息
+     * @param result
+     */
     public void updateProfile(UserProfile result) {
         mUserProfile = result;
-        EventBus.getDefault().post(new UserProfileRefreshEvent());
+
+        UserInfoBean userInfoBean = new UserInfoBean();
+        userInfoBean.user_token = mLoginResult.getResult().getUser_token();
+        userInfoBean.user_id = result.getResult().getUser_id();
+        userInfoBean.display_name = result.getResult().getDisplay_name();
+        userInfoBean.user_email = result.getResult().getUser_email();
+        userInfoBean.user_status = result.getResult().getUser_status();
+        userInfoBean.user_img = result.getResult().getUser_img();
+        BallApplication.userInfo = userInfoBean;
+        UserDao.getInstance().encodeAndSaveUserInfo(getApplicationContext(), userInfoBean);
+        EventBus.getDefault()
+                .post(new EventBusEvent(ConstantUtils.EVENT_LOGIN, UserManager.class, null));
     }
 
 
@@ -205,4 +225,5 @@ public class UserManager {
 
         return null;
     }
+
 }

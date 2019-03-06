@@ -20,14 +20,14 @@
             android:textSize="@dimen/sp_23"
             android:textStyle="bold" />
 
-        <com.wangcj.common.widget.PressImageView
+        <com.wangcj.common.widget.CircleSImageView
             android:id="@+id/iv_mine"
             android:layout_width="38dp"
             android:layout_height="38dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:clickable="true"
-            android:src="@drawable/img_default_head" />
+             />
     </RelativeLayout>
 
     <com.flyco.tablayout.CommonTabLayout

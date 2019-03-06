@@ -12,8 +12,6 @@ import com.jiec.basketball.base.BaseUIActivity;
 import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.UserProfile;
 import com.jiec.basketball.event.LoginEvent;
-import com.jiec.basketball.event.LogoutEvent;
-import com.jiec.basketball.event.UserProfileRefreshEvent;
 import com.jiec.basketball.ui.mine.collection.CollectionActivity;
 import com.jiec.basketball.ui.mine.comment.CommentActivity;
 import com.jiec.basketball.ui.mine.history.HistoryActivity;
@@ -21,6 +19,8 @@ import com.jiec.basketball.ui.mine.like.LikeActivity;
 import com.jiec.basketball.ui.mine.login.LoginActivity;
 import com.jiec.basketball.ui.mine.notify.NotifyActivity;
 import com.jiec.basketball.ui.mine.setting.SettingActivity;
+import com.jiec.basketball.utils.ConstantUtils;
+import com.jiec.basketball.utils.EventBusEvent;
 import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.wangcj.common.widget.CircleSImageView;
 import com.wangcj.common.widget.PressRelativeLayout;
@@ -60,6 +60,7 @@ public class MineActivity extends BaseUIActivity {
 
         EventBus.getDefault().register(this);
 
+
         if (!UserManager.instance().checkLogin()) {
             mTvName.setText("未登錄");
             tvLogin.setVisibility(View.VISIBLE);
@@ -91,7 +92,7 @@ public class MineActivity extends BaseUIActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick({R.id.rl_info, R.id.layout_collection, R.id.item_notify,R.id.tv_login,
+    @OnClick({R.id.rl_info, R.id.layout_collection, R.id.item_notify, R.id.tv_login,
             R.id.layout_comment, R.id.layout_zan, R.id.layout_history})
     public void onViewClicked(View view) {
         if (!UserManager.instance().checkLogin()) {
@@ -139,19 +140,17 @@ public class MineActivity extends BaseUIActivity {
         hideLoading();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(UserProfileRefreshEvent event) {
-        hideLoading();
-        update();
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(LogoutEvent event) {
+    public void onEvent(EventBusEvent event) {
         hideLoading();
         update();
-
-        mIvHead.setImageResource(R.drawable.img_default_head);
-        mTvName.setText("用戶");
+        switch (event.status){
+            case ConstantUtils.EVENT_LOGIN_OUT:
+                mIvHead.setImageResource(R.drawable.img_default_head);
+                mTvName.setText("用戶");
+                break;
+        }
     }
 
     /**

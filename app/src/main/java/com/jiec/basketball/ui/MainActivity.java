@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -14,8 +15,6 @@ import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseActivity;
 import com.jiec.basketball.core.ServerTimeManager;
 import com.jiec.basketball.core.UpdateManager;
-import com.jiec.basketball.core.UserManager;
-import com.jiec.basketball.entity.UserProfile;
 import com.jiec.basketball.entity.response.TimeResponse;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.RetrofitClient;
@@ -25,13 +24,24 @@ import com.jiec.basketball.ui.game.GameMainFragment;
 import com.jiec.basketball.ui.mine.MineActivity;
 import com.jiec.basketball.ui.news.NewsListFragment;
 import com.jiec.basketball.ui.rank.RankMainFragment;
+import com.jiec.basketball.utils.EmptyUtils;
+import com.jiec.basketball.utils.EventBusEvent;
+import com.jiec.basketball.utils.EventBusUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
+import com.wangcj.common.widget.CircleSImageView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static com.jiec.basketball.core.BallApplication.userInfo;
+import static com.jiec.basketball.utils.ConstantUtils.EVENT_LOGIN;
+import static com.jiec.basketball.utils.ConstantUtils.EVENT_LOGIN_OUT;
 
 /**
  * Description : 主界面
@@ -49,7 +59,7 @@ public class MainActivity extends BaseActivity {
             R.drawable.icon_film_pressed, R.drawable.icon_data_pressed, R.drawable.icon_rank_pressed};
 
     private CommonTabLayout mTabLayout;
-    private ImageView ivMine;
+    private CircleSImageView ivMine;
 
     private ArrayList<Fragment> mFragments;
 
@@ -62,7 +72,19 @@ public class MainActivity extends BaseActivity {
         initView();
         getServerTime();
 
-        UserManager.instance().autoLogin();
+//        UserManager.instance().autoLogin(); //??????
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBusUtils.registerEvent(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBusUtils.unRegisteredEvent(this);
     }
 
     private void getServerTime() {
@@ -90,21 +112,16 @@ public class MainActivity extends BaseActivity {
 
     private void initFragment() {
         mFragments = new ArrayList<>();
-
-
         mFragments.add(GameMainFragment.newInstance());
         mFragments.add(NewsListFragment.newInstance());
         mFragments.add(FilmListFragment.newInstance());
         mFragments.add(DataMainFragment.newInstance());
         mFragments.add(RankMainFragment.newInstance());
-
     }
-
 
 
     private void initView() {
         mTabLayout = (CommonTabLayout) findViewById(R.id.tab_layout);
-
 
         ArrayList<CustomTabEntity> tabEntities = new ArrayList<>();
 
@@ -126,19 +143,15 @@ public class MainActivity extends BaseActivity {
         });
 
 
-         ivMine = (ImageView) findViewById(R.id.iv_mine);
-
-        UserProfile userProfile = UserManager.instance().getUserProfile();
-//        ImageLoaderUtils.display(this, ivMine, userProfile.getResult().getUser_img(),
-//                R.drawable.img_default_head, R.drawable.img_default_head);
-
+         ivMine = (CircleSImageView) findViewById(R.id.iv_mine);
+        ImageLoaderUtils.display(this, ivMine, EmptyUtils.emptyOfString(userInfo.user_img) ? " " : userInfo.user_img,
+                R.drawable.img_default_head, R.drawable.img_default_head);
         ivMine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, MineActivity.class));
             }
         });
-
 
         new UpdateManager(MainActivity.this).checkUpdate();
     }
@@ -175,4 +188,20 @@ public class MainActivity extends BaseActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusEvent event) {
+        switch (event.status){
+            case EVENT_LOGIN:
+                ImageLoaderUtils.display(this, ivMine, EmptyUtils.emptyOfString(userInfo.user_img) ? " " : userInfo.user_img,
+                        R.drawable.img_default_head, R.drawable.img_default_head);
+                break;
+
+            case EVENT_LOGIN_OUT:
+                ivMine.setImageResource(R.drawable.img_default_head);
+                break;
+        }
+    }
+
+
 }
