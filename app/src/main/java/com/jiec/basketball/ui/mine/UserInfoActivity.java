@@ -29,6 +29,8 @@ import com.wangcj.common.utils.ThreadUtils;
 import com.wangcj.common.utils.ToastUtil;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,9 +54,8 @@ public class UserInfoActivity extends BaseActivity {
     @BindView(R.id.tv_email)
     TextView mTvEmail;
 
-    String mHeadBase64;
-
-    boolean mIsSaving = false;
+    private String mHeadBase64;
+    private boolean isModify;  //是否可以更改，默认可以
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,8 +64,8 @@ public class UserInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_user_info);
         ButterKnife.bind(this);
 
-        //是否可以更改，默认可以
-        boolean isModify = SPUtils.getInstance().getBoolean("isModify", true);
+
+         isModify = SPUtils.getInstance().getBoolean("isModify", false);
         if( !isModify){
             mEtName.setVisibility(View.GONE);
         }
@@ -80,10 +81,7 @@ public class UserInfoActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_save:
-                if (!mIsSaving) {
-                    mIsSaving = true;
                     updateInfo();
-                }
                 break;
             case R.id.iv_head:
                 startActivityForResult(new Intent(this, HeadActivity.class), 10000);
@@ -134,26 +132,33 @@ public class UserInfoActivity extends BaseActivity {
     public void updateInfo() {
         String email = mEtEmail.getText().toString().trim();
         String name = mEtName.getText().toString().trim();
-        if (TextUtils.isEmpty(email) || !email.contains("@")){
-            email = userInfo.user_email;
+        Map<String, String> paramsMap = new HashMap<>();
+        paramsMap.put("token", UserManager.instance().getToken());
+        if( !EmptyUtils.emptyOfString(email)){
+            if( !InputCheckUtils.checkInputIsEmail(email)){
+                ToastUtil.showMsg("請填寫正確的郵箱");
+                return;
+            }
+            paramsMap.put("email",email);
         }
-        if (TextUtils.isEmpty(name)){
-            name = userInfo.display_name;
+        if( !EmptyUtils.emptyOfString(mHeadBase64)){
+            paramsMap.put("file",mHeadBase64);
+        }
+        if(isModify){
+            paramsMap.put("display_name",name);
         }
 
         showLoading();
         UserApi userApi = RetrofitClient.getInstance().create(UserApi.class);
-        String finalName = name;
-        userApi.updateProfile(UserManager.instance().getToken(), email, name, mHeadBase64)
+
+//        userApi.updateProfile(UserManager.instance().getToken(), email, name, mHeadBase64)
+        userApi.updateProfile(paramsMap)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<UserProfile>() {
                     @Override
                     protected void onSuccess(UserProfile result) {
                         UserManager.instance().updateProfile(result);
-                        mIsSaving = false;
-                        if( !InputCheckUtils.compareIsEqual(finalName, userInfo.display_name)){
-                            SPUtils.getInstance().put("isModify", true);
-                        }
+
                         hideLoading();
                         ToastUtil.showMsg("更新成功");
                         finish();
@@ -162,7 +167,6 @@ public class UserInfoActivity extends BaseActivity {
                     @Override
                     protected void onFailed(int code, String reason) {
                         ToastUtil.showMsg("更新失敗");
-                        mIsSaving = false;
                         hideLoading();
                     }
                 });

@@ -54,7 +54,7 @@ public class MyCommentAdapter extends BaseListAdapter<NewsBean> {
             ((ItemViewHolder) holder).tvTitle.setText(news.getTitle());
             ((ItemViewHolder) holder).tvTitle.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            ((ItemViewHolder) holder).tvTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnItemClickedListener != null) {

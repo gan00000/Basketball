@@ -4,14 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIActivity;
+import com.jiec.basketball.bean.NotifyCounterModel;
 import com.jiec.basketball.core.UserManager;
+import com.jiec.basketball.entity.LoginResult;
 import com.jiec.basketball.entity.UserProfile;
 import com.jiec.basketball.event.LoginEvent;
+import com.jiec.basketball.network.NetSubscriber;
+import com.jiec.basketball.network.NetTransformer;
+import com.jiec.basketball.network.RetrofitClient;
+import com.jiec.basketball.network.UserApi;
 import com.jiec.basketball.ui.mine.collection.CollectionActivity;
 import com.jiec.basketball.ui.mine.comment.CommentActivity;
 import com.jiec.basketball.ui.mine.history.HistoryActivity;
@@ -22,7 +29,9 @@ import com.jiec.basketball.ui.mine.setting.SettingActivity;
 import com.jiec.basketball.utils.ConstantUtils;
 import com.jiec.basketball.utils.EventBusEvent;
 import com.jiec.basketball.utils.ImageLoaderUtils;
+import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.CircleSImageView;
+import com.wangcj.common.widget.ItemLayout;
 import com.wangcj.common.widget.PressRelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,6 +41,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import q.rorbin.badgeview.QBadgeView;
+
+import static com.jiec.basketball.core.BallApplication.userInfo;
 
 
 public class MineActivity extends BaseUIActivity {
@@ -45,6 +57,8 @@ public class MineActivity extends BaseUIActivity {
     TextView tvLogin;
     @BindView(R.id.rl_info)
     PressRelativeLayout rlInfo;
+    @BindView(R.id.item_notify)
+    ItemLayout rlNotify;
 
     public static void show(Context context) {
         Intent intent = new Intent(context, MineActivity.class);
@@ -54,12 +68,10 @@ public class MineActivity extends BaseUIActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_mine);
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
-
 
         if (!UserManager.instance().checkLogin()) {
             mTvName.setText("未登錄");
@@ -68,8 +80,31 @@ public class MineActivity extends BaseUIActivity {
         } else if (UserManager.instance().isLogin()) {
             tvLogin.setVisibility(View.GONE);
             rlInfo.setVisibility(View.VISIBLE);
+            getNotifyCounter();
         }
     }
+
+    /**
+     * 获取未读消息数量
+     */
+    private void getNotifyCounter(){
+        UserApi userApi = RetrofitClient.getInstance().create(UserApi.class);
+        userApi.getNotifyCounter(userInfo.user_token)
+                .compose(new NetTransformer<>())
+                .subscribe(new NetSubscriber<NotifyCounterModel>() {
+                    @Override
+                    protected void onSuccess(NotifyCounterModel result) {
+                        new QBadgeView(MineActivity.this).bindTarget(rlNotify.findViewById(com.wangcj.common.R.id.tv_title))
+                                .setBadgeNumber(Integer.parseInt(result.getResult().getTotal_unread()));
+                    }
+
+                    @Override
+                    protected void onFailed(int code, String reason) {
+                    }
+                });
+    }
+
+
 
     @Override
     protected void onResume() {
@@ -135,6 +170,20 @@ public class MineActivity extends BaseUIActivity {
         }
     }
 
+    /**
+     * 更新用戶信息
+     */
+    private void update() {
+        if (UserManager.instance().getUserProfile() == null) return;
+
+        tvLogin.setVisibility(View.GONE);
+        rlInfo.setVisibility(View.VISIBLE);
+        UserProfile userProfile = UserManager.instance().getUserProfile();
+        ImageLoaderUtils.display(this, mIvHead, userProfile.getResult().getUser_img(),
+                R.drawable.img_default_head, R.drawable.img_default_head);
+        mTvName.setText(userProfile.getResult().getDisplay_name());
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(LoginEvent event) {
         hideLoading();
@@ -149,22 +198,15 @@ public class MineActivity extends BaseUIActivity {
             case ConstantUtils.EVENT_LOGIN_OUT:
                 mIvHead.setImageResource(R.drawable.img_default_head);
                 mTvName.setText("用戶");
+                new QBadgeView(MineActivity.this).bindTarget(rlNotify.findViewById(com.wangcj.common.R.id.tv_title))
+                        .setBadgeNumber(0);
                 break;
+
+                case ConstantUtils.EVENT_LOGIN:
+                    getNotifyCounter();
+                    break;
         }
     }
 
-    /**
-     * 更新用戶信息
-     */
-    private void update() {
-        if (UserManager.instance().getUserProfile() == null) return;
-
-        tvLogin.setVisibility(View.GONE);
-        rlInfo.setVisibility(View.VISIBLE);
-        UserProfile userProfile = UserManager.instance().getUserProfile();
-        ImageLoaderUtils.display(this, mIvHead, userProfile.getResult().getUser_img(),
-                R.drawable.img_default_head, R.drawable.img_default_head);
-        mTvName.setText(userProfile.getResult().getDisplay_name());
-    }
 
 }

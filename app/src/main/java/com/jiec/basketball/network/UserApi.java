@@ -1,5 +1,6 @@
 package com.jiec.basketball.network;
 
+import com.jiec.basketball.bean.NotifyCounterModel;
 import com.jiec.basketball.entity.LoginResult;
 import com.jiec.basketball.entity.UserProfile;
 import com.jiec.basketball.entity.response.CollectionResponse;
@@ -8,7 +9,10 @@ import com.jiec.basketball.entity.response.HistoryResponse;
 import com.jiec.basketball.entity.response.LikeResponse;
 import com.jiec.basketball.entity.response.NotifyResponse;
 
+import java.util.Map;
+
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -38,6 +42,10 @@ public interface UserApi {
     Observable<UserProfile> updateProfile(@Field("token") String token, @Field("email") String email,
                                           @Field("display_name") String display_name, @Field("file") String file);
 
+    @FormUrlEncoded
+    @POST("/api/change_profile/")
+    Observable<UserProfile> updateProfile(@FieldMap Map<String, String> map);
+
 
     @GET("/api/get_saved_post/")
     Observable<CollectionResponse> getCollection(@Query("token") String token, @Query("offset") int offset);
@@ -57,6 +65,20 @@ public interface UserApi {
     @GET("/api/get_my_comment/")
     Observable<CommentResponse> getComments(@Query("token") String token, @Query("offset") int offset);
 
+    /**
+     * 获取消息通知列表
+     * @param token
+     * @param offset
+     * @return
+     */
     @GET("/api/get_my_notify/")
     Observable<NotifyResponse> getNotify(@Query("token") String token, @Query("offset") int offset);
+
+    /**
+     * 获取消息通知 （未读总数）
+     * @param token
+     * @return
+     */
+    @GET("/api/get_notify_counter/")
+    Observable<NotifyCounterModel> getNotifyCounter(@Query("token") String token);
 }

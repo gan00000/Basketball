@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jiec.basketball.R;
+import com.jiec.basketball.adapter.MyCommentAdapter;
 import com.jiec.basketball.base.BaseListAdapter;
 import com.jiec.basketball.entity.response.NotifyResponse;
 
@@ -41,11 +42,21 @@ public class NotifyAdapter extends BaseListAdapter<NotifyResponse.Result.Notific
         if (holder instanceof ItemViewHolder) {
             NotifyResponse.Result.NotificationBean bean = getItem(position);
             if (bean != null) {
-                if (bean.getType().equals("like")) {
-                    ((ItemViewHolder) holder).mTitle.setText(bean.getDisplay_name() + "點贊了你的評論");
+                if (bean.getType().equals("like")) { //????????
+                    ((ItemViewHolder) holder).mTitle.setText(bean.getDisplay_name()
+                            + "點贊了你的評論："+bean.getComment_content());
                 }
-
+                ((ItemViewHolder) holder).tvTitle.setText(bean.getPost_title());
                 ((ItemViewHolder) holder).mTime.setText(bean.getCreated_on());
+
+                ((ItemViewHolder) holder).tvTitle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mOnItemClickedListener != null) {
+                            mOnItemClickedListener.onClick(bean);
+                        }
+                    }
+                });
             }
         }
     }
@@ -54,11 +65,13 @@ public class NotifyAdapter extends BaseListAdapter<NotifyResponse.Result.Notific
 
         public TextView mTitle;
         public TextView mTime;
+        private TextView tvTitle;
 
         public ItemViewHolder(View v) {
             super(v);
             mTitle = v.findViewById(R.id.tv_title);
             mTime = v.findViewById(R.id.tv_time);
+            tvTitle = (TextView)v.findViewById( R.id.tv_news_title );
         }
     }
 

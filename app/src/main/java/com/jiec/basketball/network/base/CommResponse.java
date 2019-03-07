@@ -4,6 +4,9 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 import java.io.Serializable;
 
+/**
+ * j接口返回數據封裝基類
+ */
 @JsonObject(fieldDetectionPolicy = JsonObject.FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS)
 public class CommResponse implements Serializable {
 

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.jiec.basketball.R;
+import com.jiec.basketball.core.BallApplication;
 import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.NewsBean;
 import com.jiec.basketball.entity.TopPost;
@@ -117,7 +118,6 @@ public class DetaillWebActivity extends BaseWebActivity {
             dialog.show();
         });
 
-
         initView();
 
         parseHtml(mUrl);
@@ -130,7 +130,7 @@ public class DetaillWebActivity extends BaseWebActivity {
 
         updateBottomInfo();
 
-        if (UserManager.instance().checkLogin()) {
+        if (BallApplication.userInfo != null) {
             saveHistory();
         }
 

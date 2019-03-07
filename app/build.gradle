@@ -103,4 +103,5 @@ dependencies {
     compile 'com.lovedise:permissiongen:0.0.6'
     implementation files('libs/gson-2.2.4.jar')
     implementation 'com.blankj:utilcode:1.9.8'
+    implementation 'q.rorbin:badgeview:1.1.3'
 }

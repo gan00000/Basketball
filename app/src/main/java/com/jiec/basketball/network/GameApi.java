@@ -52,6 +52,11 @@ public interface GameApi {
     @GET("/?json=get_app_index")
     Observable<HomeResponse> getHomePage();
 
+    /**
+     * 通过新闻id获取新闻详情
+     * @param id
+     * @return
+     */
     @GET("/?json=get_post")
     Observable<PostResponse> getPost(@Query("post_id") String id);
 

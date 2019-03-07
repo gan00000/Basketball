@@ -5,11 +5,13 @@ import android.os.Bundle;
 import com.jiec.basketball.base.BaseListAdapter;
 import com.jiec.basketball.base.BaseListFragment;
 import com.jiec.basketball.core.UserManager;
+import com.jiec.basketball.entity.NewsBean;
 import com.jiec.basketball.entity.response.NotifyResponse;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.UserApi;
+import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 
 /**
  * Created by Jiec on 2019/2/16.
@@ -48,8 +50,10 @@ public class NotifyFragment extends BaseListFragment {
         return new NotifyAdapter(getContext());
     }
 
+    /**item點擊事件*/
     @Override
     protected BaseListAdapter.OnItemClickedListener createItemClickedListener() {
-        return null;
+        return data -> DetaillWebActivity.show(getContext(), (NewsBean) data); //?????
     }
+
 }
