@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -59,6 +60,7 @@ public class PlayerViewDemoActivity extends YouTubeFailureRecoveryActivity {
         setContentView(R.layout.playerview_demo);
 
         mVideoId = getIntent().getStringExtra("id");
+        Log.e("视频id", mVideoId);
 
         YouTubePlayerView youTubeView = findViewById(R.id.youtube_view);
         youTubeView.initialize(DeveloperKey.DEVELOPER_KEY, this);

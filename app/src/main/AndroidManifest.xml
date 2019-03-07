@@ -148,6 +148,17 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ytpa.YouTubePlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <!--Need Your Google API Key-->
+        <meta-data
+            android:name="com.jiec.basketball.ytpa.YouTubePlayerActivity.ApiKey"
+            android:value="AIzaSyDW1-kH93W7Q5D1dF1pWRXsz_JeE6VCBkU" />
+
     </application>
 
 </manifest>

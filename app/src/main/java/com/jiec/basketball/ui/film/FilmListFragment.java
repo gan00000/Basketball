@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.jiec.basketball.R;
 import com.jiec.basketball.entity.NewsBean;
@@ -22,6 +23,8 @@ import com.jiec.basketball.entity.response.NewListResponse;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.ui.youtube.PlayerViewDemoActivity;
+import com.jiec.basketball.ytpa.YouTubePlayerActivity;
+import com.jiec.basketball.ytpa.enums.Orientation;
 import com.wangcj.common.utils.LogUtil;
 import com.wangcj.common.utils.ToastUtil;
 
@@ -126,7 +129,36 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
         @Override
         public void onItemClick(NewsBean bean, int position) {
 
-            PlayerViewDemoActivity.show(getContext(), bean.getVideoId());
+            Intent intent = new Intent(getContext(), YouTubePlayerActivity.class);
+
+    // Youtube video ID (Required, You can use YouTubeUrlParser to parse Video Id from url)
+            intent.putExtra(YouTubePlayerActivity.EXTRA_VIDEO_ID, bean.getVideoId());
+
+    // Youtube player style (DEFAULT as default)
+            intent.putExtra(YouTubePlayerActivity.EXTRA_PLAYER_STYLE, YouTubePlayer.PlayerStyle.DEFAULT);
+
+    // Screen Orientation Setting (AUTO for default)
+    // AUTO, AUTO_START_WITH_LANDSCAPE, ONLY_LANDSCAPE, ONLY_PORTRAIT
+            intent.putExtra(YouTubePlayerActivity.EXTRA_ORIENTATION, Orientation.AUTO);
+
+    // Show audio interface when user adjust volume (true for default)
+            intent.putExtra(YouTubePlayerActivity.EXTRA_SHOW_AUDIO_UI, true);
+
+    // If the video is not playable, use Youtube app or Internet Browser to play it
+    // (true for default)
+//            intent.putExtra(YouTubePlayerActivity.EXTRA_HANDLE_ERROR, true);
+
+    // Animation when closing youtubeplayeractivity (none for default)
+            intent.putExtra(YouTubePlayerActivity.EXTRA_ANIM_ENTER, R.anim.fade_in);
+            intent.putExtra(YouTubePlayerActivity.EXTRA_ANIM_EXIT, R.anim.fade_out);
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            /**原始方法1*/
+//            PlayerViewDemoActivity.show(getContext(), bean.getVideoId());
+
+            /**原始方法2*/
 //            Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(),
 //                    YoutubeKey.KEY,
 //                    bean.getVideoId(),
@@ -142,6 +174,7 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
 //                            .getErrorDialog(getActivity(), REQ_RESOLVE_SERVICE_MISSING).show();
 //                }
 //            }
+
         }
     };
 
