@@ -65,16 +65,14 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         loadData();
-
         loadBanner();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        onRefresh();
+//        onRefresh();  //???????
     }
 
     @Nullable

@@ -194,7 +194,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                     @Override
                     protected void onFailed(int code, String reason) {
                         hideLoading();
-//                        showError(reason);
+                        showError(reason);
                     }
                 });
     }
@@ -379,6 +379,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                     @Override
                     protected void onSuccess(CommResponse result) {
                         ToastUtil.showMsg("評論成功");
+
                     }
 
                     @Override

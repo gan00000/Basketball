@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jiec.basketball.base.BaseListAdapter;
+import com.jiec.basketball.core.BallApplication;
 import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.NewsBean;
 import com.jiec.basketball.utils.ImageLoaderUtils;
@@ -43,10 +44,9 @@ public class MyCommentAdapter extends BaseListAdapter<NewsBean> {
             if (news == null) {
                 return;
             }
-            ((ItemViewHolder) holder).tvAuthor.setText(UserManager.instance().getUserProfile()
-                    .getResult().getDisplay_name());
+            ((ItemViewHolder) holder).tvAuthor.setText(BallApplication.userInfo.display_name);
             ImageLoaderUtils.display(mContext, ((ItemViewHolder) holder).ivHead,
-                    UserManager.instance().getUserProfile().getResult().getUser_img(),
+                    BallApplication.userInfo.user_img,
                     R.drawable.img_default_head, R.drawable.img_default_head);
             ((ItemViewHolder) holder).tvTime.setText(news.getComment_date());
             ((ItemViewHolder) holder).tvZan.setText("("+news.getTotal_like()+")");

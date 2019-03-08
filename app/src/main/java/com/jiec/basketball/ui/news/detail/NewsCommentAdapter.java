@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jiec.basketball.R;
+import com.jiec.basketball.adapter.MyCommentAdapter;
+import com.jiec.basketball.core.BallApplication;
 import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.response.NewsCommentResponse;
 import com.jiec.basketball.network.NetSubscriber;
@@ -16,14 +18,17 @@ import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.NewsApi;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.base.CommResponse;
+import com.jiec.basketball.utils.AppUtil;
+import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.wangcj.common.utils.ToastUtil;
+import com.wangcj.common.widget.CircleSImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * Description : 列表适配器
+ * Description : 新闻详情评论列表适配器
  * Author : jiec
  * Date   : 17-1-6
  */
@@ -92,9 +97,12 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return;
             }
 
+            ImageLoaderUtils.display(mContext, ((ItemViewHolder) holder).ivHead,
+                    news.getUser_img(),
+                    R.drawable.img_default_head, R.drawable.img_default_head);
             ((ItemViewHolder) holder).mTvName.setText(news.getComment_author());
             ((ItemViewHolder) holder).mTvComment.setText(news.getComment_content());
-            ((ItemViewHolder) holder).mTvTime.setText(news.getComment_date());
+            ((ItemViewHolder) holder).mTvTime.setText(AppUtil.getStandardDate(news.getComment_date()));
 
             ((ItemViewHolder) holder).mTvLike.setText(news.getTotal_like());
 
@@ -152,6 +160,7 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
+        private CircleSImageView ivHead;
         public TextView mTvName;
         public TextView mTvComment;
         public ImageView mIvLike;
@@ -160,6 +169,7 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public ItemViewHolder(View v) {
             super(v);
+            ivHead = (CircleSImageView)v.findViewById( R.id.iv_head );
             mTvName = v.findViewById(R.id.tv_name);
             mTvComment = v.findViewById(R.id.tv_comment);
             mIvLike = v.findViewById(R.id.iv_like);
@@ -168,6 +178,14 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    /**
+     * 提交点赞
+     * @param postId
+     * @param commentId
+     * @param like
+     * @param tvLikeNum
+     * @param ivLike
+     */
     private void like(String postId, String commentId, final int like, final TextView tvLikeNum, final ImageView ivLike) {
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
         newsApi.likeComment(UserManager.instance().getToken(), postId, commentId, like)

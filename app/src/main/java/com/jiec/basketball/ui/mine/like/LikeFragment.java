@@ -16,6 +16,7 @@ import com.jiec.basketball.ui.news.NewsListAdapter;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 
 /**
+ * 我的点赞
  * Created by Jiec on 2019/2/16.
  */
 public class LikeFragment extends BaseListFragment {
