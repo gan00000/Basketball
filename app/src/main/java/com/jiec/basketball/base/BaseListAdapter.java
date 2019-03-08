@@ -4,6 +4,7 @@ import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 
 import com.jiec.basketball.core.BallApplication;
+import com.jiec.basketball.utils.EmptyUtils;
 
 import java.util.List;
 
@@ -28,7 +29,6 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
      */
     public void setData(List<T> data) {
         this.mData = data;
-
         this.notifyDataSetChanged();
     }
 
@@ -40,6 +40,9 @@ public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         if (this.mData == null) {
             setData(data);
         } else {
+            if(EmptyUtils.emptyOfList(data)){
+                return;
+            }
             this.mData.addAll(data);
             this.notifyDataSetChanged();
         }

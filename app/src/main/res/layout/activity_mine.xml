@@ -153,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:text="我的點贊" />
+                        android:text="我的點讚" />
 
                 </com.wangcj.common.widget.PressLinearLayout>
 

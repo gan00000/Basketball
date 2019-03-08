@@ -45,8 +45,8 @@ public class NewsBean implements Serializable {
     private String videoId;
 
     private int total_comment;
-
     private int total_like;
+    private int comment_count;
 
     private int total_save;
     private int my_save;
@@ -62,6 +62,14 @@ public class NewsBean implements Serializable {
 
     public void setMy_save(int my_save) {
         this.my_save = my_save;
+    }
+
+    public int getComment_count() {
+        return comment_count;
+    }
+
+    public void setComment_count(int comment_count) {
+        this.comment_count = comment_count;
     }
 
     public String getComment_id() {

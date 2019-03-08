@@ -2,6 +2,7 @@ package com.jiec.basketball.ui.mine.like;
 
 import android.os.Bundle;
 
+import com.jiec.basketball.adapter.MyCommentAdapter;
 import com.jiec.basketball.base.BaseListAdapter;
 import com.jiec.basketball.base.BaseListFragment;
 import com.jiec.basketball.core.UserManager;
@@ -48,11 +49,11 @@ public class LikeFragment extends BaseListFragment {
 
     @Override
     protected BaseListAdapter createAdapter() {
-        return new NewsListAdapter(getContext());
+        return new MyCommentAdapter(getContext());
     }
 
     @Override
     protected BaseListAdapter.OnItemClickedListener createItemClickedListener() {
-        return data -> DetaillWebActivity.show(getContext(), (NewsBean) data);
+        return data -> DetaillWebActivity.show(getContext(), ((NewsBean) data).getId());
     }
 }

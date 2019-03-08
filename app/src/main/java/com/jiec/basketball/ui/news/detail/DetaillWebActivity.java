@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.jiec.basketball.R;
+import com.jiec.basketball.bean.NewsDetailModel;
 import com.jiec.basketball.core.BallApplication;
 import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.NewsBean;
@@ -53,6 +54,7 @@ public class DetaillWebActivity extends BaseWebActivity {
     private static final String TAG = "TopicActivity";
 
     private static final String KEY_NEWS = "key_news";
+    private static final String KEY_POSTID = "postId";
     @BindView(R.id.tv_comment)
     TextView mTvComment;
     @BindView(R.id.iv_collect)
@@ -69,22 +71,22 @@ public class DetaillWebActivity extends BaseWebActivity {
     private String mUrl;
 
     private LinearLayout mLoadingLayout;
-
     private AdView mAdViewBottom;
+    private  TextView titleTv;
+    private TextView kindTv;
+    private TextView timeTv ;
+    private TextView tvViews;
 
+    private String postId;
     private NewsBean mNewsBean;
-
     boolean mIsCollect;
-
 
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private TopAdapter mAdapter;
 
     private int mPageCounts = 1;
-
     private boolean mIsLoadingData = false;
-
 
     @BindView(R.id.recycle_comment)
     RecyclerView mCommentRecyclerView;
@@ -98,19 +100,69 @@ public class DetaillWebActivity extends BaseWebActivity {
         context.startActivity(intent);
     }
 
+    public static void show(Context context, String postId) {
+        Intent intent = new Intent(context, DetaillWebActivity.class);
+        intent.putExtra(KEY_POSTID, postId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_detail_web);
         ButterKnife.bind(this);
+        postId = getIntent().getStringExtra(KEY_POSTID);
 
-        mNewsBean = (NewsBean) getIntent().getSerializableExtra(KEY_NEWS);
-        if (mNewsBean == null) {
-            ToastUtil.showMsg("数据有误，请刷新列表");
-            return;
+        initView();
+        getNewsDetail();
+
+//        mNewsBean = (NewsBean) getIntent().getSerializableExtra(KEY_NEWS);
+//        if (mNewsBean == null) {
+//            ToastUtil.showMsg("数据有误，请刷新列表");
+//            return;
+//        }
+
+        if (BallApplication.userInfo != null) {
+            saveHistory();
         }
-        mUrl = mNewsBean.getUrl();
+    }
+
+    /**
+     * 初始化View
+     */
+    private void initView() {
+        mLoadingLayout =  findViewById(R.id.layout_loading);
+        mWebView = findViewById(R.id.webview);
+        initWebView();
+
+        titleTv = findViewById(R.id.tv_news_title);
+        kindTv = findViewById(R.id.tv_kind);
+        timeTv = findViewById(R.id.tv_time);
+        tvViews = findViewById(R.id.tv_views);
+
+        mRecyclerView = findViewById(R.id.recycle_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new TopAdapter(getApplicationContext());
+        mAdapter.setOnItemClickListener(mOnItemClickListener);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mCommentRecyclerView.setLayoutManager(mLayoutManager);
+        mCommentRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mCommentAdapter = new NewsCommentAdapter(getApplicationContext());
+        mCommentRecyclerView.setAdapter(mCommentAdapter);
+        mCommentRecyclerView.addOnScrollListener(mOnScrollListener);
+
+        mEtComment.setOnFocusChangeListener((view, b) -> mLayoutWriteComment.setVisibility(
+                b ? View.VISIBLE : View.GONE));
+        mAdViewBottom = findViewById(R.id.adView_bottom);
+        AdRequest adRequestBottom = new AdRequest.Builder().build();
+        mAdViewBottom.loadAd(adRequestBottom);
 
         ImageView ivShare = findViewById(R.id.iv_share);
         ivShare.setOnClickListener(v -> {
@@ -118,22 +170,48 @@ public class DetaillWebActivity extends BaseWebActivity {
             dialog.show();
         });
 
-        initView();
+    }
 
+
+    /**
+     * 根据id获取新闻详情
+     */
+    private void getNewsDetail() {
+        showLoading();
+        GameApi gameApi = RetrofitClient.getInstance().create(GameApi.class);
+        gameApi.getPostDetail(postId)
+                .compose(new NetTransformer<>())
+                .subscribe(new NetSubscriber<NewsDetailModel>() {
+                    @Override
+                    protected void onSuccess(NewsDetailModel result) {
+                        hideLoading();
+                        if(result.isSuccess()){
+                            mNewsBean = result.post;
+                            setDetailData();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(int code, String reason) {
+                        hideLoading();
+//                        showError(reason);
+                    }
+                });
+    }
+
+    /**
+     * 设置详情数据
+     */
+    private void setDetailData(){
+        titleTv.setText(Html.fromHtml(mNewsBean.getTitle()));
+        kindTv.setText(mNewsBean.getKind());
+        timeTv.setText(AppUtil.getStandardDate(mNewsBean.getDate()));
+        tvViews.setText(mNewsBean.getSumViews() + "");
+        mUrl = mNewsBean.getUrl();
         parseHtml(mUrl);
-
-        mAdViewBottom = findViewById(R.id.adView_bottom);
-        AdRequest adRequestBottom = new AdRequest.Builder().build();
-        mAdViewBottom.loadAd(adRequestBottom);
-
         loadTopPosts();
-
         updateBottomInfo();
-
-        if (BallApplication.userInfo != null) {
-            saveHistory();
-        }
-
+        getComments();
     }
 
     /**
@@ -141,7 +219,7 @@ public class DetaillWebActivity extends BaseWebActivity {
      */
     private void saveHistory() {
         UserApi userApi = RetrofitClient.getInstance().create(UserApi.class);
-        userApi.saveHistory(UserManager.instance().getToken(), mNewsBean.getId())
+        userApi.saveHistory(UserManager.instance().getToken(), postId)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<HistoryResponse>() {
                     @Override
@@ -157,8 +235,8 @@ public class DetaillWebActivity extends BaseWebActivity {
     }
 
     private void updateBottomInfo() {
-        if (mNewsBean.getTotal_comment() > 0) {
-            mTvCommentNum.setText("" + mNewsBean.getTotal_comment());
+        if (mNewsBean.getComment_count() > 0) {
+            mTvCommentNum.setText("" + mNewsBean.getComment_count());
         } else {
             mTvCommentNum.setVisibility(View.GONE);
         }
@@ -190,47 +268,6 @@ public class DetaillWebActivity extends BaseWebActivity {
                 });
     }
 
-    private void initView() {
-
-        mLoadingLayout = findViewById(R.id.layout_loading);
-
-        mWebView = findViewById(R.id.webview);
-        initWebView();
-
-
-        TextView titleTv = findViewById(R.id.tv_news_title);
-        titleTv.setText(Html.fromHtml(mNewsBean.getTitle()));
-
-        TextView kindTv = findViewById(R.id.tv_kind);
-        kindTv.setText(mNewsBean.getKind());
-
-        TextView timeTv = findViewById(R.id.tv_time);
-        timeTv.setText(AppUtil.getStandardDate(mNewsBean.getDate()));
-
-        ((TextView) findViewById(R.id.tv_views)).setText(mNewsBean.getSumViews() + "");
-
-
-        mRecyclerView = findViewById(R.id.recycle_view);
-        mRecyclerView.setHasFixedSize(true);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new TopAdapter(getApplicationContext());
-        mAdapter.setOnItemClickListener(mOnItemClickListener);
-        mRecyclerView.setAdapter(mAdapter);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mCommentRecyclerView.setLayoutManager(mLayoutManager);
-        mCommentRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mCommentAdapter = new NewsCommentAdapter(getApplicationContext());
-        mCommentRecyclerView.setAdapter(mCommentAdapter);
-        mCommentRecyclerView.addOnScrollListener(mOnScrollListener);
-
-        mEtComment.setOnFocusChangeListener((view, b) -> mLayoutWriteComment.setVisibility(
-                b ? View.VISIBLE : View.GONE));
-
-        getComments();
-    }
 
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -302,15 +339,22 @@ public class DetaillWebActivity extends BaseWebActivity {
                 mEtComment.requestFocus();
                 showSoftInput();
                 break;
+
             case R.id.iv_collect:
+                if(BallApplication.userInfo == null){
+                    return;
+                }
                 if (mIsCollect) {
                     uncollect();
                 } else {
                     collect();
                 }
                 break;
+
             case R.id.iv_comment:
+
                 break;
+
             case R.id.tv_send:
                 hideSoftInput(this);
                 mLayoutWriteComment.setVisibility(View.GONE);
@@ -349,7 +393,7 @@ public class DetaillWebActivity extends BaseWebActivity {
      */
     private void collect() {
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.collect(UserManager.instance().getToken(), mNewsBean.getId())
+        newsApi.collect(UserManager.instance().getToken(), postId)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<CommResponse>() {
                     @Override
@@ -380,7 +424,7 @@ public class DetaillWebActivity extends BaseWebActivity {
      */
     private void uncollect() {
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.cancleCollect(UserManager.instance().getToken(), mNewsBean.getId())
+        newsApi.cancleCollect(UserManager.instance().getToken(), postId)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<CommResponse>() {
                     @Override
@@ -402,7 +446,7 @@ public class DetaillWebActivity extends BaseWebActivity {
      */
     private void getComments() {
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.getNewsCommnet(UserManager.instance().getToken(), mNewsBean.getId(), mCurrentPage)
+        newsApi.getNewsCommnet(UserManager.instance().getToken(), postId, mCurrentPage)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<NewsCommentResponse>() {
                     @Override

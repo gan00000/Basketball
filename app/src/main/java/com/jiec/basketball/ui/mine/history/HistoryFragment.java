@@ -53,6 +53,6 @@ public class HistoryFragment extends BaseListFragment {
 
     @Override
     protected BaseListAdapter.OnItemClickedListener createItemClickedListener() {
-        return data -> DetaillWebActivity.show(getContext(), (NewsBean) data);
+        return data -> DetaillWebActivity.show(getContext(), ((NewsBean) data).getId());
     }
 }

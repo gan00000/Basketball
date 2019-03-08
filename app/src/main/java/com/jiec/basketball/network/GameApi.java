@@ -1,6 +1,7 @@
 package com.jiec.basketball.network;
 
 
+import com.jiec.basketball.bean.NewsDetailModel;
 import com.jiec.basketball.entity.AllPlayerData;
 import com.jiec.basketball.entity.AllTeamData;
 import com.jiec.basketball.entity.EastWestTeamRank;
@@ -52,13 +53,17 @@ public interface GameApi {
     @GET("/?json=get_app_index")
     Observable<HomeResponse> getHomePage();
 
+
+    @GET("/?json=get_post")
+    Observable<PostResponse> getPost(@Query("post_id") String id);
+
     /**
      * 通过新闻id获取新闻详情
      * @param id
      * @return
      */
     @GET("/?json=get_post")
-    Observable<PostResponse> getPost(@Query("post_id") String id);
+    Observable<NewsDetailModel> getPostDetail(@Query("post_id") String id);
 
     @GET("?json=get_server_mtime")
     Observable<TimeResponse> getServerTime();

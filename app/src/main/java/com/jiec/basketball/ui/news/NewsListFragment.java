@@ -133,7 +133,7 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
         @Override
         public void onItemClick(View view, int position) {
             NewsBean newsBean = mAdapter.getItem(position);
-            DetaillWebActivity.show(getActivity(), newsBean);
+            DetaillWebActivity.show(getActivity(), newsBean.getId());
         }
     };
 
