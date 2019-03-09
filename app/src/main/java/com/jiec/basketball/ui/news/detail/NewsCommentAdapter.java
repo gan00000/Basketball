@@ -51,6 +51,15 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.notifyDataSetChanged();
     }
 
+    /**
+     * 添加一个Item数据
+     * @param commentsBean
+     */
+    public void addItemData(NewsCommentResponse.ResultBean.CommentsBean commentsBean){
+        this.mData.add(commentsBean);
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         // 最后一个item设置为footerView

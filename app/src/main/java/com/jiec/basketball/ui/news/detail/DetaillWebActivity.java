@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.TimeUtils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.jiec.basketball.R;
@@ -45,6 +46,8 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean;
+import static com.jiec.basketball.core.BallApplication.userInfo;
 
 /**
  * 新聞詳情頁面
@@ -229,11 +232,14 @@ public class DetaillWebActivity extends BaseWebActivity {
 
                     @Override
                     protected void onFailed(int code, String reason) {
-                        showError(reason);
+//                        showError(reason);
                     }
                 });
     }
 
+    /**
+     * 更新底部UI
+     */
     private void updateBottomInfo() {
         if (mNewsBean.getComment_count() > 0) {
             mTvCommentNum.setText("" + mNewsBean.getComment_count());
@@ -379,6 +385,18 @@ public class DetaillWebActivity extends BaseWebActivity {
                     @Override
                     protected void onSuccess(CommResponse result) {
                         ToastUtil.showMsg("評論成功");
+
+                        CommentsBean commentsBean = new CommentsBean();
+                        commentsBean.setPost_id(postId);
+                        commentsBean.setUser_id(userInfo.user_id);
+                        commentsBean.setComment_author(userInfo.display_name);
+                        commentsBean.setUser_img(userInfo.user_img);
+                        commentsBean.setComment_content(comment);
+                        commentsBean.setComment_date(TimeUtils.getNowString());
+                        commentsBean.setTotal_like("0");
+                        commentsBean.setMy_like(0);
+                        mCommentAdapter.addItemData(commentsBean);
+                        mCommentRecyclerView.scrollToPosition(mCommentAdapter.getItemCount()-1);
 
                     }
 
