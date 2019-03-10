@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jiec.basketball.R;
@@ -20,6 +21,7 @@ import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.base.CommResponse;
 import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.utils.ImageLoaderUtils;
+import com.jiec.basketball.widget.UserReplyView;
 import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.CircleSImageView;
 
@@ -41,6 +43,7 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private boolean mShowFooter = true;
 
     private Context mContext;
+    private ItemChildClickListener itemChildClickListener;
 
     public NewsCommentAdapter(Context context) {
         mContext = context.getApplicationContext();
@@ -49,6 +52,14 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void addData(List<NewsCommentResponse.ResultBean.CommentsBean> data) {
         this.mData = data;
         this.notifyDataSetChanged();
+    }
+
+    public void setItemChildClickListener(ItemChildClickListener itemChildClickListener) {
+        this.itemChildClickListener = itemChildClickListener;
+    }
+
+    public interface ItemChildClickListener{
+        void onItemChildClick(View view, int position);
     }
 
     /**
@@ -112,8 +123,8 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ItemViewHolder) holder).mTvName.setText(news.getComment_author());
             ((ItemViewHolder) holder).mTvComment.setText(news.getComment_content());
             ((ItemViewHolder) holder).mTvTime.setText(AppUtil.getStandardDate(news.getComment_date()));
-
             ((ItemViewHolder) holder).mTvLike.setText(news.getTotal_like());
+            ((ItemViewHolder) holder).tvReplyNum.setText(news.getTotal_reply()+"回復");
 
             boolean isLike = false;
             if (news.getMy_like() == 0) {
@@ -133,6 +144,30 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             ((ItemViewHolder) holder).mTvLike, ((ItemViewHolder) holder).mIvLike);
                 }
             });
+
+            ((ItemViewHolder) holder).tvReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    itemChildClickListener.onItemChildClick(view, position);
+                }
+            });
+
+            /****************設置評論回復View********************/
+            int replySize = Integer.parseInt(news.getTotal_reply());
+            if(replySize > 0){
+                ((ItemViewHolder) holder).llReply.removeAllViews();
+                List<NewsCommentResponse.ResultBean.CommentsBean.ReplyBean> replyList = news.getReply();
+                ((ItemViewHolder) holder).llReply.setVisibility(View.VISIBLE);
+//                ((ItemViewHolder) holder).llMore.setVisibility(View.VISIBLE);
+                for (int i = 0; i < replySize; i++) {
+                    UserReplyView userReplyView = new UserReplyView(mContext);
+                    userReplyView.setReplyData(replyList.get(i));
+                    ((ItemViewHolder) holder).llReply.addView(userReplyView);
+                }
+            }else {
+                ((ItemViewHolder) holder).llReply.setVisibility(View.GONE);
+            }
+
         }
     }
 
@@ -167,14 +202,19 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    private static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         private CircleSImageView ivHead;
-        public TextView mTvName;
-        public TextView mTvComment;
-        public ImageView mIvLike;
-        public TextView mTvLike;
-        public TextView mTvTime;
+        private TextView mTvName;
+        private TextView mTvComment;
+        private ImageView mIvLike;
+        private TextView mTvLike;
+        private TextView mTvTime;
+        private TextView tvReply;
+        private TextView tvReplyNum;
+        private LinearLayout llReply;
+        private LinearLayout llMore;
+
 
         public ItemViewHolder(View v) {
             super(v);
@@ -184,6 +224,10 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             mIvLike = v.findViewById(R.id.iv_like);
             mTvLike = v.findViewById(R.id.tv_like);
             mTvTime = v.findViewById(R.id.tv_time);
+            tvReply = v.findViewById(R.id.tv_reply);
+            tvReplyNum = v.findViewById(R.id.tv_reply_num);
+            llReply = v.findViewById(R.id.ll_reply);
+            llMore = v.findViewById(R.id.more_comment_layout);
         }
     }
 

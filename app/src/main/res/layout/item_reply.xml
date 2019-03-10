@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.wangcj.common.widget.CircleSImageView
+        android:id="@+id/iv_head"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="6dp"
+        android:src="@drawable/img_default_head"
+        app:civ_border_color="@color/white"
+        app:civ_border_overlay="true" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        style="@style/MainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_head"
+        android:ellipsize="end"
+        android:lines="1"
+        android:paddingRight="@dimen/page_padding"
+        android:paddingTop="8dp"
+        android:textColor="@color/red"
+        android:textSize="@dimen/sp_12"
+        tools:text="name" />
+
+    <TextView
+        android:id="@+id/tv_comment"
+        style="@style/SecondText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_name"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@id/iv_head"
+        android:textSize="@dimen/sp_12"
+        android:ellipsize="end"
+        android:lines="1"
+        android:paddingRight="@dimen/page_padding"
+        tools:text="comment" />
+
+    <TextView
+        android:id="@+id/tv_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp"
+        android:paddingRight="@dimen/page_padding"
+        android:textColor="@color/red"
+        android:textSize="@dimen/sp_12"
+        tools:text="12" />
+
+    <com.wangcj.common.widget.PressImageView
+        android:id="@+id/iv_like"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@id/tv_like"
+        android:clickable="true"
+        android:src="@drawable/icon_great_normal" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_comment"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@id/iv_head"
+        android:paddingRight="@dimen/page_padding"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/sp_12"
+        tools:text="time" />
+
+
+</RelativeLayout>

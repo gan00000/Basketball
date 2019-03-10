@@ -26,6 +26,7 @@ import com.jiec.basketball.entity.NewsBean;
 import com.jiec.basketball.entity.TopPost;
 import com.jiec.basketball.entity.response.HistoryResponse;
 import com.jiec.basketball.entity.response.NewsCommentResponse;
+import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean.ReplyBean;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
@@ -35,6 +36,7 @@ import com.jiec.basketball.network.UserApi;
 import com.jiec.basketball.network.base.CommResponse;
 import com.jiec.basketball.ui.dialog.ShareUrlDialog;
 import com.jiec.basketball.utils.AppUtil;
+import com.jiec.basketball.utils.EmptyUtils;
 import com.wangcj.common.utils.ThreadUtils;
 import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.PressImageView;
@@ -47,6 +49,10 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.jiec.basketball.core.BallApplication.userInfo;
 
 /**
@@ -80,9 +86,11 @@ public class DetaillWebActivity extends BaseWebActivity {
     private TextView timeTv ;
     private TextView tvViews;
 
-    private String postId;
+    private String postId; //新聞id
+    private String reply_comment_id; //評論id
     private NewsBean mNewsBean;
     boolean mIsCollect;
+    private int commentPosition; //回復評論所在位置
 
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
@@ -95,6 +103,8 @@ public class DetaillWebActivity extends BaseWebActivity {
     RecyclerView mCommentRecyclerView;
     private NewsCommentAdapter mCommentAdapter;
     private int mCurrentPage = 0;
+
+
 
     public static void show(Context context, NewsBean newsBean) {
         Intent intent = new Intent(context, DetaillWebActivity.class);
@@ -118,15 +128,10 @@ public class DetaillWebActivity extends BaseWebActivity {
         setContentView(R.layout.activity_detail_web);
         ButterKnife.bind(this);
         postId = getIntent().getStringExtra(KEY_POSTID);
+        postId = "125345";
 
         initView();
         getNewsDetail();
-
-//        mNewsBean = (NewsBean) getIntent().getSerializableExtra(KEY_NEWS);
-//        if (mNewsBean == null) {
-//            ToastUtil.showMsg("数据有误，请刷新列表");
-//            return;
-//        }
 
         if (BallApplication.userInfo != null) {
             saveHistory();
@@ -158,6 +163,7 @@ public class DetaillWebActivity extends BaseWebActivity {
         mCommentRecyclerView.setLayoutManager(mLayoutManager);
         mCommentRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mCommentAdapter = new NewsCommentAdapter(getApplicationContext());
+        mCommentAdapter.setItemChildClickListener(itemChildClickListener);
         mCommentRecyclerView.setAdapter(mCommentAdapter);
         mCommentRecyclerView.addOnScrollListener(mOnScrollListener);
 
@@ -222,7 +228,7 @@ public class DetaillWebActivity extends BaseWebActivity {
      */
     private void saveHistory() {
         UserApi userApi = RetrofitClient.getInstance().create(UserApi.class);
-        userApi.saveHistory(UserManager.instance().getToken(), postId)
+        userApi.saveHistory(userInfo.user_token, postId)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<HistoryResponse>() {
                     @Override
@@ -339,7 +345,15 @@ public class DetaillWebActivity extends BaseWebActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_comment:
+                if(userInfo == null){
+                    ToastUtil.showMsg("請先登錄");
+                    return;
+                }
                 mLayoutWriteComment.setVisibility(View.VISIBLE);
+                reply_comment_id = "";
+
+                mEtComment.setText("");
+                mEtComment.setHint("請輸入你的評論");
                 mEtComment.setFocusableInTouchMode(true);
                 mEtComment.setFocusable(true);
                 mEtComment.requestFocus();
@@ -347,7 +361,8 @@ public class DetaillWebActivity extends BaseWebActivity {
                 break;
 
             case R.id.iv_collect:
-                if(BallApplication.userInfo == null){
+                if(userInfo == null){
+                    ToastUtil.showMsg("請先登錄");
                     return;
                 }
                 if (mIsCollect) {
@@ -374,29 +389,77 @@ public class DetaillWebActivity extends BaseWebActivity {
     }
 
     /**
+     * 評論列表回復按鈕點擊事件處理
+     */
+    private NewsCommentAdapter.ItemChildClickListener itemChildClickListener
+            = new NewsCommentAdapter.ItemChildClickListener() {
+        @Override
+        public void onItemChildClick(View view, int position) {
+            if(userInfo == null){
+                ToastUtil.showMsg("請先登錄");
+                return;
+            }
+            commentPosition = position;
+            CommentsBean commentsBean = mCommentAdapter.getItem(position);
+            reply_comment_id = commentsBean.getComment_id();
+
+            mLayoutWriteComment.setVisibility(View.VISIBLE);
+            mEtComment.setText("");
+            mEtComment.setHint("回復  "+commentsBean.getComment_author());
+            mEtComment.setFocusableInTouchMode(true);
+            mEtComment.setFocusable(true);
+            mEtComment.requestFocus();
+            showSoftInput();
+        }
+    };
+
+    /**
      * 發表評論
      * @param comment
      */
     private void comment(String comment) {
+
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.comment(UserManager.instance().getToken(), mNewsBean.getId(), comment)
+        newsApi.comment(userInfo.user_token, mNewsBean.getId(), comment, reply_comment_id)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<CommResponse>() {
                     @Override
                     protected void onSuccess(CommResponse result) {
-                        ToastUtil.showMsg("評論成功");
+                        if(EmptyUtils.emptyOfString(reply_comment_id)){
+                            ToastUtil.showMsg("評論成功");
 
-                        CommentsBean commentsBean = new CommentsBean();
-                        commentsBean.setPost_id(postId);
-                        commentsBean.setUser_id(userInfo.user_id);
-                        commentsBean.setComment_author(userInfo.display_name);
-                        commentsBean.setUser_img(userInfo.user_img);
-                        commentsBean.setComment_content(comment);
-                        commentsBean.setComment_date(TimeUtils.getNowString());
-                        commentsBean.setTotal_like("0");
-                        commentsBean.setMy_like(0);
-                        mCommentAdapter.addItemData(commentsBean);
-                        mCommentRecyclerView.scrollToPosition(mCommentAdapter.getItemCount()-1);
+                            CommentsBean commentsBean = new CommentsBean();
+                            commentsBean.setPost_id(postId);
+                            commentsBean.setUser_id(userInfo.user_id);
+                            commentsBean.setComment_author(userInfo.display_name);
+                            commentsBean.setUser_img(userInfo.user_img);
+                            commentsBean.setComment_content(comment);
+                            commentsBean.setComment_date(TimeUtils.getNowString());
+                            commentsBean.setTotal_like("0");
+                            commentsBean.setMy_like(0);
+                            mCommentAdapter.addItemData(commentsBean);
+                            mCommentRecyclerView.scrollToPosition(mCommentAdapter.getItemCount()-1);
+                        }else {
+                            ToastUtil.showMsg("回復成功");
+                            List<ReplyBean> replyList = mCommentAdapter.getItem(commentPosition).getReply();
+                            if(EmptyUtils.emptyOfList(replyList)){
+                                replyList = new ArrayList<>();
+                            }
+                            ReplyBean replyBean = new ReplyBean();
+                            replyBean.setPost_id(postId);
+                            replyBean.setUser_id(userInfo.user_id);
+                            replyBean.setComment_author(userInfo.display_name);
+                            replyBean.setUser_img(userInfo.user_img);
+                            replyBean.setComment_content(comment);
+                            replyBean.setComment_date(TimeUtils.getNowString());
+                            replyBean.setTotal_like("0");
+                            replyBean.setMy_like(0);
+                            replyList.add(replyBean);
+                            mCommentAdapter.getItem(commentPosition).setReply(replyList);
+                            mCommentAdapter.notifyDataSetChanged();
+//                            mCommentAdapter.notifyItemChanged(commentPosition);
+                        }
+
 
                     }
 
@@ -412,7 +475,7 @@ public class DetaillWebActivity extends BaseWebActivity {
      */
     private void collect() {
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.collect(UserManager.instance().getToken(), postId)
+        newsApi.collect(userInfo.user_token, postId)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<CommResponse>() {
                     @Override
@@ -443,7 +506,7 @@ public class DetaillWebActivity extends BaseWebActivity {
      */
     private void uncollect() {
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.cancleCollect(UserManager.instance().getToken(), postId)
+        newsApi.cancleCollect(userInfo.user_token, postId)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<CommResponse>() {
                     @Override

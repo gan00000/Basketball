@@ -82,6 +82,9 @@ public class NewsCommentResponse extends CommResponse {
             this.pages = pages;
         }
 
+        /**
+         * 評論實體類
+         */
         @JsonObject(fieldDetectionPolicy = JsonObject.FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS)
         public static class CommentsBean {
             /**
@@ -106,6 +109,131 @@ public class NewsCommentResponse extends CommResponse {
             private String user_img;
             private String total_like;
             private int my_like;
+            private String total_reply;
+            private List<ReplyBean> reply;
+
+            public List<ReplyBean> getReply() {
+                return reply;
+            }
+
+            public void setReply(List<ReplyBean> reply) {
+                this.reply = reply;
+            }
+
+            /**
+             * 回復留言實體類
+             */
+            @JsonObject(fieldDetectionPolicy = JsonObject.FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS)
+            public static class  ReplyBean{
+                private String comment_id;
+                private String post_id;
+                private String user_id;
+                private String comment_author;
+                private String comment_date;
+                private String comment_content;
+                private String user_img;
+                private String total_like;
+                private String reply_to_user_id;
+                private String reply_to_display_name;
+                private int my_like;
+
+                public String getComment_id() {
+                    return comment_id;
+                }
+
+                public void setComment_id(String comment_id) {
+                    this.comment_id = comment_id;
+                }
+
+                public String getPost_id() {
+                    return post_id;
+                }
+
+                public void setPost_id(String post_id) {
+                    this.post_id = post_id;
+                }
+
+                public String getUser_id() {
+                    return user_id;
+                }
+
+                public void setUser_id(String user_id) {
+                    this.user_id = user_id;
+                }
+
+                public String getComment_author() {
+                    return comment_author;
+                }
+
+                public void setComment_author(String comment_author) {
+                    this.comment_author = comment_author;
+                }
+
+                public String getComment_date() {
+                    return comment_date;
+                }
+
+                public void setComment_date(String comment_date) {
+                    this.comment_date = comment_date;
+                }
+
+                public String getComment_content() {
+                    return comment_content;
+                }
+
+                public void setComment_content(String comment_content) {
+                    this.comment_content = comment_content;
+                }
+
+                public String getUser_img() {
+                    return user_img;
+                }
+
+                public void setUser_img(String user_img) {
+                    this.user_img = user_img;
+                }
+
+                public String getTotal_like() {
+                    return total_like;
+                }
+
+                public void setTotal_like(String total_like) {
+                    this.total_like = total_like;
+                }
+
+                public String getReply_to_user_id() {
+                    return reply_to_user_id;
+                }
+
+                public void setReply_to_user_id(String reply_to_user_id) {
+                    this.reply_to_user_id = reply_to_user_id;
+                }
+
+                public String getReply_to_display_name() {
+                    return reply_to_display_name;
+                }
+
+                public void setReply_to_display_name(String reply_to_display_name) {
+                    this.reply_to_display_name = reply_to_display_name;
+                }
+
+                public int getMy_like() {
+                    return my_like;
+                }
+
+                public void setMy_like(int my_like) {
+                    this.my_like = my_like;
+                }
+
+            }
+
+            public String getTotal_reply() {
+                return total_reply;
+            }
+
+            public void setTotal_reply(String total_reply) {
+                this.total_reply = total_reply;
+            }
 
             public String getComment_id() {
                 return comment_id;
@@ -178,6 +306,7 @@ public class NewsCommentResponse extends CommResponse {
             public void setMy_like(int my_like) {
                 this.my_like = my_like;
             }
+
         }
     }
 }

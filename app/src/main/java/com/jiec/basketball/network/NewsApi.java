@@ -44,7 +44,7 @@ public interface NewsApi {
     @FormUrlEncoded
     @POST("/api/save_post_comments/")
     Observable<CommResponse> comment(@Field("token") String token, @Field("post_id") String id,
-                                     @Field("comment_txt") String comment_txt);
+                                     @Field("comment_txt") String comment_txt, @Field("reply_comment_id") String reply_comment_id);
 
     @GET("/api/get_post_comments/")
     Observable<NewsCommentResponse> getNewsCommnet(@Query("token") String token, @Query("post_id") String post_id, @Query("offset") int offset);
