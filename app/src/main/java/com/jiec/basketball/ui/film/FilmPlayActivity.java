@@ -1,4 +1,4 @@
-package com.jiec.basketball.ui.mine.comment;
+package com.jiec.basketball.ui.film;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseActivity;
+import com.jiec.basketball.base.BaseUIActivity;
 import com.jiec.basketball.ui.mine.collection.CollectionActivity;
 import com.wangcj.common.widget.TitleBar;
 
@@ -15,15 +16,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Jiec on 2019/1/13.
+ * 視頻播放頁面
  */
-public class CommentActivity extends BaseActivity {
+public class FilmPlayActivity extends BaseUIActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
 
-    public static void show(Context context) {
-        context.startActivity(new Intent(context, CollectionActivity.class));
+    private String playUrl;
+
+    public static void show(Context context, String  playUrl) {
+        Intent mIntent = new Intent(context, FilmPlayActivity.class);
+        mIntent.putExtra("playUrl", playUrl);
+        context.startActivity(mIntent);
     }
 
     @Override
@@ -32,14 +37,14 @@ public class CommentActivity extends BaseActivity {
 
         setContentView(R.layout.activity_fragment);
         ButterKnife.bind(this);
+        playUrl = getIntent().getStringExtra("playUrl");
+        mTitleBar.setTitle(R.string.film_play);
 
-        mTitleBar.setTitle(R.string.mine_comment);
-
-        CommentFragment fragment = (CommentFragment) getSupportFragmentManager()
+        FilmPlayFragment fragment = (FilmPlayFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.layout_fragment);
-
+        ;
         if (fragment == null) {
-            fragment = CommentFragment.newInstance();
+            fragment = FilmPlayFragment.newInstance(playUrl);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.add(R.id.layout_fragment, fragment);
             transaction.commit();

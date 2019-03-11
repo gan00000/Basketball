@@ -29,6 +29,8 @@ public class CommentFragment extends BaseListFragment {
         return fragment;
     }
 
+
+
     @Override
     protected void loadData(int page, int num) {
         UserApi userApi = RetrofitClient.getInstance().create(UserApi.class);

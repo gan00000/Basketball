@@ -47,6 +47,15 @@ public class UserProfile extends CommResponse {
         private String user_email;
         private String user_status;
         private String user_img;
+        private String change_name;
+
+        public String getChange_name() {
+            return change_name;
+        }
+
+        public void setChange_name(String change_name) {
+            this.change_name = change_name;
+        }
 
         public String getUser_id() {
             return user_id;

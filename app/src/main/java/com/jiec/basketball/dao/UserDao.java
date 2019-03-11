@@ -88,11 +88,11 @@ public class UserDao {
             SharedPreferences.Editor editor = sp.edit();
             editor.putString("user_token", simpleEncodeString(userInfo.user_token));
             editor.putString("user_id", simpleEncodeString(userInfo.user_id));
-
             editor.putString("display_name", simpleEncodeString(userInfo.display_name));
             editor.putString("user_email", simpleEncodeString(userInfo.user_email));
             editor.putString("user_status", simpleEncodeString(userInfo.user_status));
             editor.putString("user_img", simpleEncodeString(userInfo.user_img));
+            editor.putString("change_name", simpleEncodeString(userInfo.change_name));
 
             editor.commit();
 
@@ -117,6 +117,7 @@ public class UserDao {
             userInfo.user_email = simpleDecodeString(sp.getString("user_email", null));
             userInfo.user_status = simpleDecodeString(sp.getString("user_status", null));
             userInfo.user_img = simpleDecodeString(sp.getString("user_img", null));
+            userInfo.change_name = simpleDecodeString(sp.getString("change_name", null));
 
             return userInfo;
         } catch (Exception e) {

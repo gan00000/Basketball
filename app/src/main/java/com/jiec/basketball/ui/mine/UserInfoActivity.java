@@ -40,6 +40,7 @@ import static com.jiec.basketball.core.BallApplication.userInfo;
 
 /**
  * Created by Jiec on 2019/1/13.
+ * 个人中心，修改用户资料页面
  */
 public class UserInfoActivity extends BaseActivity {
 
@@ -55,23 +56,21 @@ public class UserInfoActivity extends BaseActivity {
     TextView mTvEmail;
 
     private String mHeadBase64;
-    private boolean isModify;  //是否可以更改，默认可以
+    private boolean isModify;  //是否可以更改
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_user_info);
         ButterKnife.bind(this);
 
-
-         isModify = SPUtils.getInstance().getBoolean("isModify", false);
-        if( !isModify){
+        isModify = InputCheckUtils.compareIsEqual("0", userInfo.change_name);
+        if (!isModify) {
             mEtName.setVisibility(View.GONE);
         }
         mTvName.setText("用戶名（" + userInfo.display_name + "）");
         if (!TextUtils.isEmpty(userInfo.user_email)) {
-            mTvEmail.setText("郵件（" + userInfo.user_email+ "）");
+            mTvEmail.setText("郵件（" + userInfo.user_email + "）");
         }
         ImageLoaderUtils.display(this, mIvHead, EmptyUtils.emptyOfString(userInfo.user_img) ? " " : userInfo.user_img,
                 R.drawable.img_default_head, R.drawable.img_default_head);
@@ -81,7 +80,7 @@ public class UserInfoActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_save:
-                    updateInfo();
+                updateInfo();
                 break;
             case R.id.iv_head:
                 startActivityForResult(new Intent(this, HeadActivity.class), 10000);
@@ -130,20 +129,25 @@ public class UserInfoActivity extends BaseActivity {
     public void updateInfo() {
         String email = mEtEmail.getText().toString().trim();
         String name = mEtName.getText().toString().trim();
+
         Map<String, String> paramsMap = new HashMap<>();
-        paramsMap.put("token", UserManager.instance().getToken());
-        if( !EmptyUtils.emptyOfString(email)){
-            if( !InputCheckUtils.checkInputIsEmail(email)){
+        paramsMap.put("token", userInfo.user_token);
+        if (!EmptyUtils.emptyOfString(email)) {
+            if (!InputCheckUtils.checkInputIsEmail(email)) {
                 ToastUtil.showMsg("請填寫正確的郵箱");
                 return;
             }
-            paramsMap.put("email",email);
+            paramsMap.put("email", email);
         }
-        if( !EmptyUtils.emptyOfString(mHeadBase64)){
-            paramsMap.put("file",mHeadBase64);
+        if (!EmptyUtils.emptyOfString(mHeadBase64)) {
+            paramsMap.put("file", mHeadBase64);
         }
-        if(isModify){
-            paramsMap.put("display_name",name);
+        if (isModify) {
+            if (EmptyUtils.emptyOfString(name)) {
+                ToastUtil.showMsg("請輸入用戶名");
+                return;
+            }
+            paramsMap.put("display_name", name);
         }
 
         showLoading();
@@ -156,7 +160,6 @@ public class UserInfoActivity extends BaseActivity {
                     @Override
                     protected void onSuccess(UserProfile result) {
                         UserManager.instance().updateProfile(result);
-
                         hideLoading();
                         ToastUtil.showMsg("更新成功");
                         finish();

@@ -69,7 +69,6 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         loadData();
     }
 
@@ -129,7 +128,9 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
         @Override
         public void onItemClick(NewsBean bean, int position) {
 
-            Intent intent = new Intent(getContext(), YouTubePlayerActivity.class);
+        FilmPlayActivity.show(getContext(), bean.getVideoId());
+
+    /*        Intent intent = new Intent(getContext(), YouTubePlayerActivity.class);
 
     // Youtube video ID (Required, You can use YouTubeUrlParser to parse Video Id from url)
             intent.putExtra(YouTubePlayerActivity.EXTRA_VIDEO_ID, bean.getVideoId());
@@ -153,12 +154,12 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
             intent.putExtra(YouTubePlayerActivity.EXTRA_ANIM_EXIT, R.anim.fade_out);
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            startActivity(intent);*/
 
-            /**原始方法1*/
+            /**================原始方法1==========*/
 //            PlayerViewDemoActivity.show(getContext(), bean.getVideoId());
 
-            /**原始方法2*/
+            /**================原始方法2==========*/
 //            Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(),
 //                    YoutubeKey.KEY,
 //                    bean.getVideoId(),

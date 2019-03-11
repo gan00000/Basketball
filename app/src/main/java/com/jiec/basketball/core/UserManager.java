@@ -189,6 +189,7 @@ public class UserManager {
         userInfoBean.user_email = result.getResult().getUser_email();
         userInfoBean.user_status = result.getResult().getUser_status();
         userInfoBean.user_img = result.getResult().getUser_img();
+        userInfoBean.change_name = result.getResult().getChange_name();
         BallApplication.userInfo = userInfoBean;
         UserDao.getInstance().encodeAndSaveUserInfo(getApplicationContext(), userInfoBean);
         EventBus.getDefault()

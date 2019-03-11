@@ -372,7 +372,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                 }
                 break;
 
-            case R.id.iv_comment:
+            case R.id.iv_comment: //跳轉到評論頁面
 
                 break;
 

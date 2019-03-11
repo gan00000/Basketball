@@ -13,6 +13,11 @@ public class UserInfoBean implements Parcelable {
     public String user_email;
     public String user_status;
     public String user_img;
+    public String change_name; //是否已更换昵称：0=没更换，1=已更换
+
+
+    public UserInfoBean() {
+    }
 
     @Override
     public int describeContents() {
@@ -27,9 +32,7 @@ public class UserInfoBean implements Parcelable {
         dest.writeString(this.user_email);
         dest.writeString(this.user_status);
         dest.writeString(this.user_img);
-    }
-
-    public UserInfoBean() {
+        dest.writeString(this.change_name);
     }
 
     protected UserInfoBean(Parcel in) {
@@ -39,9 +42,10 @@ public class UserInfoBean implements Parcelable {
         this.user_email = in.readString();
         this.user_status = in.readString();
         this.user_img = in.readString();
+        this.change_name = in.readString();
     }
 
-    public static final Parcelable.Creator<UserInfoBean> CREATOR = new Parcelable.Creator<UserInfoBean>() {
+    public static final Creator<UserInfoBean> CREATOR = new Creator<UserInfoBean>() {
         @Override
         public UserInfoBean createFromParcel(Parcel source) {
             return new UserInfoBean(source);
