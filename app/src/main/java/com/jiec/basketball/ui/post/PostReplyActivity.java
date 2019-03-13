@@ -1,4 +1,4 @@
-package com.jiec.basketball.ui.mine.comment;
+package com.jiec.basketball.ui.post;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,35 +15,38 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * 我的評論頁面
- * Created by Jiec on 2019/1/13.
+ * 評論跟帖頁面
  */
-public class CommentActivity extends BaseActivity {
+public class PostReplyActivity extends BaseActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
 
-    public static void show(Context context) {
-        context.startActivity(new Intent(context, CollectionActivity.class));
+    private String postId;
+
+    public static void show(Context context, String postId) {
+        Intent mIntent = new Intent(context, PostReplyActivity.class);
+        mIntent.putExtra("postId", postId);
+        context.startActivity(mIntent);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_fragment);
         ButterKnife.bind(this);
+        postId = getIntent().getStringExtra("postId");
+        mTitleBar.setTitle("評論回復");
 
-        mTitleBar.setTitle(R.string.mine_comment);
-
-        CommentFragment fragment = (CommentFragment) getSupportFragmentManager()
+        PostReplyFragment fragment = (PostReplyFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.layout_fragment);
 
         if (fragment == null) {
-            fragment = CommentFragment.newInstance();
+            fragment = PostReplyFragment.newInstance(postId);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.add(R.id.layout_fragment, fragment);
             transaction.commit();
         }
     }
+
 }

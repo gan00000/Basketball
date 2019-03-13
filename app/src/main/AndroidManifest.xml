@@ -159,6 +159,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.post.PostReplyActivity"
+            android:screenOrientation="portrait" />
+
         <!--Need Your Google API Key-->
         <meta-data
             android:name="com.jiec.basketball.ytpa.YouTubePlayerActivity.ApiKey"

@@ -27,7 +27,7 @@ import com.wangcj.common.widget.CircleSImageView;
  * 新聞評論列表适配器
  */
 
-public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean> {
+public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewHolder> {
 
     public PostCommentAdapter(List<CommentsBean> data) {
         super(R.layout.item_news_comment, data);

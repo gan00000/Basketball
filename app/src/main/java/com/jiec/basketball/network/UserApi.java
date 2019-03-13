@@ -61,7 +61,7 @@ public interface UserApi {
     @GET("/api/get_history/")
     Observable<HistoryResponse> getHistory(@Query("token") String token, @Query("offset") int offset);
 
-
+    /**獲取我的評論*/
     @GET("/api/get_my_comment/")
     Observable<CommentResponse> getComments(@Query("token") String token, @Query("offset") int offset);
 

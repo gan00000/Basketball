@@ -46,6 +46,23 @@ public interface NewsApi {
     Observable<CommResponse> comment(@Field("token") String token, @Field("post_id") String id,
                                      @Field("comment_txt") String comment_txt, @Field("reply_comment_id") String reply_comment_id);
 
+    /**
+     * 獲取所有新聞評論
+     * @param token
+     * @param post_id
+     * @param offset
+     * @return
+     */
     @GET("/api/get_post_comments/")
     Observable<NewsCommentResponse> getNewsCommnet(@Query("token") String token, @Query("post_id") String post_id, @Query("offset") int offset);
+
+    /**
+     * 獲取所有新聞評論
+     * @param token
+     * @param post_id
+     * @param offset
+     * @return
+     */
+    @GET("/api/get_post_hot_comments/")
+    Observable<NewsCommentResponse> getHotCommnet(@Query("token") String token, @Query("post_id") String post_id, @Query("offset") int offset);
 }

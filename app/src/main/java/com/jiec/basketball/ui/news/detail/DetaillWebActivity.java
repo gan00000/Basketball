@@ -35,6 +35,7 @@ import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.UserApi;
 import com.jiec.basketball.network.base.CommResponse;
 import com.jiec.basketball.ui.dialog.ShareUrlDialog;
+import com.jiec.basketball.ui.post.PostReplyActivity;
 import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.wangcj.common.utils.ThreadUtils;
@@ -373,7 +374,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                 break;
 
             case R.id.iv_comment: //跳轉到評論頁面
-
+                PostReplyActivity.show(DetaillWebActivity.this, postId);
                 break;
 
             case R.id.tv_send:
