@@ -65,7 +65,7 @@ public class UserReplyView extends LinearLayout {
 				R.drawable.img_default_head, R.drawable.img_default_head);
 		tvName.setText(replyBean.getComment_author());
 		tvComment.setText(replyBean.getComment_content());
-		tvTime.setText(AppUtil.getStandardDate(replyBean.getComment_date()));
+		tvTime.setText(AppUtil.getCommentTime(replyBean.getComment_date()));
 		tvLike.setText(replyBean.getTotal_like());
 
 		boolean isLike = false;

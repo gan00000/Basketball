@@ -50,6 +50,7 @@
         android:layout_marginTop="15dp"
         android:paddingRight="@dimen/page_padding"
         android:textColor="@color/red"
+        android:visibility="invisible"
         android:textSize="@dimen/sp_12"
         tools:text="12" />
 
@@ -59,6 +60,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="10dp"
         android:layout_toLeftOf="@id/tv_like"
+        android:visibility="invisible"
         android:clickable="true"
         android:src="@drawable/icon_great_normal" />
 

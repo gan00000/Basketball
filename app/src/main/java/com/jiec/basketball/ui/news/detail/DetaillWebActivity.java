@@ -419,9 +419,8 @@ public class DetaillWebActivity extends BaseWebActivity {
      * @param comment
      */
     private void comment(String comment) {
-
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.comment(userInfo.user_token, mNewsBean.getId(), comment, reply_comment_id)
+        newsApi.comment(userInfo.user_token, postId, comment, reply_comment_id)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<CommResponse>() {
                     @Override

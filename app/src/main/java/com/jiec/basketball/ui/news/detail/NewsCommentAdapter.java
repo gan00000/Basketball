@@ -21,6 +21,7 @@ import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.base.CommResponse;
 import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.utils.ImageLoaderUtils;
+import com.jiec.basketball.utils.InputCheckUtils;
 import com.jiec.basketball.widget.UserReplyView;
 import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.CircleSImageView;
@@ -122,8 +123,8 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     R.drawable.img_default_head, R.drawable.img_default_head);
             ((ItemViewHolder) holder).mTvName.setText(news.getComment_author());
             ((ItemViewHolder) holder).mTvComment.setText(news.getComment_content());
-            ((ItemViewHolder) holder).mTvTime.setText(AppUtil.getStandardDate(news.getComment_date()));
-            ((ItemViewHolder) holder).mTvLike.setText(news.getTotal_like());
+            ((ItemViewHolder) holder).mTvTime.setText(AppUtil.getCommentTime(news.getComment_date()));
+            ((ItemViewHolder) holder).mTvLike.setText( InputCheckUtils.compareIsEqual(news.getTotal_like(), "0") ? "讃" : "（"+news.getTotal_like()+"）");
             ((ItemViewHolder) holder).tvReplyNum.setText(news.getTotal_reply()+"回復");
 
             boolean isLike = false;
@@ -140,6 +141,10 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ItemViewHolder) holder).mIvLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(BallApplication.userInfo == null){
+                        ToastUtil.showMsg("請先登錄");
+                        return;
+                    }
                     like(news.getPost_id(), news.getComment_id(), _isLike,
                             ((ItemViewHolder) holder).mTvLike, ((ItemViewHolder) holder).mIvLike);
                 }
@@ -241,7 +246,7 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      */
     private void like(String postId, String commentId, final int like, final TextView tvLikeNum, final ImageView ivLike) {
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.likeComment(UserManager.instance().getToken(), postId, commentId, like)
+        newsApi.likeComment(BallApplication.userInfo.user_token, postId, commentId, like)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<CommResponse>() {
                     @Override
