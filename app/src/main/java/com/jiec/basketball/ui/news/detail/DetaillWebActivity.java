@@ -125,11 +125,10 @@ public class DetaillWebActivity extends BaseWebActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_detail_web);
         ButterKnife.bind(this);
         postId = getIntent().getStringExtra(KEY_POSTID);
-        postId = "125345";
+//        postId = "125345";
 
         initView();
         getNewsDetail();
@@ -437,6 +436,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                             commentsBean.setComment_date(TimeUtils.getNowString());
                             commentsBean.setTotal_like("0");
                             commentsBean.setMy_like(0);
+                            commentsBean.setTotal_reply("0");
                             mCommentAdapter.addItemData(commentsBean);
                             mCommentRecyclerView.scrollToPosition(mCommentAdapter.getItemCount()-1);
                         }else {

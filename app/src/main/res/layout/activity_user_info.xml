@@ -26,7 +26,37 @@
             android:textSize="@dimen/text_14sp" />
     </com.wangcj.common.widget.TitleBar>
 
+
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/page_padding"
+            android:layout_marginTop="5dp"
+            android:text="用戶名"
+            android:textSize="@dimen/text_14sp" />
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tv_name"
+            android:layout_marginLeft="@dimen/page_padding"
+            android:background="@null"
+            android:hint="請填寫用戶名"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"
+            android:textSize="@dimen/text_14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_head"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginTop="5dp"
@@ -39,7 +69,7 @@
             android:layout_marginLeft="@dimen/page_padding"
             android:text="頭像  (添加/修改頭像)"
             android:textColor="@color/gray"
-            android:textSize="@dimen/text_12sp" />
+            android:textSize="@dimen/text_14sp" />
 
         <com.jiec.basketball.widget.CircleSImageView
             android:id="@+id/iv_head"
@@ -69,41 +99,13 @@
         android:background="@color/white">
 
         <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/page_padding"
-            android:layout_marginTop="5dp"
-            android:text="用戶名"
-            android:textSize="@dimen/text_12sp" />
-
-        <EditText
-            android:id="@+id/et_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/tv_name"
-            android:layout_marginLeft="@dimen/page_padding"
-            android:background="@null"
-            android:hint="請填寫用戶名"
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray"
-            android:textSize="@dimen/text_12sp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/white">
-
-        <TextView
             android:id="@+id/tv_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/page_padding"
             android:layout_marginTop="5dp"
             android:text="郵件"
-            android:textSize="@dimen/text_12sp" />
+            android:textSize="@dimen/text_14sp" />
 
         <EditText
             android:id="@+id/et_email"
@@ -116,7 +118,7 @@
             android:hint="請填寫你的郵件"
             android:textColor="@color/black"
             android:textColorHint="@color/gray"
-            android:textSize="@dimen/text_12sp" />
+            android:textSize="@dimen/text_14sp" />
     </RelativeLayout>
 
 </LinearLayout>

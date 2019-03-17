@@ -48,7 +48,7 @@ public class CollectionFragment extends BaseListFragment {
 
     @Override
     protected BaseListAdapter createAdapter() {
-        return new NewsListAdapter(getContext());
+        return new NewsListAdapter(getContext(), 2);
     }
 
     @Override

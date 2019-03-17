@@ -15,6 +15,7 @@ import com.jiec.basketball.ui.news.NewsListAdapter;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 
 /**
+ * 浏览历史Fragment
  * Created by Jiec on 2019/2/16.
  */
 public class HistoryFragment extends BaseListFragment {
@@ -48,7 +49,7 @@ public class HistoryFragment extends BaseListFragment {
 
     @Override
     protected BaseListAdapter createAdapter() {
-        return new NewsListAdapter(getContext());
+        return new NewsListAdapter(getContext(), 2);
     }
 
     @Override

@@ -4,9 +4,12 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +17,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.jiec.basketball.R;
 import com.jiec.basketball.entity.NewsBean;
+import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.jiec.basketball.utils.ThumbnailUtils;
@@ -82,21 +86,18 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (position == 3 || (position - 3) % 8 == 0) {
             return TYPE_ADMOB;
         }
-
         return TYPE_ITEM;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                      int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_film, parent, false);
             ItemViewHolder vh = new ItemViewHolder(v);
             return vh;
         } else if (viewType == TYPE_FOOTER) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.footer, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer, null);
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             if (this.mShowFooter) {
@@ -104,7 +105,6 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             } else {
                 view.setVisibility(View.GONE);
             }
-
             return new FooterViewHolder(view);
         } else if (viewType == TYPE_ADMOB) {
             View v = LayoutInflater.from(parent.getContext())
@@ -112,14 +112,12 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             AdViewHolder vh = new AdViewHolder(v);
             return vh;
         }
-
         return null;
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
-
             final NewsBean news = mData.get(position - getAdSize(position));
             if (news == null) {
                 return;
@@ -129,6 +127,10 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((ItemViewHolder) holder).mKind.setText(news.getKind());
             ((ItemViewHolder) holder).mTime.setText(AppUtil.getStandardDate(news.getDate()));
             ((ItemViewHolder) holder).mViews.setText(news.getSumViews() + "");
+
+            String playUrl = "https://www.youtube.com/embed/"+news.getVideoId();
+            Log.e("視頻播放地址", playUrl);
+            ((ItemViewHolder) holder).wvFilm.loadUrl(playUrl);
 
             if (TextUtils.isEmpty(news.getImagesrc())) {
                 ThumbnailUtils.getThumbnail(news.getId(), new ThumbnailUtils.OnLoadSuccessLisener() {
@@ -142,14 +144,38 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ImageLoaderUtils.display(mContext, ((ItemViewHolder) holder).youTubeThumbnailView, news.getImgsrc());
             }
 
+            //Item点击处理
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    NewsBean newsBean = mData.get(position - getAdSize(position));
+                    DetaillWebActivity.show(mContext, newsBean.getId());
+                }
+            });
 
+            //播放按钮点击处理
+            ((ItemViewHolder) holder).ivPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     if (mOnItemClickListener != null) {
-                        mOnItemClickListener.onItemClick(news, position - getAdSize(position));
+                        mOnItemClickListener.onItemClick(1, news, position - getAdSize(position));
                     }
+                }
+            });
 
+            //播放区域点击处理
+            ((ItemViewHolder) holder).youTubeThumbnailView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(1, news, position - getAdSize(position));
+                    }
+                }
+            });
+
+            ((ItemViewHolder) holder).tvShare.setOnClickListener(v -> {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(2, news, position - getAdSize(position));
                 }
             });
 
@@ -165,11 +191,8 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (mData == null) {
             return begin;
         }
-
         int adSize = mData.size() > 2 ? ((mData.size() - 3) / 7 + 1) : 0;
-
         int sumSize = mData.size() + begin + adSize;
-
         return sumSize;
     }
 
@@ -196,42 +219,39 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return adSize;
     }
 
-
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
     }
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
-
         public FooterViewHolder(View view) {
             super(view);
         }
-
     }
 
     public interface OnItemClickListener {
-        void onItemClick(NewsBean bean, int position);
+        //clickType点击类型：1=播放按钮点击，2=分享按钮点击
+        void onItemClick(int clickType, NewsBean bean, int position);
     }
 
     public class AdViewHolder extends RecyclerView.ViewHolder {
-
         public AdView adView;
-
         public AdViewHolder(View itemView) {
             super(itemView);
-
             adView = (AdView) itemView.findViewById(R.id.adView_bottom);
         }
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-
-        TextView mTitle;
-        TextView mAuthor;
-        TextView mKind;
-        TextView mTime;
-        TextView mViews;
-        ImageView youTubeThumbnailView;
+        private  TextView mTitle;
+        private TextView mAuthor;
+        private TextView mKind;
+        private  TextView mTime;
+        private  TextView tvShare;
+        private TextView mViews;
+        private ImageView youTubeThumbnailView;
+        private ImageView ivPlay;
+        private WebView wvFilm;
 
         public ItemViewHolder(View v) {
             super(v);
@@ -239,8 +259,15 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mAuthor = v.findViewById(R.id.tv_author);
             mKind = v.findViewById(R.id.tv_kind);
             mTime = v.findViewById(R.id.tv_time);
+            tvShare = v.findViewById(R.id.tv_share);
             mViews = v.findViewById(R.id.tv_views);
             youTubeThumbnailView = v.findViewById(R.id.youtube_thumbnail);
+            ivPlay = v.findViewById(R.id.iv_play);
+            wvFilm = v.findViewById(R.id.wv_film);
+
+            WebSettings mSettings = wvFilm.getSettings();
+            mSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+            mSettings.setLoadWithOverviewMode(true); //打开页面时， 自适应屏幕
         }
     }
 

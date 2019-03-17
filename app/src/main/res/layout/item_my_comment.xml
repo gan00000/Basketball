@@ -36,38 +36,44 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_author"
             android:layout_marginLeft="@dimen/margin_text"
-            android:layout_marginTop="3dp"
             android:layout_toRightOf="@id/iv_head"
             android:textColor="@color/gray"
-            android:textSize="@dimen/sp_14" />
+            android:textSize="@dimen/sp_12" />
 
         <TextView
             android:id="@+id/tv_zan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginLeft="@dimen/margin_text"
-            android:drawableLeft="@drawable/icon_great_pressed"
-            android:drawablePadding="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:gravity="center"
             android:textColor="@color/gray"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_14" />
+
+
+        <ImageView
+            android:id="@+id/iv_zan"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_toLeftOf="@id/tv_zan"
+            android:src="@drawable/icon_great_pressed" />
 
         <TextView
             android:id="@+id/tv_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_time"
             android:layout_alignLeft="@id/tv_time"
+            android:layout_below="@id/tv_time"
             android:layout_marginTop="5dp"
             android:textColor="@color/black"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_14" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_comment"
             android:layout_alignLeft="@id/tv_time"
+            android:layout_below="@id/tv_comment"
             android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
@@ -76,14 +82,16 @@
                 android:layout_height="wrap_content"
                 android:text="來自："
                 android:textColor="@color/gray"
-                android:textSize="@dimen/sp_16" />
+                android:textSize="@dimen/sp_14" />
 
             <TextView
                 android:id="@+id/tv_news_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lineSpacingMultiplier="1.2"
+                android:maxLines="2"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/sp_16" />
+                android:textSize="@dimen/sp_14" />
 
         </LinearLayout>
 

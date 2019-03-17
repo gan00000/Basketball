@@ -31,9 +31,11 @@ public class NewsListAdapter extends BaseListAdapter<NewsBean> {
     private static final int TYPE_ADMOB = 1;
 
     private Context mContext;
+    private int adapterType; //适配器类型：1=item中有广告，用于新闻列表页面；2=item无广告，用户收藏、浏览历史==
 
-    public NewsListAdapter(Context context) {
+    public NewsListAdapter(Context context, int adapterType) {
         this.mContext = context;
+        this.adapterType = adapterType;
     }
 
     @Override
@@ -48,16 +50,16 @@ public class NewsListAdapter extends BaseListAdapter<NewsBean> {
      * @return
      */
     public int getType(int position) {
-        if (position == 3 || (position - 3) % 8 == 0) {
-            return TYPE_ADMOB;
+        if(adapterType == 1){
+            if (position == 3 || (position - 3) % 8 == 0) {
+                return TYPE_ADMOB;
+            }
         }
-
         return TYPE_ITEM;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                      int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_news, parent, false);

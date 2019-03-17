@@ -13,29 +13,17 @@
         android:lines="1"
         android:paddingLeft="@dimen/page_padding"
         android:paddingRight="@dimen/page_padding"
-        android:paddingTop="@dimen/page_padding"
+        android:paddingTop="@dimen/margin_text"
         tools:text="name" />
 
-    <TextView
-        android:id="@+id/tv_time"
-        style="@style/SecondText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_title"
-        android:layout_marginTop="10dp"
-        android:ellipsize="end"
-        android:lines="1"
-        android:paddingBottom="@dimen/page_padding"
-        android:paddingLeft="@dimen/page_padding"
-        android:paddingRight="@dimen/page_padding"
-        tools:text="comment" />
-
     <LinearLayout
+        android:id="@+id/ll_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_time"
+        android:layout_below="@id/tv_title"
         android:layout_alignLeft="@id/tv_time"
-        android:paddingBottom="@dimen/page_padding"
+        android:paddingBottom="5dp"
+        android:layout_marginTop="5dp"
         android:paddingLeft="@dimen/page_padding"
         android:paddingRight="@dimen/page_padding"
         android:orientation="horizontal">
@@ -45,16 +33,32 @@
             android:layout_height="wrap_content"
             android:text="來自："
             android:textColor="@color/gray"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/tv_news_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.2"
+            android:maxLines="2"
             android:textColor="@color/blue"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_14" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_info"
+        android:ellipsize="end"
+        android:lines="1"
+        android:paddingBottom="8dp"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/sp_12"
+        android:paddingLeft="@dimen/page_padding"
+        android:paddingRight="@dimen/page_padding"
+        tools:text="时间" />
 
     <View
         android:layout_width="match_parent"

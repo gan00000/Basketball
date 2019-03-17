@@ -28,15 +28,12 @@ public class ShareUrlDialog extends Dialog {
 
     public ShareUrlDialog(final Activity activity, final NewsBean newsBean) {
         super(activity);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_share);
-
         setDialogDefaultSize(activity);
 
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(activity);
-
 
         ImageView facebook = (ImageView) findViewById(R.id.iv_facebook);
         facebook.setOnClickListener(new View.OnClickListener() {
@@ -75,9 +72,7 @@ public class ShareUrlDialog extends Dialog {
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         DisplayMetrics dm = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-
         lp.width = dm.widthPixels;
-
         dialogWindow.setAttributes(lp);
         dialogWindow.setGravity(Gravity.BOTTOM);
         dialogWindow.setBackgroundDrawableResource(android.R.color.transparent);

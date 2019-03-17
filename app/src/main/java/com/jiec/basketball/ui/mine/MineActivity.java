@@ -48,7 +48,6 @@ import static com.jiec.basketball.core.BallApplication.userInfo;
 
 public class MineActivity extends BaseUIActivity {
 
-
     @BindView(R.id.iv_head)
     CircleSImageView mIvHead;
     @BindView(R.id.tv_name)
@@ -70,7 +69,6 @@ public class MineActivity extends BaseUIActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
         ButterKnife.bind(this);
-
         EventBus.getDefault().register(this);
 
         if (!UserManager.instance().checkLogin()) {
@@ -201,6 +199,11 @@ public class MineActivity extends BaseUIActivity {
                 new QBadgeView(MineActivity.this).bindTarget(rlNotify.findViewById(com.wangcj.common.R.id.tv_title))
                         .setBadgeNumber(0);
                 break;
+
+                case ConstantUtils.EVENT_HAS_READ:
+                    new QBadgeView(MineActivity.this).bindTarget(rlNotify.findViewById(com.wangcj.common.R.id.tv_title))
+                            .setBadgeNumber(0);
+                    break;
 
                 case ConstantUtils.EVENT_LOGIN:
                     getNotifyCounter();

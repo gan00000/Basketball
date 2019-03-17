@@ -11,6 +11,8 @@ import com.jiec.basketball.R;
 import com.jiec.basketball.adapter.MyCommentAdapter;
 import com.jiec.basketball.base.BaseListAdapter;
 import com.jiec.basketball.entity.response.NotifyResponse;
+import com.jiec.basketball.utils.AppUtil;
+import com.jiec.basketball.utils.InputCheckUtils;
 
 
 /**
@@ -42,12 +44,17 @@ public class NotifyAdapter extends BaseListAdapter<NotifyResponse.Result.Notific
         if (holder instanceof ItemViewHolder) {
             NotifyResponse.Result.NotificationBean bean = getItem(position);
             if (bean != null) {
-                if (bean.getType().equals("like")) { //????????
+                if (InputCheckUtils.compareIsEqual(bean.getType(), "like")) {
+                    //點讚消息通知
                     ((ItemViewHolder) holder).mTitle.setText(bean.getDisplay_name()
                             + "點贊了你的評論："+bean.getComment_content());
+                }else if(InputCheckUtils.compareIsEqual(bean.getType(), "reply")){
+                    //評論回復消息通知
+                    ((ItemViewHolder) holder).mTitle.setText(bean.getDisplay_name()
+                            + "回復了你的評論："+bean.getComment_content());
                 }
                 ((ItemViewHolder) holder).tvTitle.setText(bean.getPost_title());
-                ((ItemViewHolder) holder).mTime.setText(bean.getCreated_on());
+                ((ItemViewHolder) holder).mTime.setText(AppUtil.getStandardDate(bean.getCreated_on()));
 
                 ((ItemViewHolder) holder).tvTitle.setOnClickListener(new View.OnClickListener() {
                     @Override

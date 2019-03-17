@@ -29,7 +29,7 @@ import java.util.List;
 
 
 /**
- * Description : 列表适配器
+ * Description : 新闻列表适配器
  * Author : jiec
  * Date   : 17-1-6
  */

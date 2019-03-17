@@ -76,13 +76,14 @@ public class UserInfoActivity extends BaseActivity {
                 R.drawable.img_default_head, R.drawable.img_default_head);
     }
 
-    @OnClick({R.id.tv_save, R.id.iv_head})
+    @OnClick({R.id.tv_save, R.id.iv_head, R.id.rl_head})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_save:
                 updateInfo();
                 break;
             case R.id.iv_head:
+            case R.id.rl_head:
                 startActivityForResult(new Intent(this, HeadActivity.class), 10000);
                 break;
         }

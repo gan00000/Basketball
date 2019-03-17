@@ -12,7 +12,6 @@ import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.UserApi;
-import com.jiec.basketball.ui.news.NewsListAdapter;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 
 /**
@@ -21,14 +20,11 @@ import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 public class CommentFragment extends BaseListFragment {
 
     public static CommentFragment newInstance() {
-
         Bundle args = new Bundle();
-
         CommentFragment fragment = new CommentFragment();
         fragment.setArguments(args);
         return fragment;
     }
-
 
 
     @Override
@@ -39,7 +35,7 @@ public class CommentFragment extends BaseListFragment {
                 .subscribe(new NetSubscriber<CommentResponse>() {
                     @Override
                     protected void onSuccess(CommentResponse result) {
-                        showData(result.getPages(), result.getSavedposts().getComments());
+                        showData(result.getSavedposts().getPages(), result.getSavedposts().getComments());
                     }
 
                     @Override

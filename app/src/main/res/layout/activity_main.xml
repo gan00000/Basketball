@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:id="@+id/title_layout"
@@ -27,7 +28,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:clickable="true"
-             />
+            app:civ_border_color="@color/red"
+            app:civ_border_overlay="true" />
     </RelativeLayout>
 
     <com.flyco.tablayout.CommonTabLayout

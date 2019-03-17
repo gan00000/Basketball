@@ -226,7 +226,7 @@ public class PostReplyFragment extends BaseUIFragment  {
     private void getHotComment() {
         //getHotCommnet
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.getNewsCommnet(UserManager.instance().getToken(), postId, hotOffset)
+        newsApi.getHotCommnet(UserManager.instance().getToken(), postId, hotOffset)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<NewsCommentResponse>() {
                     @Override
@@ -266,7 +266,6 @@ public class PostReplyFragment extends BaseUIFragment  {
                             }
                         }
 
-
                     }
 
                     @Override
@@ -293,7 +292,10 @@ public class PostReplyFragment extends BaseUIFragment  {
                         if(allAdapter == null){
                             LogUtils.e("首次加載所有評論555");
                             allAdapter = new PostCommentAdapter(commentList);
-                            rvAll.setAdapter(allAdapter);
+                            allAdapter.bindToRecyclerView(rvAll);
+                            if(EmptyUtils.emptyOfList(commentList)){
+                                allAdapter.setEmptyView(R.layout.tipslayout_load_empty);
+                            }
 
                             allAdapter.setEnableLoadMore(true);
                             allAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
@@ -314,7 +316,6 @@ public class PostReplyFragment extends BaseUIFragment  {
 //                                mPullRefreshLayout.onSuccessCompelete();
                             }
                         }
-
 
                     }
 
@@ -349,6 +350,7 @@ public class PostReplyFragment extends BaseUIFragment  {
                             commentsBean.setComment_date(TimeUtils.getNowString());
                             commentsBean.setTotal_like("0");
                             commentsBean.setMy_like(0);
+                            commentsBean.setTotal_reply("0");
                             allAdapter.addData(commentsBean);
 //                            rvAll.scrollToPosition(allAdapter.getItemCount()-1);
                         }else {

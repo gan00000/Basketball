@@ -21,6 +21,7 @@ import com.jiec.basketball.network.NewsApi;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.base.CommResponse;
 import com.jiec.basketball.utils.AppUtil;
+import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.jiec.basketball.utils.InputCheckUtils;
 import com.jiec.basketball.widget.UserReplyView;
@@ -52,17 +53,14 @@ public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewH
 
         ImageView mIvLike = baseViewHolder.itemView.findViewById(R.id.iv_like);
         TextView mTvLike = baseViewHolder.itemView.findViewById(R.id.tv_like);
-        boolean isLike = false;
         if (hisBean.getMy_like() == 0) {
             mIvLike.setImageResource(R.drawable.icon_great_normal);
             mTvLike.setTextColor(mContext.getResources().getColor(R.color.gray));
         } else {
-            isLike = true;
             mIvLike.setImageResource(R.drawable.icon_great_pressed);
             mTvLike.setTextColor(mContext.getResources().getColor(R.color.red));
         }
 
-        final int _isLike = isLike ? 0 : 1;
         mIvLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,13 +68,15 @@ public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewH
                     ToastUtil.showMsg("請先登錄");
                     return;
                 }
-                like(hisBean.getPost_id(), hisBean.getComment_id(), _isLike, mTvLike, mIvLike);
+                CommentsBean hisBean = mData.get(baseViewHolder.getAdapterPosition());
+                int isLike = hisBean.getMy_like() == 1 ? 0 : 1; //0=取消點讚；1=點讚
+                like(hisBean.getPost_id(), hisBean.getComment_id(), isLike, mTvLike, mIvLike);
             }
         });
 
         LinearLayout llReply = baseViewHolder.itemView.findViewById(R.id.ll_reply);
         /****************設置評論回復View********************/
-        int replySize = Integer.parseInt(hisBean.getTotal_reply());
+        int replySize = EmptyUtils.emptyOfObject(hisBean.getReply()) ? 0 : hisBean.getReply().size();
         if (replySize > 0) {
             llReply.removeAllViews();
             List<NewsCommentResponse.ResultBean.CommentsBean.ReplyBean> replyList = hisBean.getReply();

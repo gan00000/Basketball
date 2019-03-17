@@ -12,7 +12,6 @@ import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.UserApi;
-import com.jiec.basketball.ui.news.NewsListAdapter;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 
 /**

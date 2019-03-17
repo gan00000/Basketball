@@ -6,19 +6,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jiec.basketball.base.BaseListAdapter;
 import com.jiec.basketball.core.BallApplication;
-import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.NewsBean;
+import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.wangcj.common.widget.CircleSImageView;
 import com.jiec.basketball.R;
 
 
 /**
- * Description : 我的評論列表适配器
+ * 我的評論列表适配器
  */
 public class MyCommentAdapter extends BaseListAdapter<NewsBean> {
 
@@ -48,11 +49,19 @@ public class MyCommentAdapter extends BaseListAdapter<NewsBean> {
             ImageLoaderUtils.display(mContext, ((ItemViewHolder) holder).ivHead,
                     BallApplication.userInfo.user_img,
                     R.drawable.img_default_head, R.drawable.img_default_head);
-            ((ItemViewHolder) holder).tvTime.setText(news.getComment_date());
-            ((ItemViewHolder) holder).tvZan.setText("("+news.getTotal_like()+")");
+            ((ItemViewHolder) holder).tvTime.setText(AppUtil.getStandardDate(news.getComment_date()));
             ((ItemViewHolder) holder).tvComment.setText(news.getComment_content());
             ((ItemViewHolder) holder).tvTitle.setText(news.getTitle());
-            ((ItemViewHolder) holder).tvTitle.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+//            ((ItemViewHolder) holder).tvTitle.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+            ((ItemViewHolder) holder).tvZan.setText("("+news.getTotal_like()+")");
+
+            if (news.getTotal_like() == 0) {
+                ((ItemViewHolder) holder).mIvLike.setImageResource(R.drawable.icon_great_normal);
+                ((ItemViewHolder) holder).tvZan.setTextColor(mContext.getResources().getColor(R.color.gray));
+            } else {
+                ((ItemViewHolder) holder).mIvLike.setImageResource(R.drawable.icon_great_pressed);
+                ((ItemViewHolder) holder).tvZan.setTextColor(mContext.getResources().getColor(R.color.red));
+            }
 
             ((ItemViewHolder) holder).tvTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,6 +91,7 @@ public class MyCommentAdapter extends BaseListAdapter<NewsBean> {
         private TextView tvZan;
         private TextView tvComment;
         private TextView tvTitle;
+        private ImageView mIvLike;
 
         public ItemViewHolder(View v) {
             super(v);
@@ -91,6 +101,7 @@ public class MyCommentAdapter extends BaseListAdapter<NewsBean> {
             tvZan = (TextView)v.findViewById( R.id.tv_zan );
             tvComment = (TextView)v.findViewById( R.id.tv_comment );
             tvTitle = (TextView)v.findViewById( R.id.tv_news_title );
+            mIvLike = (ImageView)v.findViewById(R.id.iv_zan);
         }
     }
 

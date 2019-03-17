@@ -20,6 +20,7 @@ import com.jiec.basketball.network.NewsApi;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.base.CommResponse;
 import com.jiec.basketball.utils.AppUtil;
+import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.jiec.basketball.utils.InputCheckUtils;
 import com.jiec.basketball.widget.UserReplyView;
@@ -111,9 +112,9 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
-            final NewsCommentResponse.ResultBean.CommentsBean news = mData.get(position);
+             NewsCommentResponse.ResultBean.CommentsBean news = mData.get(position);
             if (news == null) {
                 return;
             }
@@ -127,17 +128,15 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ItemViewHolder) holder).mTvLike.setText( InputCheckUtils.compareIsEqual(news.getTotal_like(), "0") ? "讃" : "（"+news.getTotal_like()+"）");
             ((ItemViewHolder) holder).tvReplyNum.setText(news.getTotal_reply()+"回復");
 
-            boolean isLike = false;
             if (news.getMy_like() == 0) {
                 ((ItemViewHolder) holder).mIvLike.setImageResource(R.drawable.icon_great_normal);
                 ((ItemViewHolder) holder).mTvLike.setTextColor(mContext.getResources().getColor(R.color.gray));
             } else {
-                isLike = true;
                 ((ItemViewHolder) holder).mIvLike.setImageResource(R.drawable.icon_great_pressed);
                 ((ItemViewHolder) holder).mTvLike.setTextColor(mContext.getResources().getColor(R.color.red));
             }
 
-            final int _isLike = isLike ? 0 : 1;
+
             ((ItemViewHolder) holder).mIvLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -145,7 +144,9 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         ToastUtil.showMsg("請先登錄");
                         return;
                     }
-                    like(news.getPost_id(), news.getComment_id(), _isLike,
+                    NewsCommentResponse.ResultBean.CommentsBean news = mData.get(position);
+                    int isLike = news.getMy_like() == 1 ? 0 : 1; //0=取消點讚；1=點讚
+                    like(news.getPost_id(), news.getComment_id(), isLike,
                             ((ItemViewHolder) holder).mTvLike, ((ItemViewHolder) holder).mIvLike);
                 }
             });
@@ -158,7 +159,7 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             });
 
             /****************設置評論回復View********************/
-            int replySize = Integer.parseInt(news.getTotal_reply());
+            int replySize =  EmptyUtils.emptyOfObject(news.getReply()) ? 0 : news.getReply().size();
             if(replySize > 0){
                 ((ItemViewHolder) holder).llReply.removeAllViews();
                 List<NewsCommentResponse.ResultBean.CommentsBean.ReplyBean> replyList = news.getReply();
@@ -184,7 +185,6 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         int sumSize = mData.size() + begin;
-
         return sumSize;
     }
 

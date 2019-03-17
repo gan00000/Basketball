@@ -22,7 +22,10 @@ import com.jiec.basketball.entity.NewsBean;
 import com.jiec.basketball.entity.response.NewListResponse;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.RetrofitClient;
+import com.jiec.basketball.ui.dialog.ShareUrlDialog;
+import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 import com.jiec.basketball.ui.youtube.PlayerViewDemoActivity;
+import com.jiec.basketball.widget.RvDividerItemDecoration;
 import com.jiec.basketball.ytpa.YouTubePlayerActivity;
 import com.jiec.basketball.ytpa.enums.Orientation;
 import com.wangcj.common.utils.LogUtil;
@@ -88,7 +91,7 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
+        mRecyclerView.addItemDecoration(new RvDividerItemDecoration(getResources().getColor(R.color.divider), 12));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new FilmListAdapter(getActivity().getApplicationContext());
         mAdapter.setOnItemClickListener(mOnItemClickListener);
@@ -126,9 +129,14 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private FilmListAdapter.OnItemClickListener mOnItemClickListener = new FilmListAdapter.OnItemClickListener() {
         @Override
-        public void onItemClick(NewsBean bean, int position) {
+        public void onItemClick(int clickType, NewsBean bean, int position) {
+            if(clickType == 2){
+                ShareUrlDialog dialog = new ShareUrlDialog(getActivity(), bean);
+                dialog.show();
+            }else {
+                FilmPlayActivity.show(getContext(), bean.getVideoId());
+            }
 
-        FilmPlayActivity.show(getContext(), bean.getVideoId());
 
     /*        Intent intent = new Intent(getContext(), YouTubePlayerActivity.class);
 

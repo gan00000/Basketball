@@ -233,7 +233,7 @@ public abstract class BaseListFragment extends BaseUIFragment {
     /**
      * 显示数据
      *
-     * @param totalPage
+     * @param totalPage  总分頁數
      * @param data
      */
     public void showData(int totalPage, List<?> data) {
