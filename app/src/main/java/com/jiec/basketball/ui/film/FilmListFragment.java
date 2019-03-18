@@ -22,6 +22,7 @@ import com.jiec.basketball.entity.NewsBean;
 import com.jiec.basketball.entity.response.NewListResponse;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.RetrofitClient;
+import com.jiec.basketball.ui.MainActivity;
 import com.jiec.basketball.ui.dialog.ShareUrlDialog;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 import com.jiec.basketball.ui.youtube.PlayerViewDemoActivity;
@@ -93,7 +94,7 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new RvDividerItemDecoration(getResources().getColor(R.color.divider), 12));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new FilmListAdapter(getActivity().getApplicationContext());
+        mAdapter = new FilmListAdapter((MainActivity)getActivity());
         mAdapter.setOnItemClickListener(mOnItemClickListener);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(mOnScrollListener);

@@ -1,5 +1,6 @@
 package com.jiec.basketball.ui.film;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -17,6 +18,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.jiec.basketball.R;
 import com.jiec.basketball.entity.NewsBean;
+import com.jiec.basketball.ui.MainActivity;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.utils.ImageLoaderUtils;
@@ -40,11 +42,13 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<NewsBean> mData = new ArrayList<>();
     private boolean mShowFooter = true;
     private Context mContext;
+    private MainActivity mActivity;
 
     private OnItemClickListener mOnItemClickListener;
 
-    public FilmListAdapter(Context context) {
-        this.mContext = context;
+    public FilmListAdapter(MainActivity mActivity) {
+        this.mActivity = mActivity;
+        this.mContext = mActivity;
     }
 
     public void setmDate(List<NewsBean> data) {
@@ -266,8 +270,10 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             wvFilm = v.findViewById(R.id.wv_film);
 
             WebSettings mSettings = wvFilm.getSettings();
+            mSettings.setJavaScriptEnabled(true);
             mSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
             mSettings.setLoadWithOverviewMode(true); //打开页面时， 自适应屏幕
+            wvFilm.setWebChromeClient(new BaseWebChromeClient(new VideoImpl(mActivity, wvFilm)));
         }
     }
 

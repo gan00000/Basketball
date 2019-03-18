@@ -124,14 +124,14 @@ public class UserManager {
      * 登录
      *
      * @param type
-     * @param token
+     * @param token  facebook或者line授权token
      */
     public void login(int type, String token) {
         BallPreferencesUtils.getInstance().setLoginType(type);
         //测试账号？？？？？？？？？？？
-        token = "EAAG0bZCueI9wBAAAZAVMKBVs4MjonsjInVeR3NeHZBz53BIig6ZCT" +
-                "DEFshuNOOJdor1KcV5kjC4a0ZAPoarQMNc8HFHD19xzbmV6O9FYm" +
-                "1Rpu4dbTJPQDiayDNfwNoLoiT5ztC3dm4ZBARxqXZCekb2EzUiZCecINb4ZD";
+//        token = "EAAG0bZCueI9wBAAAZAVMKBVs4MjonsjInVeR3NeHZBz53BIig6ZCT" +
+//                "DEFshuNOOJdor1KcV5kjC4a0ZAPoarQMNc8HFHD19xzbmV6O9FYm" +
+//                "1Rpu4dbTJPQDiayDNfwNoLoiT5ztC3dm4ZBARxqXZCekb2EzUiZCecINb4ZD";
 
         UserApi userApi = RetrofitClient.getInstance().create(UserApi.class);
         userApi.login(type, token, mDeviceToke, 2)
