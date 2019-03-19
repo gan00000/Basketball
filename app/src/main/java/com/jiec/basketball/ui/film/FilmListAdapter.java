@@ -21,6 +21,7 @@ import com.jiec.basketball.entity.NewsBean;
 import com.jiec.basketball.ui.MainActivity;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 import com.jiec.basketball.utils.AppUtil;
+import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.jiec.basketball.utils.ThumbnailUtils;
 import com.wangcj.common.utils.LogUtil;
@@ -51,6 +52,10 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.mContext = mActivity;
     }
 
+    /**
+     * 设置数据
+     * @param data
+     */
     public void setmDate(List<NewsBean> data) {
         if (data != null && data.size() > 0) {
             for (NewsBean bean : data) {
@@ -62,8 +67,23 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else {
             this.mData.clear();
         }
-
         this.notifyDataSetChanged();
+    }
+
+    /**
+     * 添加列表数据
+     * @param data
+     */
+    public void addData(List<NewsBean>data) {
+        if (this.mData == null) {
+            setmDate(data);
+        } else {
+            if(EmptyUtils.emptyOfList(data)){
+                return;
+            }
+            this.mData.addAll(data);
+            this.notifyDataSetChanged();
+        }
     }
 
     @Override

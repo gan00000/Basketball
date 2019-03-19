@@ -51,7 +51,6 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private static final int REQ_START_STANDALONE_PLAYER = 1;
     private static final int REQ_RESOLVE_SERVICE_MISSING = 2;
 
-
     private static final String TAG = "FilmListFragment";
 
     private SwipeRefreshLayout mSwipeRefreshWidget;
@@ -276,11 +275,12 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private void showLoadingMore() {
         mAdapter.isShowFooter(true);
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
     }
 
     public void hideLoadingMore() {
         mAdapter.isShowFooter(false);
+
         mAdapter.notifyDataSetChanged();
     }
 

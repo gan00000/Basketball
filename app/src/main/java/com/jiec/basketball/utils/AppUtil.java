@@ -21,8 +21,12 @@ import java.util.Locale;
 
 public class AppUtil {
 
+    /**
+     * 解析获取视频id
+     * @param content
+     * @return
+     */
     public static String getVideoId(String content) {
-
         //找到视频标签
         int index = content.indexOf("https://www.youtube.com");
         if (index < 0) return null;
@@ -59,7 +63,6 @@ public class AppUtil {
             PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             return pi.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return 0;
         }
