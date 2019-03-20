@@ -10,9 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jiec.basketball.R;
-import com.jiec.basketball.adapter.MyCommentAdapter;
 import com.jiec.basketball.core.BallApplication;
-import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.response.NewsCommentResponse;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;

@@ -8,17 +8,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.TimeUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.jiec.basketball.R;
+import com.jiec.basketball.adapter.PostCommentAdapter;
 import com.jiec.basketball.bean.NewsDetailModel;
 import com.jiec.basketball.core.BallApplication;
 import com.jiec.basketball.core.UserManager;
@@ -38,6 +41,7 @@ import com.jiec.basketball.ui.dialog.ShareUrlDialog;
 import com.jiec.basketball.ui.post.PostReplyActivity;
 import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.utils.EmptyUtils;
+import com.jiec.basketball.widget.RvDividerItemDecoration;
 import com.wangcj.common.utils.ThreadUtils;
 import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.PressImageView;
@@ -61,10 +65,9 @@ import static com.jiec.basketball.core.BallApplication.userInfo;
  */
 public class DetaillWebActivity extends BaseWebActivity {
 
-    private static final String TAG = "TopicActivity";
-
     private static final String KEY_NEWS = "key_news";
     private static final String KEY_POSTID = "postId";
+    private static final String KEY_TOTALCOMMENT = "totalComment";
     @BindView(R.id.tv_comment)
     TextView mTvComment;
     @BindView(R.id.iv_collect)
@@ -78,6 +81,19 @@ public class DetaillWebActivity extends BaseWebActivity {
     @BindView(R.id.et_comment)
     EditText mEtComment;
 
+    @BindView(R.id.tv_hot_comment)
+    TextView tvHot;
+    @BindView(R.id.rv_hot_comment)
+    RecyclerView rvHot;
+    @BindView(R.id.tv_all_comment)
+    TextView tvAll;
+    @BindView(R.id.rv_all_comment)
+    RecyclerView rvAll;
+    @BindView(R.id.tv_empty_comment)
+    TextView tvEmptyComment;
+    @BindView(R.id.ll_comment)
+    LinearLayout llComment;
+
     private String mUrl;
 
     private LinearLayout mLoadingLayout;
@@ -88,6 +104,7 @@ public class DetaillWebActivity extends BaseWebActivity {
     private TextView tvViews;
 
     private String postId; //新聞id
+    private int totalComment;
     private String reply_comment_id; //評論id
     private NewsBean mNewsBean;
     boolean mIsCollect;
@@ -97,14 +114,14 @@ public class DetaillWebActivity extends BaseWebActivity {
     private LinearLayoutManager mLayoutManager;
     private TopAdapter mAdapter;
 
-    private int mPageCounts = 1;
-    private boolean mIsLoadingData = false;
 
-    @BindView(R.id.recycle_comment)
-    RecyclerView mCommentRecyclerView;
-    private NewsCommentAdapter mCommentAdapter;
-    private int mCurrentPage = 0;
-
+    private Context mContext;
+    private PostCommentAdapter hotAdapter;
+    private PostCommentAdapter allAdapter;
+    private int hotOffset = 0;
+    private int allOffset = 0;
+    private int pageSize = 10; //每次分頁加載10條數據
+    private int commentType = 1; //發佈評論類型：1=評論，2=熱門跟帖，3=全部跟帖
 
 
     public static void show(Context context, NewsBean newsBean) {
@@ -114,9 +131,10 @@ public class DetaillWebActivity extends BaseWebActivity {
         context.startActivity(intent);
     }
 
-    public static void show(Context context, String postId) {
+    public static void show(Context context, String postId, int totalComment) {
         Intent intent = new Intent(context, DetaillWebActivity.class);
         intent.putExtra(KEY_POSTID, postId);
+        intent.putExtra(KEY_TOTALCOMMENT, totalComment);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -126,9 +144,10 @@ public class DetaillWebActivity extends BaseWebActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_web);
+        mContext = DetaillWebActivity.this;
         ButterKnife.bind(this);
         postId = getIntent().getStringExtra(KEY_POSTID);
-//        postId = "125345";
+        totalComment = getIntent().getIntExtra(KEY_TOTALCOMMENT, 0);
 
         initView();
         getNewsDetail();
@@ -136,6 +155,8 @@ public class DetaillWebActivity extends BaseWebActivity {
         if (BallApplication.userInfo != null) {
             saveHistory();
         }
+
+
     }
 
     /**
@@ -159,13 +180,6 @@ public class DetaillWebActivity extends BaseWebActivity {
         mAdapter.setOnItemClickListener(mOnItemClickListener);
         mRecyclerView.setAdapter(mAdapter);
 
-        mLayoutManager = new LinearLayoutManager(this);
-        mCommentRecyclerView.setLayoutManager(mLayoutManager);
-        mCommentRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mCommentAdapter = new NewsCommentAdapter(getApplicationContext());
-        mCommentAdapter.setItemChildClickListener(itemChildClickListener);
-        mCommentRecyclerView.setAdapter(mCommentAdapter);
-        mCommentRecyclerView.addOnScrollListener(mOnScrollListener);
 
         mEtComment.setOnFocusChangeListener((view, b) -> mLayoutWriteComment.setVisibility(
                 b ? View.VISIBLE : View.GONE));
@@ -177,6 +191,68 @@ public class DetaillWebActivity extends BaseWebActivity {
         ivShare.setOnClickListener(v -> {
             ShareUrlDialog dialog = new ShareUrlDialog(DetaillWebActivity.this, mNewsBean);
             dialog.show();
+        });
+
+
+        rvHot.setLayoutManager(new LinearLayoutManager(mContext));
+        rvHot.addItemDecoration(new RvDividerItemDecoration(getResources().getColor(R.color.divider), 1));
+        rvAll.setLayoutManager(new LinearLayoutManager(mContext));
+        rvAll.addItemDecoration(new RvDividerItemDecoration(getResources().getColor(R.color.divider), 1));
+
+        rvHot.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+            }
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                super.onItemChildClick(adapter, view, position);
+                if(userInfo == null){
+                    ToastUtil.showMsg("請先登錄");
+                    return;
+                }
+                commentType = 2;
+                commentPosition = position;
+                CommentsBean commentsBean = hotAdapter.getItem(position);
+                reply_comment_id = commentsBean.getComment_id();
+
+                mLayoutWriteComment.setVisibility(View.VISIBLE);
+                mEtComment.setText("");
+                mEtComment.setHint("回復  "+commentsBean.getComment_author());
+                mEtComment.setFocusableInTouchMode(true);
+                mEtComment.setFocusable(true);
+                mEtComment.requestFocus();
+                showSoftInput();
+            }
+        });
+
+        rvAll.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+            }
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                super.onItemChildClick(adapter, view, position);
+                if(userInfo == null){
+                    ToastUtil.showMsg("請先登錄");
+                    return;
+                }
+                commentType = 3;
+                commentPosition = position;
+                CommentsBean commentsBean = allAdapter.getItem(position);
+                reply_comment_id = commentsBean.getComment_id();
+
+                mLayoutWriteComment.setVisibility(View.VISIBLE);
+                mEtComment.setText("");
+                mEtComment.setHint("回復  "+commentsBean.getComment_author());
+                mEtComment.setFocusableInTouchMode(true);
+                mEtComment.setFocusable(true);
+                mEtComment.requestFocus();
+                showSoftInput();
+            }
         });
 
     }
@@ -220,7 +296,7 @@ public class DetaillWebActivity extends BaseWebActivity {
         parseHtml(mUrl);
         loadTopPosts();
         updateBottomInfo();
-        getComments();
+        getHotComment();
     }
 
     /**
@@ -247,8 +323,8 @@ public class DetaillWebActivity extends BaseWebActivity {
      * 更新底部UI
      */
     private void updateBottomInfo() {
-        if (mNewsBean.getComment_count() > 0) {
-            mTvCommentNum.setText("" + mNewsBean.getComment_count());
+        if (totalComment > 0) {
+            mTvCommentNum.setText("" + totalComment);
         } else {
             mTvCommentNum.setVisibility(View.GONE);
         }
@@ -281,34 +357,8 @@ public class DetaillWebActivity extends BaseWebActivity {
     }
 
 
-    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
-
-        private int lastVisibleItem;
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-        }
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (newState == RecyclerView.SCROLL_STATE_IDLE
-                    && lastVisibleItem + 1 == mAdapter.getItemCount()
-                    && mPageCounts >= mCurrentPage
-                    && !mIsLoadingData) {
-                //加载更多
-                Log.d(TAG, "loading more data");
-
-                showLoadingMore();
-                getComments();
-            }
-        }
-    };
-
     private TopAdapter.OnItemClickListener mOnItemClickListener =
-            newsBean -> DetaillWebActivity.show(DetaillWebActivity.this, newsBean);
+            newsBean -> DetaillWebActivity.show(DetaillWebActivity.this, newsBean.getId(), newsBean.getTotal_comment());
 
 
     public void showLoading() {
@@ -341,6 +391,112 @@ public class DetaillWebActivity extends BaseWebActivity {
         }, 4000);
     }
 
+    /**
+     * 獲取熱門評論
+     * 測試：使用全部評論接口
+     */
+    private void getHotComment() {
+        //getHotCommnet     getNewsCommnet
+        NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
+        newsApi.getNewsCommnet(UserManager.instance().getToken(), postId, hotOffset)
+                .compose(new NetTransformer<>())
+                .subscribe(new NetSubscriber<NewsCommentResponse>() {
+                    @Override
+                    protected void onSuccess(NewsCommentResponse result) {
+                        hideLoading();
+                        hotOffset++;
+                        List<CommentsBean> hotList = result.getResult().getComments();
+                        if(hotAdapter == null){
+                            LogUtils.e("首次加載熱門評論");
+                            if(!EmptyUtils.emptyOfList(hotList)){
+                                llComment.setVisibility(View.VISIBLE);
+                                tvHot.setVisibility(View.VISIBLE);
+                                rvHot.setVisibility(View.VISIBLE);
+                            }
+                            hotAdapter = new PostCommentAdapter(hotList);
+                            rvHot.setAdapter(hotAdapter);
+                            hotAdapter.setEnableLoadMore(true);
+                            hotAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+                                @Override
+                                public void onLoadMoreRequested() {
+                                    getHotComment();
+                                }
+                            }, rvHot);
+
+                            if (hotList.size() < pageSize) {
+                                getAllComment();
+                            }
+                        }else{
+                            LogUtils.e("加載更多熱門評論");
+                            if (hotList.size() < pageSize) {
+                                hotAdapter.loadMoreEnd(true);
+                                getAllComment();
+                            } else {
+                                hotAdapter.addData(hotList);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailed(int code, String reason) {
+                        hideLoading();
+                        ToastUtil.showMsg(reason);
+                    }
+                });
+    }
+
+
+    /**
+     * 獲取所有評論
+     */
+    private void getAllComment() {
+        NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
+        newsApi.getNewsCommnet(UserManager.instance().getToken(), postId, allOffset)
+                .compose(new NetTransformer<>())
+                .subscribe(new NetSubscriber<NewsCommentResponse>() {
+                    @Override
+                    protected void onSuccess(NewsCommentResponse result) {
+                        allOffset++;
+                        List<CommentsBean> commentList = result.getResult().getComments();
+                        if(allAdapter == null){
+                            LogUtils.e("首次加載所有評論555");
+                            allAdapter = new PostCommentAdapter(commentList);
+                            allAdapter.bindToRecyclerView(rvAll);
+                            if(EmptyUtils.emptyOfList(commentList)){
+                                allAdapter.setEmptyView(R.layout.tipslayout_load_empty);
+                                tvEmptyComment.setVisibility(View.VISIBLE);
+                            }else {
+                                llComment.setVisibility(View.VISIBLE);
+                            }
+
+                            allAdapter.setEnableLoadMore(true);
+                            allAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+                                @Override
+                                public void onLoadMoreRequested() {
+                                    getAllComment();
+                                }
+                            }, rvHot);
+
+                        }else{
+                            LogUtils.e("加載更多所有評論555");
+                            if (commentList.size() < pageSize) {
+                                allAdapter.loadMoreEnd();
+                            } else {
+                                allAdapter.addData(commentList);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailed(int code, String reason) {
+                        ToastUtil.showMsg(reason);
+                    }
+                });
+    }
+
+
     @OnClick({R.id.tv_comment, R.id.iv_collect, R.id.iv_comment, R.id.tv_send})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -349,6 +505,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                     ToastUtil.showMsg("請先登錄");
                     return;
                 }
+                commentType = 1;
                 mLayoutWriteComment.setVisibility(View.VISIBLE);
                 reply_comment_id = "";
 
@@ -373,7 +530,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                 break;
 
             case R.id.iv_comment: //跳轉到評論頁面
-                PostReplyActivity.show(DetaillWebActivity.this, postId);
+                PostReplyActivity.show(mContext, postId);
                 break;
 
             case R.id.tv_send:
@@ -388,30 +545,6 @@ public class DetaillWebActivity extends BaseWebActivity {
         }
     }
 
-    /**
-     * 評論列表回復按鈕點擊事件處理
-     */
-    private NewsCommentAdapter.ItemChildClickListener itemChildClickListener
-            = new NewsCommentAdapter.ItemChildClickListener() {
-        @Override
-        public void onItemChildClick(View view, int position) {
-            if(userInfo == null){
-                ToastUtil.showMsg("請先登錄");
-                return;
-            }
-            commentPosition = position;
-            CommentsBean commentsBean = mCommentAdapter.getItem(position);
-            reply_comment_id = commentsBean.getComment_id();
-
-            mLayoutWriteComment.setVisibility(View.VISIBLE);
-            mEtComment.setText("");
-            mEtComment.setHint("回復  "+commentsBean.getComment_author());
-            mEtComment.setFocusableInTouchMode(true);
-            mEtComment.setFocusable(true);
-            mEtComment.requestFocus();
-            showSoftInput();
-        }
-    };
 
     /**
      * 發表評論
@@ -437,15 +570,12 @@ public class DetaillWebActivity extends BaseWebActivity {
                             commentsBean.setTotal_like("0");
                             commentsBean.setMy_like(0);
                             commentsBean.setTotal_reply("0");
-                            mCommentAdapter.addItemData(commentsBean);
-                            mCommentRecyclerView.scrollToPosition(mCommentAdapter.getItemCount()-1);
+                            allAdapter.addData(commentsBean);
+//                            rvAll.scrollToPosition(allAdapter.getItemCount()-1);
                         }else {
                             ToastUtil.showMsg("回復成功");
-                            List<ReplyBean> replyList = mCommentAdapter.getItem(commentPosition).getReply();
-                            if(EmptyUtils.emptyOfList(replyList)){
-                                replyList = new ArrayList<>();
-                            }
-                            ReplyBean replyBean = new ReplyBean();
+                            List<CommentsBean.ReplyBean> replyList = null;
+                            CommentsBean.ReplyBean replyBean = new CommentsBean.ReplyBean();
                             replyBean.setPost_id(postId);
                             replyBean.setUser_id(userInfo.user_id);
                             replyBean.setComment_author(userInfo.display_name);
@@ -454,12 +584,29 @@ public class DetaillWebActivity extends BaseWebActivity {
                             replyBean.setComment_date(TimeUtils.getNowString());
                             replyBean.setTotal_like("0");
                             replyBean.setMy_like(0);
-                            replyList.add(replyBean);
-                            mCommentAdapter.getItem(commentPosition).setReply(replyList);
-                            mCommentAdapter.notifyDataSetChanged();
-//                            mCommentAdapter.notifyItemChanged(commentPosition);
-                        }
+                            switch (commentType){
+                                case 2:
+                                    replyList = hotAdapter.getItem(commentPosition).getReply();
+                                    if(EmptyUtils.emptyOfList(replyList)){
+                                        replyList = new ArrayList<>();
+                                    }
+                                    replyList.add(replyBean);
+                                    hotAdapter.getItem(commentPosition).setReply(replyList);
+                                    hotAdapter.notifyItemChanged(commentPosition);
+                                    break;
 
+                                case 3:
+                                    replyList = allAdapter.getItem(commentPosition).getReply();
+                                    if(EmptyUtils.emptyOfList(replyList)){
+                                        replyList = new ArrayList<>();
+                                    }
+                                    replyList.add(replyBean);
+                                    allAdapter.getItem(commentPosition).setReply(replyList);
+                                    allAdapter.notifyItemChanged(commentPosition);
+                                    break;
+                            }
+
+                        }
 
                     }
 
@@ -469,6 +616,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                     }
                 });
     }
+
 
     /**
      * 收藏
@@ -523,30 +671,6 @@ public class DetaillWebActivity extends BaseWebActivity {
                 });
     }
 
-    /**
-     * 獲取評論
-     */
-    private void getComments() {
-        NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.getNewsCommnet(UserManager.instance().getToken(), postId, mCurrentPage)
-                .compose(new NetTransformer<>())
-                .subscribe(new NetSubscriber<NewsCommentResponse>() {
-                    @Override
-                    protected void onSuccess(NewsCommentResponse result) {
-                        mCommentAdapter.addData(result.getResult().getComments());
-
-                        hideLoadingMore();
-                        mPageCounts = result.getResult().getPages();
-                        mCurrentPage++;
-                    }
-
-                    @Override
-                    protected void onFailed(int code, String reason) {
-                        ToastUtil.showMsg(reason);
-                        hideLoadingMore();
-                    }
-                });
-    }
 
     @Override
     public void onBackPressed() {
@@ -560,15 +684,6 @@ public class DetaillWebActivity extends BaseWebActivity {
         mLayoutWriteComment.setVisibility(View.GONE);
     }
 
-    private void showLoadingMore() {
-        mCommentAdapter.isShowFooter(true);
-        mCommentAdapter.notifyDataSetChanged();
-    }
-
-    public void hideLoadingMore() {
-        mCommentAdapter.isShowFooter(false);
-        mCommentAdapter.notifyDataSetChanged();
-    }
 }
 
 

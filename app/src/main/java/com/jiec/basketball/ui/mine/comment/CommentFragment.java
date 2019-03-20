@@ -53,7 +53,7 @@ public class CommentFragment extends BaseListFragment {
     /**item點擊事件*/
     @Override
     protected BaseListAdapter.OnItemClickedListener createItemClickedListener() {
-        return data -> DetaillWebActivity.show(getContext(), ((NewsBean) data).getId());
+        return data -> DetaillWebActivity.show(getContext(), ((NewsBean) data).getId(), ((NewsBean) data).getTotal_comment());
     }
 
 }

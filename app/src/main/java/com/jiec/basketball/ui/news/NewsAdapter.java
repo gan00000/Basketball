@@ -178,7 +178,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     if (position < 1 && position > mBannerData.size()) return;
 
                     NewsBean newsBean = mBannerData.get(position - 1);
-                    DetaillWebActivity.show(mContext, newsBean.getId());
+                    DetaillWebActivity.show(mContext, newsBean.getId(), newsBean.getTotal_comment());
                 }
             });
             ((BannerViewHolder) holder).banner.start();

@@ -37,7 +37,7 @@ public abstract class BaseListActivity extends BaseActivity {
         @Override
         public void onItemClick(View view, int position) {
             NewsBean newsBean = mAdapter.getItem(position);
-            DetaillWebActivity.show(BaseListActivity.this, newsBean.getId());
+            DetaillWebActivity.show(BaseListActivity.this, newsBean.getId(), newsBean.getTotal_comment());
         }
     };
 

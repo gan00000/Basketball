@@ -8,6 +8,9 @@ import com.jiec.basketball.network.base.CommResponse;
 
 import java.util.List;
 
+/**
+ * 新闻详情数据模型
+ */
 @JsonObject(fieldDetectionPolicy = JsonObject.FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS)
 public class NewsDetailModel extends CommResponse {
 

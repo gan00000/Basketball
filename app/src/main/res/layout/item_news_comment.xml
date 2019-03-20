@@ -127,10 +127,4 @@
             android:text="更多100条评论" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_alignParentBottom="true"
-        android:background="@color/divider" />
-
 </RelativeLayout>

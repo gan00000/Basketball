@@ -57,7 +57,7 @@ public class NotifyFragment extends BaseListFragment {
     /**item點擊事件*/
     @Override
     protected BaseListAdapter.OnItemClickedListener createItemClickedListener() {
-        return data -> DetaillWebActivity.show(getContext(), ((NotifyResponse.Result.NotificationBean) data).getPost_id());
+        return data -> DetaillWebActivity.show(getContext(), ((NotifyResponse.Result.NotificationBean) data).getPost_id(), 0);
     }
 
 }

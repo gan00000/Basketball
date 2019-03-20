@@ -79,7 +79,7 @@
                 android:background="@drawable/shape_number"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="999+"
+                tools:text="999+"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_10" />
         </RelativeLayout>
@@ -161,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="10fen"
+                    tools:text="10fen"
                     android:textColor="@color/gray"
                     android:textSize="@dimen/sp_14" />
 
@@ -177,7 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="kind"
+                    tools:text="kind"
                     android:textColor="@color/blue"
                     android:textSize="@dimen/sp_14" />
 
@@ -234,6 +234,7 @@
 
             <include layout="@layout/layout_divider" />
 
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycle_view"
                 android:layout_width="match_parent"
@@ -241,12 +242,64 @@
                 android:overScrollMode="never"
                 android:scrollbars="vertical" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_comment"
+            <TextView
+                android:id="@+id/tv_empty_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:scrollbars="vertical" />
+                android:visibility="gone"
+                android:text="暫無評論，快來搶沙發"
+                android:textColor="@color/black"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14" />
+
+            <LinearLayout
+                android:id="@+id/ll_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_hot_comment"
+                    style="@style/MainText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#dfdbdb"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:text="熱門回復"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_hot_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="vertical"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_all_comment"
+                    style="@style/MainText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#dfdbdb"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:text="全部回復"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_all_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="vertical" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jiec.basketball.R;
-import com.jiec.basketball.adapter.MyCommentAdapter;
 import com.jiec.basketball.base.BaseListAdapter;
 import com.jiec.basketball.entity.response.NotifyResponse;
 import com.jiec.basketball.utils.AppUtil;

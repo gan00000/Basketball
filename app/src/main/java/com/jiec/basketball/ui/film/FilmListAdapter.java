@@ -173,7 +173,7 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
                     NewsBean newsBean = mData.get(position - getAdSize(position));
-                    DetaillWebActivity.show(mContext, newsBean.getId());
+                    DetaillWebActivity.show(mContext, newsBean.getId(), newsBean.getTotal_comment());
                 }
             });
 
