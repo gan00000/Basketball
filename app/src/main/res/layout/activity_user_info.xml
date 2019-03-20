@@ -42,6 +42,19 @@
             android:text="用戶名"
             android:textSize="@dimen/text_14sp" />
 
+        <TextView
+            android:id="@+id/tv_oneTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_toRightOf="@id/tv_name"
+            android:layout_marginTop="7dp"
+            android:drawableLeft="@drawable/ico_start"
+            android:visibility="gone"
+            android:drawablePadding="3dp"
+            android:text="暱稱僅可修改一次"
+            android:textSize="@dimen/text_12sp" />
+
         <EditText
             android:id="@+id/et_name"
             android:layout_width="match_parent"

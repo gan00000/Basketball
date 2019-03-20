@@ -68,6 +68,10 @@ public class UserManager {
         return mLoginResult != null;
     }
 
+    /**
+     * 檢測是否登錄
+     * @return
+     */
     public boolean checkLogin() {
         if (isLogin()) return true;
 

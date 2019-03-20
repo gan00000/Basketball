@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIActivity;
 import com.jiec.basketball.bean.NotifyCounterModel;
@@ -198,11 +199,13 @@ public class MineActivity extends BaseUIActivity {
                 mTvName.setText("用戶");
                 new QBadgeView(MineActivity.this).bindTarget(rlNotify.findViewById(com.wangcj.common.R.id.tv_title))
                         .setBadgeNumber(0);
+                LogUtils.e("登出EventBus");
                 break;
 
                 case ConstantUtils.EVENT_HAS_READ:
                     new QBadgeView(MineActivity.this).bindTarget(rlNotify.findViewById(com.wangcj.common.R.id.tv_title))
                             .setBadgeNumber(0);
+                    LogUtils.e("消息已讀EventBus");
                     break;
 
                 case ConstantUtils.EVENT_LOGIN:

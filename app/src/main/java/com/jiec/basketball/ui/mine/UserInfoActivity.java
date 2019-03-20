@@ -54,6 +54,8 @@ public class UserInfoActivity extends BaseActivity {
     TextView mTvName;
     @BindView(R.id.tv_email)
     TextView mTvEmail;
+    @BindView(R.id.tv_oneTime)
+    TextView tvOneTime;
 
     private String mHeadBase64;
     private boolean isModify;  //是否可以更改
@@ -67,6 +69,8 @@ public class UserInfoActivity extends BaseActivity {
         isModify = InputCheckUtils.compareIsEqual("0", userInfo.change_name);
         if (!isModify) {
             mEtName.setVisibility(View.GONE);
+        }else {
+            tvOneTime.setVisibility(View.VISIBLE);
         }
         mTvName.setText("用戶名（" + userInfo.display_name + "）");
         if (!TextUtils.isEmpty(userInfo.user_email)) {
@@ -119,7 +123,7 @@ public class UserInfoActivity extends BaseActivity {
     public static Bitmap getCompressPhoto(String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
-        options.inSampleSize = 20;
+        options.inSampleSize = 2;
         Bitmap bmp = BitmapFactory.decodeFile(path, options);
         return bmp;
     }
