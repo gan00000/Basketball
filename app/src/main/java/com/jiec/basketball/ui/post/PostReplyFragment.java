@@ -232,7 +232,7 @@ public class PostReplyFragment extends BaseUIFragment  {
                                 tvHot.setVisibility(View.VISIBLE);
                                 rvHot.setVisibility(View.VISIBLE);
                             }
-                            hotAdapter = new PostCommentAdapter(hotList);
+                            hotAdapter = new PostCommentAdapter(2, hotList);
                             rvHot.setAdapter(hotAdapter);
                             hotAdapter.setEnableLoadMore(true);
                             hotAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
@@ -283,7 +283,7 @@ public class PostReplyFragment extends BaseUIFragment  {
                         List<CommentsBean> commentList = result.getResult().getComments();
                         if(allAdapter == null){
                             LogUtils.e("首次加載所有評論555");
-                            allAdapter = new PostCommentAdapter(commentList);
+                            allAdapter = new PostCommentAdapter(3, commentList);
                             allAdapter.bindToRecyclerView(rvAll);
                             if(EmptyUtils.emptyOfList(commentList)){
                                 allAdapter.setEmptyView(R.layout.tipslayout_load_empty);

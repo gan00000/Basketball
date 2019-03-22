@@ -16,6 +16,7 @@
 
     <color name="red">#fc562e</color>
     <color name="red_dark">#ff502e</color>
+    <color name="red_little">#9c4433</color>
 
     <color name="black_overlay">#66000000</color>
 </resources>

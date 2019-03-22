@@ -29,6 +29,7 @@ import com.jiec.basketball.ui.mine.notify.NotifyActivity;
 import com.jiec.basketball.ui.mine.setting.SettingActivity;
 import com.jiec.basketball.utils.ConstantUtils;
 import com.jiec.basketball.utils.EventBusEvent;
+import com.jiec.basketball.utils.EventBusUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.CircleSImageView;
@@ -42,6 +43,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
 import static com.jiec.basketball.core.BallApplication.userInfo;
@@ -59,6 +61,7 @@ public class MineActivity extends BaseUIActivity {
     PressRelativeLayout rlInfo;
     @BindView(R.id.item_notify)
     ItemLayout rlNotify;
+    private QBadgeView qBadgeView;
 
     public static void show(Context context) {
         Intent intent = new Intent(context, MineActivity.class);
@@ -71,6 +74,7 @@ public class MineActivity extends BaseUIActivity {
         setContentView(R.layout.activity_mine);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        qBadgeView =  new QBadgeView(MineActivity.this);
 
         if (!UserManager.instance().checkLogin()) {
             mTvName.setText("未登錄");
@@ -83,6 +87,8 @@ public class MineActivity extends BaseUIActivity {
         }
     }
 
+
+
     /**
      * 获取未读消息数量
      */
@@ -93,8 +99,9 @@ public class MineActivity extends BaseUIActivity {
                 .subscribe(new NetSubscriber<NotifyCounterModel>() {
                     @Override
                     protected void onSuccess(NotifyCounterModel result) {
-                        new QBadgeView(MineActivity.this).bindTarget(rlNotify.findViewById(com.wangcj.common.R.id.tv_title))
+                        qBadgeView.bindTarget(rlNotify.findViewById(com.wangcj.common.R.id.tv_title))
                                 .setBadgeNumber(Integer.parseInt(result.getResult().getTotal_unread()));
+
                     }
 
                     @Override
@@ -192,23 +199,21 @@ public class MineActivity extends BaseUIActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(EventBusEvent event) {
         hideLoading();
-        update();
         switch (event.status){
             case ConstantUtils.EVENT_LOGIN_OUT:
                 mIvHead.setImageResource(R.drawable.img_default_head);
                 mTvName.setText("用戶");
-                new QBadgeView(MineActivity.this).bindTarget(rlNotify.findViewById(com.wangcj.common.R.id.tv_title))
-                        .setBadgeNumber(0);
+                qBadgeView.setBadgeNumber(0);
                 LogUtils.e("登出EventBus");
                 break;
 
                 case ConstantUtils.EVENT_HAS_READ:
-                    new QBadgeView(MineActivity.this).bindTarget(rlNotify.findViewById(com.wangcj.common.R.id.tv_title))
-                            .setBadgeNumber(0);
+                    qBadgeView.setBadgeNumber(0);
                     LogUtils.e("消息已讀EventBus");
                     break;
 
                 case ConstantUtils.EVENT_LOGIN:
+                    update();
                     getNotifyCounter();
                     break;
         }

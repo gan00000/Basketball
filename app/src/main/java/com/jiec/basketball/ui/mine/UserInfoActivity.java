@@ -115,7 +115,7 @@ public class UserInfoActivity extends BaseActivity {
     public static String encodeBase64File(String path) throws Exception {
         Bitmap bitmap = getCompressPhoto(path);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.WEBP, 80, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }

@@ -35,8 +35,11 @@ import com.wangcj.common.widget.CircleSImageView;
 
 public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewHolder> {
 
-    public PostCommentAdapter(List<CommentsBean> data) {
+    private int adapterType; //适配器类型：2=热门评论，3=所有评论
+
+    public PostCommentAdapter(int adapterType, List<CommentsBean> data) {
         super(R.layout.item_news_comment, data);
+        this.adapterType = adapterType;
     }
 
     @Override
@@ -69,9 +72,9 @@ public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewH
                     ToastUtil.showMsg("請先登錄");
                     return;
                 }
-                CommentsBean hisBean = mData.get(baseViewHolder.getAdapterPosition());
-                int isLike = hisBean.getMy_like() == 1 ? 0 : 1; //0=取消點讚；1=點讚
-                like(baseViewHolder.getAdapterPosition(), hisBean.getPost_id(), hisBean.getComment_id(), hisBean.getTotal_like(), isLike, mTvLike, mIvLike);
+                CommentsBean commentsBean = mData.get(baseViewHolder.getAdapterPosition());
+                int isLike = commentsBean.getMy_like() == 1 ? 0 : 1; //0=取消點讚；1=點讚
+                like(baseViewHolder.getAdapterPosition(), commentsBean.getPost_id(), commentsBean.getComment_id(), commentsBean.getTotal_like(), isLike, mTvLike, mIvLike);
             }
         });
 
@@ -84,7 +87,8 @@ public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewH
             llReply.setVisibility(View.VISIBLE);
 //         lMore.setVisibility(View.VISIBLE);
             for (int i = 0; i < replySize; i++) {
-                UserReplyView userReplyView = new UserReplyView(mContext);
+                UserReplyView userReplyView = new UserReplyView(mContext, adapterType,
+                        baseViewHolder.getAdapterPosition(), i);
                 userReplyView.setReplyData(replyList.get(i));
                 llReply.addView(userReplyView);
             }

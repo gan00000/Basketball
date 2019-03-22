@@ -3,15 +3,26 @@ package com.jiec.basketball.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jiec.basketball.R;
+import com.jiec.basketball.bean.EventReplyBean;
+import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.response.NewsCommentResponse;
 import com.jiec.basketball.utils.AppUtil;
+import com.jiec.basketball.utils.ConstantUtils;
+import com.jiec.basketball.utils.EventBusEvent;
+import com.jiec.basketball.utils.EventBusUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
+import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.PressImageView;
 import com.wangcj.common.widget.CircleSImageView;
+
+import org.greenrobot.eventbus.EventBus;
+
+import static com.jiec.basketball.core.BallApplication.userInfo;
 
 
 /**
@@ -27,11 +38,30 @@ public class UserReplyView extends LinearLayout {
 	private PressImageView ivLike;
 	private TextView tvTime;
 	private TextView tvReply;
+	private TextView tvReplyName;
 
+	private int adapterType;
+	private int parentPosition;
+	private int childPosition;
 
-	public UserReplyView(Context context) {
+	public int getAdapterType() {
+		return adapterType;
+	}
+
+	public int getParentPosition() {
+		return parentPosition;
+	}
+
+	public int getChildPosition() {
+		return childPosition;
+	}
+
+	public UserReplyView(Context context, int adapterType, int parentPosition, int childPosition) {
 		super(context);
 		this.mContext = context;
+		this.adapterType = adapterType;
+		this.parentPosition = parentPosition;
+		this.childPosition = childPosition;
 		initView();
 	}
 	
@@ -53,6 +83,22 @@ public class UserReplyView extends LinearLayout {
 		ivLike = (PressImageView)findViewById( R.id.iv_like );
 		tvTime = (TextView)findViewById( R.id.tv_time );
 		tvReply = (TextView)findViewById(R.id.tv_reply);
+		tvReplyName = (TextView)findViewById(R.id.tv_reply_name);
+		tvReply.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(userInfo == null){
+					ToastUtil.showMsg("請先登錄");
+					return;
+				}
+				EventReplyBean eventReplyBean = new EventReplyBean();
+				eventReplyBean.adapterType = adapterType;
+				eventReplyBean.parentPosition = parentPosition;
+				eventReplyBean.childPosition = childPosition;
+				EventBus.getDefault()
+						.post(new EventBusEvent(ConstantUtils.EVENT_REPLY, UserReplyView.class, eventReplyBean));
+			}
+		});
 	}
 
 	/**
@@ -69,6 +115,7 @@ public class UserReplyView extends LinearLayout {
 		tvComment.setText(replyBean.getComment_content());
 		tvTime.setText(AppUtil.getCommentTime(replyBean.getComment_date()));
 		tvLike.setText(replyBean.getTotal_like());
+		tvReplyName.setText(replyBean.getReply_to_display_name());
 
 		boolean isLike = false;
 		if (replyBean.getMy_like() == 0) {

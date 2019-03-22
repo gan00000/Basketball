@@ -24,7 +24,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:paddingRight="@dimen/page_padding"
-        android:paddingTop="@dimen/page_padding"
+        android:paddingTop="8dp"
         android:textColor="@color/red"
         tools:text="name" />
 

@@ -9,4 +9,9 @@ public class ConstantUtils {
      * 已讀消息通知
      */
     public static final int EVENT_HAS_READ= 394;
+
+    /**
+     * 点击评论中回复列表下的回复按钮消息通知
+     */
+    public static final int EVENT_REPLY = 395;
 }

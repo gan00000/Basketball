@@ -162,11 +162,10 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 ((ItemViewHolder) holder).llReply.removeAllViews();
                 List<NewsCommentResponse.ResultBean.CommentsBean.ReplyBean> replyList = news.getReply();
                 ((ItemViewHolder) holder).llReply.setVisibility(View.VISIBLE);
-//                ((ItemViewHolder) holder).llMore.setVisibility(View.VISIBLE);
                 for (int i = 0; i < replySize; i++) {
-                    UserReplyView userReplyView = new UserReplyView(mContext);
-                    userReplyView.setReplyData(replyList.get(i));
-                    ((ItemViewHolder) holder).llReply.addView(userReplyView);
+//                    UserReplyView userReplyView = new UserReplyView(mContext);
+//                    userReplyView.setReplyData(replyList.get(i));
+//                    ((ItemViewHolder) holder).llReply.addView(userReplyView);
                 }
             }else {
                 ((ItemViewHolder) holder).llReply.setVisibility(View.GONE);
