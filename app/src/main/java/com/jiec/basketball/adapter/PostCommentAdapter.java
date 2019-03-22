@@ -48,7 +48,8 @@ public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewH
         baseViewHolder.setText(R.id.tv_name, hisBean.getComment_author())
                 .setText(R.id.tv_time, AppUtil.getCommentTime(hisBean.getComment_date()))
                 .setText(R.id.tv_comment, hisBean.getComment_content())
-                .setText(R.id.tv_like, InputCheckUtils.compareIsEqual(hisBean.getTotal_like(), "0") ? "讃" : "（"+hisBean.getTotal_like()+"）")
+                .setText(R.id.tv_reply_num, hisBean.getTotal_reply()+"回復")
+                .setText(R.id.tv_like, InputCheckUtils.compareIsEqual(hisBean.getTotal_like(), "0") ? "讃" : hisBean.getTotal_like())
                 .addOnClickListener(R.id.tv_reply);
 
         ImageView mIvLike = baseViewHolder.itemView.findViewById(R.id.iv_like);
@@ -70,7 +71,7 @@ public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewH
                 }
                 CommentsBean hisBean = mData.get(baseViewHolder.getAdapterPosition());
                 int isLike = hisBean.getMy_like() == 1 ? 0 : 1; //0=取消點讚；1=點讚
-                like(hisBean.getPost_id(), hisBean.getComment_id(), isLike, mTvLike, mIvLike);
+                like(baseViewHolder.getAdapterPosition(), hisBean.getPost_id(), hisBean.getComment_id(), hisBean.getTotal_like(), isLike, mTvLike, mIvLike);
             }
         });
 
@@ -98,23 +99,29 @@ public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewH
      *
      * @param postId
      * @param commentId
-     * @param like
+     * @param totalLike 点赞总数
+     * @param like 1=点赞，0=取消点赞
      * @param tvLikeNum
      * @param ivLike
      */
-    private void like(String postId, String commentId, final int like, final TextView tvLikeNum, final ImageView ivLike) {
+    private void like(int position, String postId, String commentId, String totalLike, final int like, final TextView tvLikeNum, final ImageView ivLike) {
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
         newsApi.likeComment(BallApplication.userInfo.user_token, postId, commentId, like)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<CommResponse>() {
                     @Override
                     protected void onSuccess(CommResponse result) {
+                        mData.get(position).setMy_like(like);
                         if (like == 1) {
                             ivLike.setImageResource(R.drawable.icon_great_pressed);
-                            tvLikeNum.setText(String.valueOf(Integer.valueOf(tvLikeNum.getText().toString()) + 1));
+                            tvLikeNum.setText(String.valueOf(Integer.valueOf(totalLike) + 1));
+                            ToastUtil.showMsg("點讚成功");
+                            mData.get(position).setTotal_like(String.valueOf(Integer.valueOf(totalLike) + 1));
                         } else {
                             ivLike.setImageResource(R.drawable.icon_great_normal);
-                            tvLikeNum.setText(String.valueOf(Integer.valueOf(tvLikeNum.getText().toString()) - 1));
+                            tvLikeNum.setText(String.valueOf(Integer.valueOf(totalLike) - 1));
+                            ToastUtil.showMsg("取消點讚成功");
+                            mData.get(position).setTotal_like(String.valueOf(Integer.valueOf(totalLike) - 1));
                         }
 
                         if (Integer.valueOf(tvLikeNum.getText().toString()) == 0) {

@@ -26,6 +26,7 @@ public class UserReplyView extends LinearLayout {
 	private TextView tvLike;
 	private PressImageView ivLike;
 	private TextView tvTime;
+	private TextView tvReply;
 
 
 	public UserReplyView(Context context) {
@@ -51,6 +52,7 @@ public class UserReplyView extends LinearLayout {
 		tvLike = (TextView)findViewById( R.id.tv_like );
 		ivLike = (PressImageView)findViewById( R.id.iv_like );
 		tvTime = (TextView)findViewById( R.id.tv_time );
+		tvReply = (TextView)findViewById(R.id.tv_reply);
 	}
 
 	/**

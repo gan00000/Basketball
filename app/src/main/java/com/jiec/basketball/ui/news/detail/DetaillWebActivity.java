@@ -111,7 +111,6 @@ public class DetaillWebActivity extends BaseWebActivity {
     private int commentPosition; //回復評論所在位置
 
     private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
     private TopAdapter mAdapter;
 
 
@@ -122,6 +121,9 @@ public class DetaillWebActivity extends BaseWebActivity {
     private int allOffset = 0;
     private int pageSize = 10; //每次分頁加載10條數據
     private int commentType = 1; //發佈評論類型：1=評論，2=熱門跟帖，3=全部跟帖
+    private boolean isHotRefresh = true;
+    private boolean isAllRefresh = true;
+
 
 
     public static void show(Context context, NewsBean newsBean) {
@@ -324,7 +326,7 @@ public class DetaillWebActivity extends BaseWebActivity {
      */
     private void updateBottomInfo() {
         if (totalComment > 0) {
-            mTvCommentNum.setText("" + totalComment);
+            mTvCommentNum.setText("" + mNewsBean.getTotal_comment());
         } else {
             mTvCommentNum.setVisibility(View.GONE);
         }
@@ -398,7 +400,7 @@ public class DetaillWebActivity extends BaseWebActivity {
     private void getHotComment() {
         //getHotCommnet     getNewsCommnet
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.getNewsCommnet(UserManager.instance().getToken(), postId, hotOffset)
+        newsApi.getHotCommnet(EmptyUtils.emptyOfObject(userInfo) ? "" : userInfo.user_token, postId, hotOffset)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<NewsCommentResponse>() {
                     @Override
@@ -419,6 +421,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                             hotAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
                                 @Override
                                 public void onLoadMoreRequested() {
+                                    isHotRefresh = false;
                                     getHotComment();
                                 }
                             }, rvHot);
@@ -428,12 +431,17 @@ public class DetaillWebActivity extends BaseWebActivity {
                             }
                         }else{
                             LogUtils.e("加載更多熱門評論");
-                            if (hotList.size() < pageSize) {
-                                hotAdapter.loadMoreEnd(true);
-                                getAllComment();
-                            } else {
-                                hotAdapter.addData(hotList);
+                            if(isHotRefresh){
+                                hotAdapter.setNewData(hotList);
+                            }else {
+                                if (hotList.size() < pageSize) {
+                                    hotAdapter.loadMoreEnd(true);
+                                    getAllComment();
+                                } else {
+                                    hotAdapter.addData(hotList);
+                                }
                             }
+
                         }
 
                     }
@@ -452,7 +460,7 @@ public class DetaillWebActivity extends BaseWebActivity {
      */
     private void getAllComment() {
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.getNewsCommnet(UserManager.instance().getToken(), postId, allOffset)
+        newsApi.getNewsCommnet(EmptyUtils.emptyOfObject(userInfo) ? "" : userInfo.user_token, postId, allOffset)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<NewsCommentResponse>() {
                     @Override
@@ -474,17 +482,25 @@ public class DetaillWebActivity extends BaseWebActivity {
                             allAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
                                 @Override
                                 public void onLoadMoreRequested() {
+                                    isAllRefresh = false;
                                     getAllComment();
                                 }
                             }, rvHot);
 
                         }else{
                             LogUtils.e("加載更多所有評論555");
-                            if (commentList.size() < pageSize) {
-                                allAdapter.loadMoreEnd();
-                            } else {
-                                allAdapter.addData(commentList);
+                            if(isAllRefresh){
+                                allAdapter.setNewData(commentList);
+                                tvEmptyComment.setVisibility(View.GONE);
+                                llComment.setVisibility(View.VISIBLE);
+                            }else {
+                                if (commentList.size() < pageSize) {
+                                    allAdapter.loadMoreEnd();
+                                } else {
+                                    allAdapter.addData(commentList);
+                                }
                             }
+
                         }
 
                     }
@@ -530,7 +546,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                 break;
 
             case R.id.iv_comment: //跳轉到評論頁面
-                PostReplyActivity.show(mContext, postId);
+//                PostReplyActivity.show(mContext, postId);
                 break;
 
             case R.id.tv_send:
@@ -559,50 +575,60 @@ public class DetaillWebActivity extends BaseWebActivity {
                     protected void onSuccess(CommResponse result) {
                         if(EmptyUtils.emptyOfString(reply_comment_id)){
                             ToastUtil.showMsg("評論成功");
+                            isAllRefresh = true;
+                            allOffset = 0;
+                            getAllComment();
 
-                            CommentsBean commentsBean = new CommentsBean();
-                            commentsBean.setPost_id(postId);
-                            commentsBean.setUser_id(userInfo.user_id);
-                            commentsBean.setComment_author(userInfo.display_name);
-                            commentsBean.setUser_img(userInfo.user_img);
-                            commentsBean.setComment_content(comment);
-                            commentsBean.setComment_date(TimeUtils.getNowString());
-                            commentsBean.setTotal_like("0");
-                            commentsBean.setMy_like(0);
-                            commentsBean.setTotal_reply("0");
-                            allAdapter.addData(commentsBean);
-//                            rvAll.scrollToPosition(allAdapter.getItemCount()-1);
+//                            CommentsBean commentsBean = new CommentsBean();
+//                            commentsBean.setPost_id(postId);
+//                            commentsBean.setUser_id(userInfo.user_id);
+//                            commentsBean.setComment_author(userInfo.display_name);
+//                            commentsBean.setUser_img(userInfo.user_img);
+//                            commentsBean.setComment_content(comment);
+//                            commentsBean.setComment_date(TimeUtils.getNowString());
+//                            commentsBean.setTotal_like("0");
+//                            commentsBean.setMy_like(0);
+//                            commentsBean.setTotal_reply("0");
+//                            allAdapter.addData(commentsBean);
                         }else {
                             ToastUtil.showMsg("回復成功");
-                            List<CommentsBean.ReplyBean> replyList = null;
-                            CommentsBean.ReplyBean replyBean = new CommentsBean.ReplyBean();
-                            replyBean.setPost_id(postId);
-                            replyBean.setUser_id(userInfo.user_id);
-                            replyBean.setComment_author(userInfo.display_name);
-                            replyBean.setUser_img(userInfo.user_img);
-                            replyBean.setComment_content(comment);
-                            replyBean.setComment_date(TimeUtils.getNowString());
-                            replyBean.setTotal_like("0");
-                            replyBean.setMy_like(0);
+//                            List<CommentsBean.ReplyBean> replyList = null;
+//                            CommentsBean.ReplyBean replyBean = new CommentsBean.ReplyBean();
+//                            replyBean.setPost_id(postId);
+//                            replyBean.setUser_id(userInfo.user_id);
+//                            replyBean.setComment_author(userInfo.display_name);
+//                            replyBean.setUser_img(userInfo.user_img);
+//                            replyBean.setComment_content(comment);
+//                            replyBean.setComment_date(TimeUtils.getNowString());
+//                            replyBean.setTotal_like("0");
+//                            replyBean.setMy_like(0);
                             switch (commentType){
                                 case 2:
-                                    replyList = hotAdapter.getItem(commentPosition).getReply();
-                                    if(EmptyUtils.emptyOfList(replyList)){
-                                        replyList = new ArrayList<>();
-                                    }
-                                    replyList.add(replyBean);
-                                    hotAdapter.getItem(commentPosition).setReply(replyList);
-                                    hotAdapter.notifyItemChanged(commentPosition);
+                                    isHotRefresh = true;
+                                    isAllRefresh = true;
+                                    hotOffset = 0;
+                                    allOffset = 0;
+                                    getHotComment();
+//                                    replyList = hotAdapter.getItem(commentPosition).getReply();
+//                                    if(EmptyUtils.emptyOfList(replyList)){
+//                                        replyList = new ArrayList<>();
+//                                    }
+//                                    replyList.add(replyBean);
+//                                    hotAdapter.getItem(commentPosition).setReply(replyList);
+//                                    hotAdapter.notifyItemChanged(commentPosition);
                                     break;
 
                                 case 3:
-                                    replyList = allAdapter.getItem(commentPosition).getReply();
-                                    if(EmptyUtils.emptyOfList(replyList)){
-                                        replyList = new ArrayList<>();
-                                    }
-                                    replyList.add(replyBean);
-                                    allAdapter.getItem(commentPosition).setReply(replyList);
-                                    allAdapter.notifyItemChanged(commentPosition);
+                                    isAllRefresh = true;
+                                    allOffset = 0;
+                                    getAllComment();
+//                                    replyList = allAdapter.getItem(commentPosition).getReply();
+//                                    if(EmptyUtils.emptyOfList(replyList)){
+//                                        replyList = new ArrayList<>();
+//                                    }
+//                                    replyList.add(replyBean);
+//                                    allAdapter.getItem(commentPosition).setReply(replyList);
+//                                    allAdapter.notifyItemChanged(commentPosition);
                                     break;
                             }
 
