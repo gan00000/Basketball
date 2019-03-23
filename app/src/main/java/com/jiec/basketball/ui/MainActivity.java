@@ -144,7 +144,7 @@ public class MainActivity extends BaseActivity {
 
 
          ivMine = (CircleSImageView) findViewById(R.id.iv_mine);
-        ImageLoaderUtils.display(this, ivMine, EmptyUtils.emptyOfString(userInfo.user_img) ? " " : userInfo.user_img,
+        ImageLoaderUtils.display(this, ivMine, EmptyUtils.emptyOfObject(userInfo) ? " " : userInfo.user_img,
                 R.drawable.img_default_head, R.drawable.img_default_head);
         ivMine.setOnClickListener(new View.OnClickListener() {
             @Override

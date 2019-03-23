@@ -159,6 +159,7 @@ public class DetaillWebActivity extends BaseWebActivity {
         mContext = DetaillWebActivity.this;
         ButterKnife.bind(this);
         postId = getIntent().getStringExtra(KEY_POSTID);
+        postId = "125345"; /**========測試數據=========*/
         totalComment = getIntent().getIntExtra(KEY_TOTALCOMMENT, 0);
 
         initView();
@@ -295,6 +296,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                         hideLoading();
                         if(result.isSuccess()){
                             mNewsBean = result.post;
+                            totalComment = mNewsBean.getTotal_comment();
                             setDetailData();
                         }
                     }

@@ -103,4 +103,18 @@
         android:text="回復" />
 
 
+        <TextView
+            android:id="@+id/tv_more_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+          android:layout_below="@id/tv_reply"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/sp_12"
+            android:visibility="gone"
+            android:gravity="center"
+            android:text="展開更多回復" />
+
+
 </RelativeLayout>

@@ -95,7 +95,7 @@
         android:textColor="@color/blue"
         tools:text="10回復" />
 
-    <LinearLayout
+    <com.chaychan.library.ExpandableLinearLayout
         android:id="@+id/ll_reply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,9 +107,15 @@
         android:layout_marginRight="20dp"
         android:divider="@drawable/divider_linear"
         android:showDividers="middle"
-        android:orientation="vertical"></LinearLayout>
+        app:useDefaultBottom="true"
+        app:defaultItemCount="3"
+        app:expandText="展開更多回復"
+        app:hideText="點擊收起"
+        android:orientation="vertical">
 
-    <LinearLayout
+    </com.chaychan.library.ExpandableLinearLayout>
+
+<!--    <LinearLayout
         android:id="@+id/more_comment_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -125,6 +131,6 @@
             android:drawablePadding="3dip"
             android:gravity="center"
             android:text="更多100条评论" />
-    </LinearLayout>
+    </LinearLayout>-->
 
 </RelativeLayout>

@@ -39,6 +39,7 @@ public class UserReplyView extends LinearLayout {
 	private TextView tvTime;
 	private TextView tvReply;
 	private TextView tvReplyName;
+	private TextView tvMoreReply;
 
 	private int adapterType;
 	private int parentPosition;
@@ -84,6 +85,8 @@ public class UserReplyView extends LinearLayout {
 		tvTime = (TextView)findViewById( R.id.tv_time );
 		tvReply = (TextView)findViewById(R.id.tv_reply);
 		tvReplyName = (TextView)findViewById(R.id.tv_reply_name);
+		tvMoreReply = (TextView)findViewById(R.id.tv_more_reply);
+
 		tvReply.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -99,6 +102,7 @@ public class UserReplyView extends LinearLayout {
 						.post(new EventBusEvent(ConstantUtils.EVENT_REPLY, UserReplyView.class, eventReplyBean));
 			}
 		});
+
 	}
 
 	/**
@@ -127,6 +131,13 @@ public class UserReplyView extends LinearLayout {
 			tvLike.setTextColor(mContext.getResources().getColor(R.color.red));
 		}
 
+	}
+
+	/**
+	 * 顯示展開 更多回復按鈕
+	 */
+	public void setTvMoreReplyVis(){
+		tvMoreReply.setVisibility(VISIBLE);
 	}
 	
 

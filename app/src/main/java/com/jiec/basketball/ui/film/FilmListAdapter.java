@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.jiec.basketball.R;
@@ -71,17 +72,23 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     /**
-     * 添加列表数据
+     * 加載更多 添加列表数据
      * @param data
      */
     public void addData(List<NewsBean>data) {
+        LogUtils.e("影片列表加載更多");
         if (this.mData == null) {
             setmDate(data);
         } else {
             if(EmptyUtils.emptyOfList(data)){
                 return;
             }
-            this.mData.addAll(data);
+            for (NewsBean bean : data) {
+                if (AppUtil.getVideoId(bean.getContent()) != null) {
+                    bean.setVideoId(AppUtil.getVideoId(bean.getContent()));
+                    this.mData.add(bean);
+                }
+            }
             this.notifyDataSetChanged();
         }
     }

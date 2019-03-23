@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
+import com.chaychan.library.ExpandableLinearLayout;
 import com.jiec.basketball.R;
 import com.jiec.basketball.core.BallApplication;
 import com.jiec.basketball.core.UserManager;
@@ -78,14 +79,13 @@ public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewH
             }
         });
 
-        LinearLayout llReply = baseViewHolder.itemView.findViewById(R.id.ll_reply);
+        ExpandableLinearLayout llReply = baseViewHolder.itemView.findViewById(R.id.ll_reply);
         /****************設置評論回復View********************/
         int replySize = EmptyUtils.emptyOfObject(hisBean.getReply()) ? 0 : hisBean.getReply().size();
         if (replySize > 0) {
             llReply.removeAllViews();
             List<NewsCommentResponse.ResultBean.CommentsBean.ReplyBean> replyList = hisBean.getReply();
             llReply.setVisibility(View.VISIBLE);
-//         lMore.setVisibility(View.VISIBLE);
             for (int i = 0; i < replySize; i++) {
                 UserReplyView userReplyView = new UserReplyView(mContext, adapterType,
                         baseViewHolder.getAdapterPosition(), i);

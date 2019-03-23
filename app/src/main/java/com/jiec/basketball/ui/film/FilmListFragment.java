@@ -257,9 +257,11 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
             mData = new ArrayList<NewsBean>();
         }
 
-        mData.addAll(newsList);
+//        mData.addAll(newsList);
         if (mPageIndex == 1) {
-            mAdapter.setmDate(mData);
+            mAdapter.setmDate(newsList);
+        }else {
+            mAdapter.addData(newsList);
         }
 
         hideLoadingMore();
@@ -280,8 +282,7 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void hideLoadingMore() {
         mAdapter.isShowFooter(false);
-
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
     }
 
     @Override

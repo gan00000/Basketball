@@ -229,7 +229,6 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tvReply = v.findViewById(R.id.tv_reply);
             tvReplyNum = v.findViewById(R.id.tv_reply_num);
             llReply = v.findViewById(R.id.ll_reply);
-            llMore = v.findViewById(R.id.more_comment_layout);
         }
     }
 

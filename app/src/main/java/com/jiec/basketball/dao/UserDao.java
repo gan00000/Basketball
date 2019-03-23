@@ -111,13 +111,18 @@ public class UserDao {
             SharedPreferences sp = mContext.getSharedPreferences(SP_UINFO, Context.MODE_PRIVATE);
 
             UserInfoBean userInfo = new UserInfoBean();
-            userInfo.user_token = simpleDecodeString(sp.getString("user_token", null));
-            userInfo.user_id = simpleDecodeString(sp.getString("user_id", null));
-            userInfo.display_name = simpleDecodeString(sp.getString("display_name", null));
-            userInfo.user_email = simpleDecodeString(sp.getString("user_email", null));
-            userInfo.user_status = simpleDecodeString(sp.getString("user_status", null));
-            userInfo.user_img = simpleDecodeString(sp.getString("user_img", null));
-            userInfo.change_name = simpleDecodeString(sp.getString("change_name", null));
+            String user_token =  simpleDecodeString(sp.getString("user_token", null));
+            String user_id = simpleDecodeString(sp.getString("user_id", null));
+            if(user_token == null || user_id == null){
+                return  null;
+            }
+            userInfo.user_token = user_token;
+            userInfo.user_id = user_id;
+            userInfo.display_name = simpleDecodeString(sp.getString("display_name", ""));
+            userInfo.user_email = simpleDecodeString(sp.getString("user_email", ""));
+            userInfo.user_status = simpleDecodeString(sp.getString("user_status", ""));
+            userInfo.user_img = simpleDecodeString(sp.getString("user_img", ""));
+            userInfo.change_name = simpleDecodeString(sp.getString("change_name", ""));
 
             return userInfo;
         } catch (Exception e) {
