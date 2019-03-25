@@ -25,7 +25,7 @@
         android:layout_height="250dp"
         android:layout_below="@id/tv_title"></WebView>
 
-    <ImageView
+  <ImageView
         android:id="@+id/youtube_thumbnail"
         android:layout_width="match_parent"
         android:layout_height="250dp"
@@ -33,14 +33,14 @@
         android:scaleType="centerCrop"
         android:visibility="invisible" />
 
-    <ImageView
+<!--    <ImageView
         android:id="@+id/iv_play"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerInParent="true"
         android:visibility="invisible"
         android:alpha="0.8"
-        android:src="@drawable/ic_logo_youtube" />
+        android:src="@drawable/ic_logo_youtube" />-->
 
     <LinearLayout
         android:layout_width="match_parent"

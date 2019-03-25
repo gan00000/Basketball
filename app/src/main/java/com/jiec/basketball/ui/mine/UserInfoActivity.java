@@ -149,10 +149,11 @@ public class UserInfoActivity extends BaseActivity {
         }
         if (isModify) {
             if (EmptyUtils.emptyOfString(name)) {
-                ToastUtil.showMsg("請輸入用戶名");
-                return;
+//                ToastUtil.showMsg("請輸入用戶名");
+//                return;
+            }else {
+                paramsMap.put("display_name", name);
             }
-            paramsMap.put("display_name", name);
         }
 
         showLoading();

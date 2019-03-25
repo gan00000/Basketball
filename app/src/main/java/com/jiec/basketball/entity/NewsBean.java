@@ -43,6 +43,7 @@ public class NewsBean implements Serializable {
     private String imageUrl;
 
     private String videoId;
+    private String videoUrl; //视频播放地址
 
     private int total_comment;
     private int total_like;
@@ -55,6 +56,14 @@ public class NewsBean implements Serializable {
     private String comment_id;
     private String comment_content;
     private String comment_date;
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
 
     public int getMy_save() {
         return my_save;

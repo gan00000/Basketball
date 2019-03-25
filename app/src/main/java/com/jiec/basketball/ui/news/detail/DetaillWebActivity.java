@@ -159,7 +159,7 @@ public class DetaillWebActivity extends BaseWebActivity {
         mContext = DetaillWebActivity.this;
         ButterKnife.bind(this);
         postId = getIntent().getStringExtra(KEY_POSTID);
-        postId = "125345"; /**========測試數據=========*/
+//        postId = "125345"; /**========測試數據=========*/
         totalComment = getIntent().getIntExtra(KEY_TOTALCOMMENT, 0);
 
         initView();

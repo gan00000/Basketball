@@ -107,4 +107,5 @@ dependencies {
     implementation 'q.rorbin:badgeview:1.1.3'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     implementation 'com.github.chaychan:ExpandableLinearLayout:1.0.1'
+    implementation 'org.jsoup:jsoup:1.11.3'
 }

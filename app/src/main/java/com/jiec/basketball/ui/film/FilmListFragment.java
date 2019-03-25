@@ -26,6 +26,7 @@ import com.jiec.basketball.ui.MainActivity;
 import com.jiec.basketball.ui.dialog.ShareUrlDialog;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 import com.jiec.basketball.ui.youtube.PlayerViewDemoActivity;
+import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.widget.RvDividerItemDecoration;
 import com.jiec.basketball.ytpa.YouTubePlayerActivity;
 import com.jiec.basketball.ytpa.enums.Orientation;
@@ -120,7 +121,6 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     && !mIsLoadingData) {
                 //加载更多
                 Log.d(TAG, "loading more data");
-
                 showLoadingMore();
                 loadData();
             }
@@ -134,7 +134,7 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 ShareUrlDialog dialog = new ShareUrlDialog(getActivity(), bean);
                 dialog.show();
             }else {
-                FilmPlayActivity.show(getContext(), bean.getVideoId());
+                FilmPlayActivity.show(getContext(), bean.getVideoUrl());
             }
 
 
@@ -199,7 +199,6 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
             mData.clear();
         }
         showProgress();
-
         loadData();
     }
 
@@ -227,11 +226,8 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     @Override
                     public void onNext(NewListResponse response) {
                         Log.e("test", "onNext" + response.toString());
-
                         mPageCounts = response.getPages();
-
                         addNews(response.getPosts(), mPageCounts <= mPageIndex);
-
                         hideProgress();
                         mIsLoadingData = false;
                     }
@@ -256,16 +252,16 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
         if (mData == null) {
             mData = new ArrayList<NewsBean>();
         }
+        for(NewsBean newsBean : newsList){
+            newsBean.setVideoUrl(AppUtil.getVideoId(newsBean.getContent()));
+        }
 
-//        mData.addAll(newsList);
         if (mPageIndex == 1) {
             mAdapter.setmDate(newsList);
         }else {
             mAdapter.addData(newsList);
         }
-
         hideLoadingMore();
-
         mPageIndex++;
     }
 
@@ -277,15 +273,13 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private void showLoadingMore() {
         mAdapter.isShowFooter(true);
-//        mAdapter.notifyDataSetChanged();
     }
 
     public void hideLoadingMore() {
         mAdapter.isShowFooter(false);
-//        mAdapter.notifyDataSetChanged();
     }
 
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_START_STANDALONE_PLAYER && resultCode != RESULT_OK) {
@@ -299,6 +293,6 @@ public class FilmListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 ToastUtil.showMsg(errorMessage);
             }
         }
-    }
+    }*/
 
 }

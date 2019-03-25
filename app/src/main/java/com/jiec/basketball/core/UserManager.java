@@ -94,12 +94,12 @@ public class UserManager {
      * 注销登录
      */
     public void logout() {
-        LineApiClientBuilder apiClientBuilder = new LineApiClientBuilder(BallApplication.getContext(), Constants.LINE_CHANNEL_ID);
-        LineApiClient lineApiClient = apiClientBuilder.build();
-
-        if (lineApiClient != null) {
-            lineApiClient.logout();
-        }
+//        LineApiClientBuilder apiClientBuilder = new LineApiClientBuilder(BallApplication.getContext(), Constants.LINE_CHANNEL_ID);
+//        LineApiClient lineApiClient = apiClientBuilder.build();
+//
+//        if (lineApiClient != null) {
+//            lineApiClient.logout();
+//        }
 
         LoginManager.getInstance().logOut();
         mUserProfile = null;
@@ -145,7 +145,7 @@ public class UserManager {
                     protected void onSuccess(LoginResult result) {
                         mLoginResult = result;
                         EventBus.getDefault().post(new LoginEvent());
-                        refreshProfile();
+                        refreshProfile(mLoginResult.getResult().getUser_token());
                     }
 
                     @Override
@@ -160,9 +160,9 @@ public class UserManager {
     /**
      * 刷新个人信息
      */
-    public void refreshProfile() {
+    public void refreshProfile(String token) {
         UserApi userApi = RetrofitClient.getInstance().create(UserApi.class);
-        userApi.getProfile(mLoginResult.getResult().getUser_token())
+        userApi.getProfile(token)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<UserProfile>() {
                     @Override
@@ -187,7 +187,11 @@ public class UserManager {
         mUserProfile = result;
 
         UserInfoBean userInfoBean = new UserInfoBean();
-        userInfoBean.user_token = mLoginResult.getResult().getUser_token();
+        if(mLoginResult != null){
+            userInfoBean.user_token = mLoginResult.getResult().getUser_token();
+        }else {
+            userInfoBean.user_token = BallApplication.userInfo.user_token;
+        }
         userInfoBean.user_id = result.getResult().getUser_id();
         userInfoBean.display_name = result.getResult().getDisplay_name();
         userInfoBean.user_email = result.getResult().getUser_email();

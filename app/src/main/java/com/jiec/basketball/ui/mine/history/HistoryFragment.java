@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.jiec.basketball.base.BaseListAdapter;
 import com.jiec.basketball.base.BaseListFragment;
+import com.jiec.basketball.core.BallApplication;
 import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.NewsBean;
 import com.jiec.basketball.entity.response.HistoryResponse;
@@ -32,7 +33,7 @@ public class HistoryFragment extends BaseListFragment {
     @Override
     protected void loadData(int page, int num) {
         UserApi userApi = RetrofitClient.getInstance().create(UserApi.class);
-        userApi.getHistory(UserManager.instance().getToken(), page)
+        userApi.getHistory(BallApplication.userInfo.user_token, page)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<HistoryResponse>() {
                     @Override

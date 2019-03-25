@@ -76,13 +76,25 @@ public class MineActivity extends BaseUIActivity {
         EventBus.getDefault().register(this);
         qBadgeView =  new QBadgeView(MineActivity.this);
 
-        if (!UserManager.instance().checkLogin()) {
+//        if (!UserManager.instance().checkLogin()) {
+//            mTvName.setText("未登錄");
+//            tvLogin.setVisibility(View.VISIBLE);
+//            rlInfo.setVisibility(View.GONE);
+//        } else if (UserManager.instance().isLogin()) {
+//            tvLogin.setVisibility(View.GONE);
+//            rlInfo.setVisibility(View.VISIBLE);
+//            getNotifyCounter();
+//        }
+
+        if (userInfo == null) {
             mTvName.setText("未登錄");
             tvLogin.setVisibility(View.VISIBLE);
             rlInfo.setVisibility(View.GONE);
-        } else if (UserManager.instance().isLogin()) {
+        } else {
+            UserManager.instance().refreshProfile(userInfo.user_token);
             tvLogin.setVisibility(View.GONE);
             rlInfo.setVisibility(View.VISIBLE);
+            update();
             getNotifyCounter();
         }
     }
@@ -116,14 +128,25 @@ public class MineActivity extends BaseUIActivity {
     protected void onResume() {
         super.onResume();
         //重新回到頁面時再次檢查一下登錄狀態
-        if (UserManager.instance().isLogin()) {
-            tvLogin.setVisibility(View.GONE);
-            rlInfo.setVisibility(View.VISIBLE);
-            update();
-        }else {
+//        if (UserManager.instance().isLogin()) {
+//            tvLogin.setVisibility(View.GONE);
+//            rlInfo.setVisibility(View.VISIBLE);
+//            update();
+//        }else {
+//            mTvName.setText("未登錄");
+//            tvLogin.setVisibility(View.VISIBLE);
+//            rlInfo.setVisibility(View.GONE);
+//        }
+
+        if (userInfo == null) {
             mTvName.setText("未登錄");
             tvLogin.setVisibility(View.VISIBLE);
             rlInfo.setVisibility(View.GONE);
+        } else {
+            tvLogin.setVisibility(View.GONE);
+            rlInfo.setVisibility(View.VISIBLE);
+            update();
+            getNotifyCounter();
         }
     }
 
@@ -136,10 +159,16 @@ public class MineActivity extends BaseUIActivity {
     @OnClick({R.id.rl_info, R.id.layout_collection, R.id.item_notify, R.id.tv_login,
             R.id.layout_comment, R.id.layout_zan, R.id.layout_history})
     public void onViewClicked(View view) {
-        if (!UserManager.instance().checkLogin()) {
+//        if (!UserManager.instance().checkLogin()) {
+//            LoginActivity.show(this);
+//            return;
+//        }
+
+        if (userInfo == null) {
             LoginActivity.show(this);
             return;
         }
+
 
         switch (view.getId()) {
             case R.id.rl_info:
@@ -165,7 +194,12 @@ public class MineActivity extends BaseUIActivity {
 
     @OnClick({R.id.item_setting})
     public void onSettingClick(View view) {
-        if (!UserManager.instance().isLogin()) {
+//        if (!UserManager.instance().isLogin()) {
+//            LoginActivity.show(this);
+//            return;
+//        }
+
+        if (userInfo == null) {
             LoginActivity.show(this);
             return;
         }
@@ -180,14 +214,20 @@ public class MineActivity extends BaseUIActivity {
      * 更新用戶信息
      */
     private void update() {
-        if (UserManager.instance().getUserProfile() == null) return;
+//        if (UserManager.instance().getUserProfile() == null) return;
+//        tvLogin.setVisibility(View.GONE);
+//        rlInfo.setVisibility(View.VISIBLE);
+//        UserProfile userProfile = UserManager.instance().getUserProfile();
+//        ImageLoaderUtils.display(this, mIvHead, userProfile.getResult().getUser_img(),
+//                R.drawable.img_default_head, R.drawable.img_default_head);
+//        mTvName.setText(userProfile.getResult().getDisplay_name());
 
+        if (userInfo == null) return;
         tvLogin.setVisibility(View.GONE);
         rlInfo.setVisibility(View.VISIBLE);
-        UserProfile userProfile = UserManager.instance().getUserProfile();
-        ImageLoaderUtils.display(this, mIvHead, userProfile.getResult().getUser_img(),
+        ImageLoaderUtils.display(this, mIvHead, userInfo.user_img,
                 R.drawable.img_default_head, R.drawable.img_default_head);
-        mTvName.setText(userProfile.getResult().getDisplay_name());
+        mTvName.setText(userInfo.display_name);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

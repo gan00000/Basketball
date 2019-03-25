@@ -1,6 +1,5 @@
 package com.jiec.basketball.ui.film;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,12 +59,7 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     public void setmDate(List<NewsBean> data) {
         if (data != null && data.size() > 0) {
-            for (NewsBean bean : data) {
-                if (AppUtil.getVideoId(bean.getContent()) != null) {
-                    bean.setVideoId(AppUtil.getVideoId(bean.getContent()));
-                    this.mData.add(bean);
-                }
-            }
+            this.mData.addAll(data);
         } else {
             this.mData.clear();
         }
@@ -83,12 +78,7 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if(EmptyUtils.emptyOfList(data)){
                 return;
             }
-            for (NewsBean bean : data) {
-                if (AppUtil.getVideoId(bean.getContent()) != null) {
-                    bean.setVideoId(AppUtil.getVideoId(bean.getContent()));
-                    this.mData.add(bean);
-                }
-            }
+            this.mData.addAll(data);
             this.notifyDataSetChanged();
         }
     }
@@ -159,32 +149,32 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((ItemViewHolder) holder).mTime.setText(AppUtil.getStandardDate(news.getDate()));
             ((ItemViewHolder) holder).mViews.setText(news.getSumViews() + "");
 
-            String playUrl = "https://www.youtube.com/embed/"+news.getVideoId();
-            Log.e("視頻播放地址", playUrl);
-            ((ItemViewHolder) holder).wvFilm.loadUrl(playUrl);
+            String playUrl = news.getVideoUrl();
+            if(playUrl.contains("twitter.com")){
+                //推特视频处理
+                ((ItemViewHolder) holder).wvFilm.setVisibility(View.GONE);
+                ((ItemViewHolder) holder).youTubeThumbnailView.setVisibility(View.VISIBLE);
+                if (TextUtils.isEmpty(news.getImagesrc())) {
+                    ThumbnailUtils.getThumbnail(news.getId(), new ThumbnailUtils.OnLoadSuccessLisener() {
+                        @Override
+                        public void onSuccess(String url) {
+                            LogUtil.e("load thumbnail url = " + url);
+                            ImageLoaderUtils.display(mContext, ((ItemViewHolder) holder).youTubeThumbnailView, url);
+                        }
+                    });
+                } else {
+                    ImageLoaderUtils.display(mContext, ((ItemViewHolder) holder).youTubeThumbnailView, news.getImgsrc());
+                }
 
-            if (TextUtils.isEmpty(news.getImagesrc())) {
-                ThumbnailUtils.getThumbnail(news.getId(), new ThumbnailUtils.OnLoadSuccessLisener() {
-                    @Override
-                    public void onSuccess(String url) {
-                        LogUtil.e("load thumbnail url = " + url);
-                        ImageLoaderUtils.display(mContext, ((ItemViewHolder) holder).youTubeThumbnailView, url);
-                    }
-                });
-            } else {
-                ImageLoaderUtils.display(mContext, ((ItemViewHolder) holder).youTubeThumbnailView, news.getImgsrc());
+            }else {
+                ((ItemViewHolder) holder).wvFilm.setVisibility(View.VISIBLE);
+                ((ItemViewHolder) holder).youTubeThumbnailView.setVisibility(View.INVISIBLE);
+                ((ItemViewHolder) holder).wvFilm.loadUrl(playUrl);
             }
 
-            //Item点击处理
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    NewsBean newsBean = mData.get(position - getAdSize(position));
-                    DetaillWebActivity.show(mContext, newsBean.getId(), newsBean.getTotal_comment());
-                }
-            });
 
-            //播放按钮点击处理
+            /*
+         //播放按钮点击处理
             ((ItemViewHolder) holder).ivPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -201,6 +191,15 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (mOnItemClickListener != null) {
                         mOnItemClickListener.onItemClick(1, news, position - getAdSize(position));
                     }
+                }
+            });*/
+
+            //Item点击处理
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NewsBean newsBean = mData.get(position - getAdSize(position));
+                    DetaillWebActivity.show(mContext, newsBean.getId(), newsBean.getTotal_comment());
                 }
             });
 
@@ -280,8 +279,9 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private  TextView mTime;
         private  TextView tvShare;
         private TextView mViews;
+        //改版后删除原图片view
         private ImageView youTubeThumbnailView;
-        private ImageView ivPlay;
+//        private ImageView ivPlay;
         private WebView wvFilm;
 
         public ItemViewHolder(View v) {
@@ -293,7 +293,7 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvShare = v.findViewById(R.id.tv_share);
             mViews = v.findViewById(R.id.tv_views);
             youTubeThumbnailView = v.findViewById(R.id.youtube_thumbnail);
-            ivPlay = v.findViewById(R.id.iv_play);
+//            ivPlay = v.findViewById(R.id.iv_play);
             wvFilm = v.findViewById(R.id.wv_film);
 
             WebSettings mSettings = wvFilm.getSettings();
@@ -301,6 +301,13 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
             mSettings.setLoadWithOverviewMode(true); //打开页面时， 自适应屏幕
             wvFilm.setWebChromeClient(new BaseWebChromeClient(new VideoImpl(mActivity, wvFilm)));
+            wvFilm.setWebViewClient(new WebViewClient() {
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
+                    view.loadUrl(url);
+                    return true;
+                }
+            });
         }
     }
 

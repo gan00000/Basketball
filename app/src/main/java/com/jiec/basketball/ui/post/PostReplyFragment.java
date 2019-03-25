@@ -23,6 +23,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.jiec.basketball.R;
 import com.jiec.basketball.adapter.PostCommentAdapter;
 import com.jiec.basketball.base.BaseUIFragment;
+import com.jiec.basketball.core.BallApplication;
 import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.response.NewsCommentResponse;
 import com.jiec.basketball.network.NetSubscriber;
@@ -218,7 +219,7 @@ public class PostReplyFragment extends BaseUIFragment  {
     private void getHotComment() {
         //getHotCommnet
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.getHotCommnet(UserManager.instance().getToken(), postId, hotOffset)
+        newsApi.getHotCommnet(BallApplication.userInfo.user_token, postId, hotOffset)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<NewsCommentResponse>() {
                     @Override
@@ -274,7 +275,7 @@ public class PostReplyFragment extends BaseUIFragment  {
      */
     private void getAllComment() {
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
-        newsApi.getNewsCommnet(UserManager.instance().getToken(), postId, allOffset)
+        newsApi.getNewsCommnet(BallApplication.userInfo.user_token, postId, allOffset)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<NewsCommentResponse>() {
                     @Override

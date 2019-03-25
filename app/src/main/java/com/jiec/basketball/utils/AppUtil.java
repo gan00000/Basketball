@@ -6,9 +6,15 @@ import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.constant.TimeConstants;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.jiec.basketball.core.ServerTimeManager;
 import com.wangcj.common.utils.LogUtil;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -22,39 +28,50 @@ import java.util.Locale;
 public class AppUtil {
 
     /**
-     * 解析获取视频id
+     * 解析获取视频播放地址
      * @param content
      * @return
      */
     public static String getVideoId(String content) {
+        Document doc = Jsoup.parse(content);
+        String videoUrl = "";
+        if(content.indexOf("iframe") != -1){
+            //iframe标签的直接获取src值
+            Elements links = doc.select("iframe[src]");
+            videoUrl = links.attr("src");
+        }else {
+            //twitter视频获取第三个超链接
+            Element link = doc.select("a").get(2);//查找第2个a元素
+            videoUrl = link.attr("href");
+        }
+        if(!EmptyUtils.emptyOfString(videoUrl)){
+//            LogUtils.e("Jsoup解析视频地址："+videoUrl);
+        }
+        return videoUrl;
+
+
+
         //找到视频标签
-        int index = content.indexOf("https://www.youtube.com");
+     /*   int index = content.indexOf("https://www.youtube.com");
         if (index < 0) return null;
         content = content.substring(index);
-
         //找到视频结束位置
         index = content.indexOf("\"");
         if (index > content.indexOf("?") && content.indexOf("?") > 0) {
             index = content.indexOf("?");
         }
-
         if (index < 0) return null;
         content = content.substring(0, index);
-
         LogUtil.d("file content = " + content);
-        return getId(content);
+        return getId(content);*/
     }
 
     private static String getId(String url) {
-
         if (TextUtils.isEmpty(url)) return null;
-
         String[] strs = url.split("/");
-
         if (strs != null && strs.length > 0) {
             return strs[strs.length - 1];
         }
-
         return null;
     }
 
@@ -178,7 +195,6 @@ public class AppUtil {
             String[] names = name.split(" ");
             return names[0].substring(0, 1) + "." + names[1];
         }
-
         return name;
     }
 
