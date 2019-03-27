@@ -12,6 +12,8 @@ public class CommResponse implements Serializable {
 
     private String status;
 
+    private String desc;
+
     private int count;
 
     private int pages;
@@ -38,6 +40,14 @@ public class CommResponse implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public boolean isSuccess() {

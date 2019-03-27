@@ -20,14 +20,12 @@ public abstract class NetSubscriber<T extends CommResponse> extends Subscriber<T
     @Override
     public void onError(Throwable e) {
         e.printStackTrace();
-
         String error = e.getLocalizedMessage();
         if (e instanceof HttpException || e instanceof ConnectException) {
             error = "網絡請求異常";
         } else if (e instanceof TimeoutException || e instanceof SocketTimeoutException) {
             error = "網絡請求超時";
         }
-
         onFailed(-1, error);
     }
 
@@ -36,7 +34,8 @@ public abstract class NetSubscriber<T extends CommResponse> extends Subscriber<T
         if (response != null && response.isSuccess()) {
             onSuccess(response);
         } else {
-            onFailed(-1, "網絡請求異常");
+//            onFailed(-1, "網絡請求異常");
+            onFailed(-1, response.getDesc());
         }
     }
 

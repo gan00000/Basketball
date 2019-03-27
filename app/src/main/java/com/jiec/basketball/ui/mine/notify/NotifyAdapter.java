@@ -47,10 +47,13 @@ public class NotifyAdapter extends BaseListAdapter<NotifyResponse.Result.Notific
                     //點讚消息通知
                     ((ItemViewHolder) holder).mTitle.setText(bean.getDisplay_name()
                             + "點贊了你的評論："+bean.getComment_content());
+                    ((ItemViewHolder) holder).tvReplyContent.setVisibility(View.GONE);
                 }else if(InputCheckUtils.compareIsEqual(bean.getType(), "reply")){
                     //評論回復消息通知
                     ((ItemViewHolder) holder).mTitle.setText(bean.getDisplay_name()
                             + "回復了你的評論："+bean.getComment_content());
+                    ((ItemViewHolder) holder).tvReplyContent.setVisibility(View.VISIBLE);
+                    ((ItemViewHolder) holder).tvReplyContent.setText(bean.getReply_msg());
                 }
                 ((ItemViewHolder) holder).tvTitle.setText(bean.getPost_title());
                 ((ItemViewHolder) holder).mTime.setText(AppUtil.getStandardDate(bean.getCreated_on()));
@@ -72,12 +75,14 @@ public class NotifyAdapter extends BaseListAdapter<NotifyResponse.Result.Notific
         public TextView mTitle;
         public TextView mTime;
         private TextView tvTitle;
+        private TextView tvReplyContent;
 
         public ItemViewHolder(View v) {
             super(v);
             mTitle = v.findViewById(R.id.tv_title);
             mTime = v.findViewById(R.id.tv_time);
             tvTitle = (TextView)v.findViewById( R.id.tv_news_title );
+            tvReplyContent = v.findViewById(R.id.tv_reply_content);
         }
     }
 

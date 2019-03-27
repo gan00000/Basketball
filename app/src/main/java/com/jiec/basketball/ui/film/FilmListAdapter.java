@@ -59,6 +59,7 @@ public class FilmListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     public void setmDate(List<NewsBean> data) {
         if (data != null && data.size() > 0) {
+            this.mData.clear();
             this.mData.addAll(data);
         } else {
             this.mData.clear();
