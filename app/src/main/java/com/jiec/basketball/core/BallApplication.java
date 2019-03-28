@@ -27,10 +27,10 @@ public class BallApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
         sContext = this;
         Utils.init(this);
         ToastUtil.init(sContext);
+        initUserInfo(getApplicationContext());
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
@@ -56,7 +56,6 @@ public class BallApplication extends MultiDexApplication {
             }
         });
 
-        initUserInfo(getApplicationContext());
     }
 
     /**
