@@ -15,6 +15,7 @@ import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseActivity;
 import com.jiec.basketball.core.ServerTimeManager;
 import com.jiec.basketball.core.UpdateManager;
+import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.response.TimeResponse;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.RetrofitClient;
@@ -67,12 +68,13 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        if(userInfo == null){
+            //用户信息为空调用自动登录
+            UserManager.instance().autoLogin();
+        }
         initFragment();
         initView();
         getServerTime();
-
-//        UserManager.instance().autoLogin(); //??????
     }
 
     @Override

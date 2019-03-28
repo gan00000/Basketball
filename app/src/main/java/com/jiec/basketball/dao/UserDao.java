@@ -3,6 +3,7 @@ package com.jiec.basketball.dao;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.google.gson.Gson;
 import com.jiec.basketball.bean.UserInfoBean;
 import com.jiec.basketball.core.BallApplication;
@@ -93,7 +94,6 @@ public class UserDao {
             editor.putString("user_status", simpleEncodeString(userInfo.user_status));
             editor.putString("user_img", simpleEncodeString(userInfo.user_img));
             editor.putString("change_name", simpleEncodeString(userInfo.change_name));
-
             editor.commit();
 
         } catch (Exception e) {
@@ -108,9 +108,8 @@ public class UserDao {
      */
     public UserInfoBean decodeUserInfo(Context mContext) {
         try {
-            SharedPreferences sp = mContext.getSharedPreferences(SP_UINFO, Context.MODE_PRIVATE);
-
             UserInfoBean userInfo = new UserInfoBean();
+            SharedPreferences sp = mContext.getSharedPreferences(SP_UINFO, Context.MODE_PRIVATE);
             String user_token =  simpleDecodeString(sp.getString("user_token", null));
             String user_id = simpleDecodeString(sp.getString("user_id", null));
             if(user_token == null || user_id == null){

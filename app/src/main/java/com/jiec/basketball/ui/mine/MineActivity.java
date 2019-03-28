@@ -13,8 +13,6 @@ import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIActivity;
 import com.jiec.basketball.bean.NotifyCounterModel;
 import com.jiec.basketball.core.UserManager;
-import com.jiec.basketball.entity.LoginResult;
-import com.jiec.basketball.entity.UserProfile;
 import com.jiec.basketball.event.LoginEvent;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;

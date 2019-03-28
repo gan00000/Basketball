@@ -94,12 +94,15 @@ public class UserManager {
      * 注销登录
      */
     public void logout() {
-//        LineApiClientBuilder apiClientBuilder = new LineApiClientBuilder(BallApplication.getContext(), Constants.LINE_CHANNEL_ID);
-//        LineApiClient lineApiClient = apiClientBuilder.build();
-//
-//        if (lineApiClient != null) {
-//            lineApiClient.logout();
-//        }
+
+/*
+    *Line注销登录闪退，屏蔽以下代码
+    LineApiClientBuilder apiClientBuilder = new LineApiClientBuilder(BallApplication.getContext(), Constants.LINE_CHANNEL_ID);
+        LineApiClient lineApiClient = apiClientBuilder.build();
+
+        if (lineApiClient != null) {
+            lineApiClient.logout();
+        }*/
 
         LoginManager.getInstance().logOut();
         mUserProfile = null;
