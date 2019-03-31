@@ -159,6 +159,11 @@ public class BaseWebActivity extends BaseActivity {
         });
     }
 
+    /**
+     * html代码重构
+     * @param content
+     * @return
+     */
     protected String processData(String content) {
         LogUtil.d("start parse :" + System.currentTimeMillis());
         content = content.replaceAll("class=\"onelist\"", " style=\" display: none\"");

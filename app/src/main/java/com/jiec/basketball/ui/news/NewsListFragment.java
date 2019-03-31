@@ -181,9 +181,11 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
         mAdapter.setBannerData(mBannerNews);
     }
 
+    /**
+     * 加载获取新闻列表
+     */
     private void loadData() {
         mIsLoadingData = true;
-
         GameApi mService = RetrofitClient.getInstance().create(GameApi.class);
         Observable<NewListResponse> observable = mService.getNews(mPageIndex);
         observable.subscribeOn(Schedulers.io())
@@ -206,11 +208,8 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     @Override
                     public void onNext(NewListResponse response) {
                         Log.e("test", "onNext" + response.toString());
-
                         mPageCounts = response.getPages();
-
                         addNews(response.getPosts(), mPageCounts <= mPageIndex);
-
                         hideProgress();
                         mIsLoadingData = false;
                     }
