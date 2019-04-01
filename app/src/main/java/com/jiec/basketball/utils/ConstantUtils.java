@@ -14,4 +14,9 @@ public class ConstantUtils {
      * 点击评论中回复列表下的回复按钮消息通知
      */
     public static final int EVENT_REPLY = 395;
+
+    /**
+     * 点击消息通知进入新闻详情
+     */
+    public static final int EVENT_NOTIFICATION = 396;
 }

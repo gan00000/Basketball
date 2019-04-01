@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.facebook.FacebookSdk;
@@ -17,13 +18,19 @@ import com.jiec.basketball.R;
 import com.jiec.basketball.bean.UserInfoBean;
 import com.jiec.basketball.dao.UserDao;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
+import com.jiec.basketball.utils.ConstantUtils;
+import com.jiec.basketball.utils.EventBusEvent;
+import com.jiec.basketball.utils.EventBusUtils;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
+import com.umeng.message.inapp.UmengSplashMessageActivity;
 import com.wangcj.common.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by Administrator on 2017/1/6.
@@ -76,33 +83,22 @@ public class BallApplication extends MultiDexApplication {
             @Override
             public Notification getNotification(Context context, UMessage msg) {
 
-                LogUtils.e("4478889");
-                Notification.Builder builder = new Notification.Builder(context);
-                RemoteViews myNotificationView = new RemoteViews(getApplicationInfo().processName,
-                        R.layout.notification_view);
-                myNotificationView.setTextViewText(R.id.notification_title, msg.title);
-                myNotificationView.setImageViewResource(R.id.notification_large_icon, R.mipmap.ic_launcher);
-                builder.setContent(myNotificationView);
-                Notification   motification = builder.build();
-                motification.contentView = myNotificationView;
-                return motification;
-
-//                switch (msg.builder_id) {
-//                    case 1:
-//                        LogUtils.e("4478889");
-//                        Notification.Builder builder = new Notification.Builder(context);
-//                        RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
-//                                R.layout.notification_view);
-//                        myNotificationView.setTextViewText(R.id.notification_title, msg.title);
-//                        myNotificationView.setImageViewResource(R.id.notification_large_icon, R.mipmap.ic_launcher);
-//                        builder.setContent(myNotificationView);
-//                        Notification   motification = builder.build();
-//                        motification.contentView = myNotificationView;
-//                        return motification;
-//                    default:
-//                        //默认为0，若填写的builder_id并不存在，也使用默认。
-//                        return super.getNotification(context, msg);
-//                }
+                switch (msg.builder_id) {
+                    case 1:
+                        LogUtils.e("4478889");
+                        Notification.Builder builder = new Notification.Builder(context);
+                        RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
+                                R.layout.notification_view);
+                        myNotificationView.setTextViewText(R.id.notification_title, msg.title);
+                        myNotificationView.setImageViewResource(R.id.notification_large_icon, R.mipmap.ic_launcher);
+                        builder.setContent(myNotificationView);
+                        Notification   motification = builder.build();
+                        motification.contentView = myNotificationView;
+                        return motification;
+                    default:
+                        //默认为0，若填写的builder_id并不存在，也使用默认。
+                        return super.getNotification(context, msg);
+                }
             }
         };
         mPushAgent.setMessageHandler(messageHandler);
@@ -110,16 +106,18 @@ public class BallApplication extends MultiDexApplication {
         UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
             @Override
             public void dealWithCustomAction(Context context, UMessage msg) {
-//                Toast.makeText(context, msg.custom, Toast.LENGTH_LONG).show();
-//                LogUtils.e(msg.text);
-//                DetaillWebActivity.show(context, msg.text, 10);
             }
 
             @Override
             public void launchApp(Context context, UMessage uMessage) {
-                super.launchApp(context, uMessage);
+//                super.launchApp(context, uMessage);
                 LogUtils.e(uMessage.text);
-                DetaillWebActivity.show(context, uMessage.text, 10);
+                if(AppUtils.isAppForeground()){
+                    EventBus.getDefault()
+                            .post(new EventBusEvent(ConstantUtils.EVENT_NOTIFICATION, BallApplication.class, uMessage.text));
+                }else {
+                    DetaillWebActivity.show(context, uMessage.text, 10);
+                }
             }
         };
         mPushAgent.setNotificationClickHandler(notificationClickHandler);

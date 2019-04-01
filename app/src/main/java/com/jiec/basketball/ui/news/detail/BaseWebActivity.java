@@ -11,6 +11,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.jiec.basketball.base.BaseActivity;
 import com.wangcj.common.utils.LogUtil;
 import com.wangcj.common.utils.ToastUtil;
@@ -135,6 +136,7 @@ public class BaseWebActivity extends BaseActivity {
                         content = processData(content);
 
                         final String finalContent = content;
+//                        LogUtils.e("HTML： "+finalContent);
                         loadData(urlpath, finalContent);
                     } else {
                         ToastUtil.showMsg("失败");

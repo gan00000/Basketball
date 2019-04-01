@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -24,6 +25,7 @@ import com.jiec.basketball.ui.film.FilmListFragment;
 import com.jiec.basketball.ui.game.GameMainFragment;
 import com.jiec.basketball.ui.mine.MineActivity;
 import com.jiec.basketball.ui.news.NewsListFragment;
+import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 import com.jiec.basketball.ui.rank.RankMainFragment;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.EventBusEvent;
@@ -43,6 +45,7 @@ import rx.schedulers.Schedulers;
 import static com.jiec.basketball.core.BallApplication.userInfo;
 import static com.jiec.basketball.utils.ConstantUtils.EVENT_LOGIN;
 import static com.jiec.basketball.utils.ConstantUtils.EVENT_LOGIN_OUT;
+import static com.jiec.basketball.utils.ConstantUtils.EVENT_NOTIFICATION;
 
 /**
  * Description : 主界面
@@ -201,6 +204,12 @@ public class MainActivity extends BaseActivity {
 
             case EVENT_LOGIN_OUT:
                 ivMine.setImageResource(R.drawable.img_default_head);
+                break;
+
+            case EVENT_NOTIFICATION:
+                String postId = (String) event.data;
+                LogUtils.e(postId+"消息通知Id");
+                DetaillWebActivity.show(MainActivity.this, postId, 10);
                 break;
         }
     }

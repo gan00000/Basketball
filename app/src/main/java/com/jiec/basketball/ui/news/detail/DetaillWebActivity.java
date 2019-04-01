@@ -159,7 +159,6 @@ public class DetaillWebActivity extends BaseWebActivity {
         mContext = DetaillWebActivity.this;
         ButterKnife.bind(this);
         postId = getIntent().getStringExtra(KEY_POSTID);
-//        postId = "125345"; /**========測試數據=========*/
         totalComment = getIntent().getIntExtra(KEY_TOTALCOMMENT, 0);
 
         initView();
@@ -421,7 +420,6 @@ public class DetaillWebActivity extends BaseWebActivity {
      * 測試：使用全部評論接口
      */
     private void getHotComment() {
-        //getHotCommnet     getNewsCommnet
         NewsApi newsApi = RetrofitClient.getInstance().create(NewsApi.class);
         newsApi.getHotCommnet(EmptyUtils.emptyOfObject(userInfo) ? "" : userInfo.user_token, postId, hotOffset)
                 .compose(new NetTransformer<>())
@@ -432,7 +430,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                         hotOffset++;
                         List<CommentsBean> hotList = result.getResult().getComments();
                         if(hotAdapter == null){
-                            LogUtils.e("首次加載熱門評論");
+//                            LogUtils.e("首次加載熱門評論");
                             if(!EmptyUtils.emptyOfList(hotList)){
                                 llComment.setVisibility(View.VISIBLE);
                                 tvHot.setVisibility(View.VISIBLE);
@@ -453,7 +451,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                                 getAllComment();
                             }
                         }else{
-                            LogUtils.e("加載更多熱門評論");
+//                            LogUtils.e("加載更多熱門評論");
                             if(isHotRefresh){
                                 hotAdapter.setNewData(hotList);
                             }else {
@@ -491,7 +489,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                         allOffset++;
                         List<CommentsBean> commentList = result.getResult().getComments();
                         if(allAdapter == null){
-                            LogUtils.e("首次加載所有評論555");
+//                            LogUtils.e("首次加載所有評論555");
                             allAdapter = new PostCommentAdapter(3, commentList);
                             allAdapter.bindToRecyclerView(rvAll);
                             if(EmptyUtils.emptyOfList(commentList)){
@@ -511,7 +509,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                             }, rvHot);
 
                         }else{
-                            LogUtils.e("加載更多所有評論555");
+//                            LogUtils.e("加載更多所有評論555");
                             if(isAllRefresh){
                                 allAdapter.setNewData(commentList);
                                 tvEmptyComment.setVisibility(View.GONE);
