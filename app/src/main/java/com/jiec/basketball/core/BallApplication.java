@@ -69,37 +69,40 @@ public class BallApplication extends MultiDexApplication {
         UmengMessageHandler messageHandler = new UmengMessageHandler() {
 
             @Override
+            public void dealWithNotificationMessage(Context context, UMessage uMessage) {
+                super.dealWithNotificationMessage(context, uMessage);
+            }
+
+            @Override
             public Notification getNotification(Context context, UMessage msg) {
-                switch (msg.builder_id) {
-                    case 1:
-                        Notification.Builder builder = new Notification.Builder(context);
-                        RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
-                                R.layout.notification_view);
-                        myNotificationView.setTextViewText(R.id.notification_title, msg.title);
-                        myNotificationView.setImageViewResource(R.id.notification_large_icon, R.mipmap.ic_launcher);
-//                        myNotificationView.setTextViewText(R.id.notification_text, msg.text);
-//                        myNotificationView.setImageViewBitmap(R.id.notification_large_icon,
-//                                getLargeIcon(context, msg));
-//                        myNotificationView.setImageViewResource(R.id.notification_small_icon,
-//                                getSmallIconId(context, msg));
-                        builder.setContent(myNotificationView);
-                        Notification   motification = builder.build();
-                        motification.contentView = myNotificationView;
-                        return motification;
-                    default:
-                        //默认为0，若填写的builder_id并不存在，也使用默认。
-                        LogUtils.e("4478889");
-                        Notification.Builder mbuilder = new Notification.Builder(context);
-                        RemoteViews mNotificationView = new RemoteViews(context.getPackageName(),
-                                R.layout.notification_view);
-                        mNotificationView.setTextViewText(R.id.notification_title, msg.title);
-                        mNotificationView.setImageViewResource(R.id.notification_large_icon, R.mipmap.ic_launcher);
-                        mbuilder.setContent(mNotificationView);
-                        Notification   mNotification = mbuilder.build();
-                        mNotification.contentView = mNotificationView;
-                        return mNotification;
+
+                LogUtils.e("4478889");
+                Notification.Builder builder = new Notification.Builder(context);
+                RemoteViews myNotificationView = new RemoteViews(getApplicationInfo().processName,
+                        R.layout.notification_view);
+                myNotificationView.setTextViewText(R.id.notification_title, msg.title);
+                myNotificationView.setImageViewResource(R.id.notification_large_icon, R.mipmap.ic_launcher);
+                builder.setContent(myNotificationView);
+                Notification   motification = builder.build();
+                motification.contentView = myNotificationView;
+                return motification;
+
+//                switch (msg.builder_id) {
+//                    case 1:
+//                        LogUtils.e("4478889");
+//                        Notification.Builder builder = new Notification.Builder(context);
+//                        RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
+//                                R.layout.notification_view);
+//                        myNotificationView.setTextViewText(R.id.notification_title, msg.title);
+//                        myNotificationView.setImageViewResource(R.id.notification_large_icon, R.mipmap.ic_launcher);
+//                        builder.setContent(myNotificationView);
+//                        Notification   motification = builder.build();
+//                        motification.contentView = myNotificationView;
+//                        return motification;
+//                    default:
+//                        //默认为0，若填写的builder_id并不存在，也使用默认。
 //                        return super.getNotification(context, msg);
-                }
+//                }
             }
         };
         mPushAgent.setMessageHandler(messageHandler);
