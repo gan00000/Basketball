@@ -1,9 +1,14 @@
 package com.jiec.basketball.ui.news.detail;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.webkit.WebChromeClient;
@@ -17,6 +22,8 @@ import com.wangcj.common.utils.LogUtil;
 import com.wangcj.common.utils.ToastUtil;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -136,7 +143,13 @@ public class BaseWebActivity extends BaseActivity {
                         content = processData(content);
 
                         final String finalContent = content;
-//                        LogUtils.e("HTML： "+finalContent);
+//                        LogUtils.e("HTML： " + finalContent);
+//                        String sdCardDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                        File saveFile = new File(sdCardDir, "news.txt");
+//                        FileOutputStream outStream = new FileOutputStream(saveFile);
+//                        outStream.write(finalContent.getBytes());
+//                        outStream.close();
+
                         loadData(urlpath, finalContent);
                     } else {
                         ToastUtil.showMsg("失败");
@@ -149,6 +162,7 @@ public class BaseWebActivity extends BaseActivity {
             }
         }).start();
     }
+
 
     protected void loadData(final String url, final String finalContent) {
         runOnUiThread(new Runnable() {
@@ -163,6 +177,7 @@ public class BaseWebActivity extends BaseActivity {
 
     /**
      * html代码重构
+     *
      * @param content
      * @return
      */

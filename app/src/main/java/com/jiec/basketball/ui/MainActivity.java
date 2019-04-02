@@ -1,5 +1,6 @@
 package com.jiec.basketball.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
+import kr.co.namee.permissiongen.PermissionGen;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -78,6 +80,19 @@ public class MainActivity extends BaseActivity {
         initFragment();
         initView();
         getServerTime();
+        checkPermission();
+    }
+
+    /**
+     * 6.0以上系统检测运行时权限
+     */
+    private void checkPermission() {
+        PermissionGen.with(MainActivity.this)
+                .addRequestCode(100)
+                .permissions(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .request();
     }
 
     @Override
