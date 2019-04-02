@@ -14,6 +14,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.gson.JsonObject;
 import com.jiec.basketball.R;
 import com.jiec.basketball.bean.UserInfoBean;
 import com.jiec.basketball.dao.UserDao;
@@ -31,6 +32,8 @@ import com.umeng.message.inapp.UmengSplashMessageActivity;
 import com.wangcj.common.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2017/1/6.
@@ -78,6 +81,30 @@ public class BallApplication extends MultiDexApplication {
             @Override
             public void dealWithNotificationMessage(Context context, UMessage uMessage) {
                 super.dealWithNotificationMessage(context, uMessage);
+            }
+
+            @Override
+            public void dealWithCustomMessage(Context context, UMessage uMessage) {
+                super.dealWithCustomMessage(context, uMessage);
+//                String customMsg = uMessage.custom;
+//                try {
+//                    JSONObject obj = new JSONObject(customMsg);
+//                    String title = obj.optString("title");
+//                    String postId = obj.optString("postId");
+//
+//                    Notification.Builder builder = new Notification.Builder(context);
+//                    RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
+//                            R.layout.notification_view);
+//                    myNotificationView.setTextViewText(R.id.notification_title, title);
+//                    myNotificationView.setImageViewResource(R.id.notification_large_icon, R.mipmap.ic_launcher);
+//                    builder.setContent(myNotificationView);
+//                    Notification   motification = builder.build();
+//                    motification.contentView = myNotificationView;
+//                    motification.notify();
+//                    LogUtils.e(title+postId);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
 
             @Override

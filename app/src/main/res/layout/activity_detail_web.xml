@@ -209,14 +209,14 @@
             <WebView
                 android:id="@+id/webview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white" />
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView_bottom"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/page_padding"
                 app:adSize="MEDIUM_RECTANGLE"

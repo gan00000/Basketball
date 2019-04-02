@@ -410,6 +410,7 @@ public class DetaillWebActivity extends BaseWebActivity {
         ThreadUtils.postMainThread(new Runnable() {
             @Override
             public void run() {
+                //屏蔽广告
                 mAdViewBottom.setVisibility(View.VISIBLE);
             }
         }, 4000);
