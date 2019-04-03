@@ -20,6 +20,7 @@ import com.jiec.basketball.bean.UserInfoBean;
 import com.jiec.basketball.dao.UserDao;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 import com.jiec.basketball.utils.ConstantUtils;
+import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.EventBusEvent;
 import com.jiec.basketball.utils.EventBusUtils;
 import com.umeng.commonsdk.UMConfigure;
@@ -34,6 +35,8 @@ import com.wangcj.common.utils.ToastUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/1/6.
@@ -54,7 +57,6 @@ public class BallApplication extends MultiDexApplication {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-
         MultiDex.install(this);
 
         UMConfigure.init(getApplicationContext(), "5c9f28fb61f56499e7000bf4", "Umeng",
@@ -86,30 +88,10 @@ public class BallApplication extends MultiDexApplication {
             @Override
             public void dealWithCustomMessage(Context context, UMessage uMessage) {
                 super.dealWithCustomMessage(context, uMessage);
-//                String customMsg = uMessage.custom;
-//                try {
-//                    JSONObject obj = new JSONObject(customMsg);
-//                    String title = obj.optString("title");
-//                    String postId = obj.optString("postId");
-//
-//                    Notification.Builder builder = new Notification.Builder(context);
-//                    RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
-//                            R.layout.notification_view);
-//                    myNotificationView.setTextViewText(R.id.notification_title, title);
-//                    myNotificationView.setImageViewResource(R.id.notification_large_icon, R.mipmap.ic_launcher);
-//                    builder.setContent(myNotificationView);
-//                    Notification   motification = builder.build();
-//                    motification.contentView = myNotificationView;
-//                    motification.notify();
-//                    LogUtils.e(title+postId);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
             }
 
             @Override
             public Notification getNotification(Context context, UMessage msg) {
-
                 switch (msg.builder_id) {
                     case 1:
                         LogUtils.e("4478889");
@@ -138,13 +120,21 @@ public class BallApplication extends MultiDexApplication {
             @Override
             public void launchApp(Context context, UMessage uMessage) {
 //                super.launchApp(context, uMessage);
-                LogUtils.e(uMessage.text);
-                if(AppUtils.isAppForeground()){
-                    EventBus.getDefault()
-                            .post(new EventBusEvent(ConstantUtils.EVENT_NOTIFICATION, BallApplication.class, uMessage.text));
-                }else {
-                    DetaillWebActivity.show(context, uMessage.text, 10);
+                String postId = "";
+                for (Map.Entry entry : uMessage.extra.entrySet()) {
+                    String key = (String) entry.getKey();
+                    postId = (String) entry.getValue();
                 }
+                LogUtils.e(postId);
+                if( !EmptyUtils.emptyOfString(postId)){
+                    if(AppUtils.isAppForeground()){
+                        EventBus.getDefault()
+                                .post(new EventBusEvent(ConstantUtils.EVENT_NOTIFICATION, BallApplication.class, postId));
+                    }else {
+                        DetaillWebActivity.show(context, postId, 10);
+                    }
+                }
+
             }
         };
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
