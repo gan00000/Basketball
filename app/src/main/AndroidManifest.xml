@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
     package="com.jiec.basketball">
+
+    <uses-sdk tools:overrideLibrary="com.linecorp.linesdk,com.chaychan.library"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,7 +20,23 @@
     <!-- admaster所需权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 属于android6.0运行时权限 -->
 
-    <uses-feature android:name="android.hardware.Camera" />
+    <uses-feature android:name="android.hardware.Camera"
+        android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.NETWORK"
+        android:required="false" />
 
     <application
         android:name=".core.BallApplication"

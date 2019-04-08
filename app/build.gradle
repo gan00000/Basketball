@@ -8,10 +8,10 @@ android {
     defaultConfig {
         applicationId "com.jiec.basketball"
 
-        minSdkVersion 19
+        minSdkVersion 15
         targetSdkVersion 26
-        versionCode 3
-        versionName "1.2.0-test"
+        versionCode 8
+        versionName "2.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
@@ -100,7 +100,7 @@ dependencies {
     implementation 'com.umeng.umsdk:utdid:1.1.5.3'
     //PushSDK
     implementation 'com.umeng.umsdk:push:5.0.2'
-    compile 'com.lovedise:permissiongen:0.0.6'
+    implementation 'com.lovedise:permissiongen:0.0.6'
 
     implementation files('libs/gson-2.2.4.jar')
     implementation 'com.blankj:utilcode:1.9.8'
