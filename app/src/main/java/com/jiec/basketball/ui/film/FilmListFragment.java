@@ -14,9 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.jiec.basketball.R;
 import com.jiec.basketball.entity.NewsBean;
 import com.jiec.basketball.entity.response.NewListResponse;
@@ -24,12 +21,8 @@ import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.ui.MainActivity;
 import com.jiec.basketball.ui.dialog.ShareUrlDialog;
-import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
-import com.jiec.basketball.ui.youtube.PlayerViewDemoActivity;
 import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.widget.RvDividerItemDecoration;
-import com.jiec.basketball.ytpa.YouTubePlayerActivity;
-import com.jiec.basketball.ytpa.enums.Orientation;
 import com.wangcj.common.utils.LogUtil;
 import com.wangcj.common.utils.ToastUtil;
 
@@ -39,8 +32,6 @@ import java.util.List;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Description : 影片列表Fragment
