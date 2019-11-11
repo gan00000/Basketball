@@ -86,6 +86,7 @@
             android:drawableLeft="@drawable/img_icon_view"
             android:drawablePadding="5dp"
             android:textColor="@color/gray"
+            android:visibility="gone"
             android:textSize="@dimen/sp_12" />
 
         <TextView
