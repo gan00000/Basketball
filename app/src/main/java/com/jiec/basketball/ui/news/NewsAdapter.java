@@ -263,7 +263,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             //设置图片加载器
             banner.setImageLoader(new GlideImageLoader());
             //设置轮播时间
-            banner.setDelayTime(3000);
+            banner.setDelayTime(5000);
+            //设置自动轮播，默认为true
+            banner.isAutoPlay(true);
         }
     }
 
