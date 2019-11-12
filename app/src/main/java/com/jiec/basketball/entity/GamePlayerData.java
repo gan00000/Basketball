@@ -108,7 +108,7 @@ public class GamePlayerData {
     private String officialImagesrc;
     private String isStarter;
 
-    @SmartColumn(id = 1, name = "球员", fixed = true, width = 60)
+    @SmartColumn(id = 1, name = "球员", fixed = true, width = 80, minHeight = 40)
     private String name;
 
 

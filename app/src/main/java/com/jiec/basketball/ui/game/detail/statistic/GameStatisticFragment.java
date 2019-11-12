@@ -1,5 +1,9 @@
 package com.jiec.basketball.ui.game.detail.statistic;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -9,12 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bin.david.form.core.SmartTable;
-import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
+import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
+import com.bin.david.form.data.format.draw.FastTextDrawFormat;
 import com.bin.david.form.data.format.grid.BaseGridFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
@@ -69,31 +74,48 @@ public class GameStatisticFragment extends BaseUIFragment {
 
     private void initTable(SmartTable smartTable) {
 
-        FontStyle.setDefaultTextSize(DensityUtils.sp2px(getContext(), 12));
+        FontStyle.setDefaultTextSize(DensityUtils.sp2px(getContext(), 16));
         FontStyle.setDefaultTextColor(getContext().getResources().getColor(R.color.black));
 
         smartTable.getConfig().setShowXSequence(false);
         smartTable.getConfig().setShowYSequence(false);
-        smartTable.getTableTitle().setSize(20);
+        smartTable.getTableTitle().setSize(DensityUtils.sp2px(getContext(), 18));
 
+        FontStyle titleFontStyle = new FontStyle();
+        titleFontStyle.setTextSpSize(getContext(),18);
+        smartTable.getConfig().setColumnTitleStyle(titleFontStyle);//设置列标题文字样式
+
+//        LineStyle gridLineStyle = new LineStyle();
+//        gridLineStyle.setColor(ContextCompat.getColor(getActivity(), R.color.eef0f4));
+//        smartTable.getConfig().setColumnTitleGridStyle(gridLineStyle);//设置列标题网格样式
+
+        smartTable.getConfig().setColumnTitleBackground(new BaseBackgroundFormat(ContextCompat.getColor(getActivity(), R.color.eef0f4)));
 
         smartTable.getConfig().setContentGridStyle(new LineStyle() {
             @Override
             public LineStyle setColor(int color) {
                 return super.setColor(ContextCompat.getColor(getActivity(), R.color.black));
             }
+
         });
 
 
-        smartTable.getConfig().setTableTitleStyle(new FontStyle(getContext(), 5,
+        smartTable.getConfig().setTableTitleStyle(new FontStyle(getContext(), 5, //设置表格标题文字样式
                 getResources().getColor(R.color.black)));
+
         ICellBackgroundFormat<CellInfo> backgroundFormat = new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
-                if (cellInfo.row % 2 == 0) {
+//                if (cellInfo.row % 2 == 0) {
+//                    return ContextCompat.getColor(getActivity(), R.color.white);
+//                } else {
+//                    return TableConfig.INVALID_COLOR;
+//                }
+
+                if (cellInfo.row < 5) {
                     return ContextCompat.getColor(getActivity(), R.color.white);
                 } else {
-                    return TableConfig.INVALID_COLOR;
+                    return ContextCompat.getColor(getActivity(), R.color.eef0f4);
                 }
             }
         };
@@ -109,6 +131,19 @@ public class GameStatisticFragment extends BaseUIFragment {
 
             @Override
             protected boolean isShowVerticalLine(int col, int row, CellInfo cellInfo) {
+
+                cellInfo.column.setDrawFormat(new FastTextDrawFormat(){//设置不同列的字体
+                    @Override
+                    protected void drawText(Canvas c, String value, Rect rect, Paint paint) {
+                        if (col == 0) {
+                            paint.setTypeface(Typeface.DEFAULT_BOLD);
+                        }else {
+                            paint.setTypeface(Typeface.DEFAULT);
+                        }
+                        super.drawText(c, value, rect, paint);
+                    }
+                });
+
                 if (col == 0) {
                     return true;
                 }
@@ -117,10 +152,10 @@ public class GameStatisticFragment extends BaseUIFragment {
 
             @Override
             protected boolean isShowHorizontalLine(int col, int row, CellInfo cellInfo) {
-                if (row == 0 || row == 5) {
-                    return true;
-                }
-                return false;
+//                if (row == 0 || row == 5) {
+//                    return true;
+//                }
+                return true;
             }
         });
 
