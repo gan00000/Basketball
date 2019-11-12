@@ -19,4 +19,6 @@
     <color name="red_little">#9c4433</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <color name="transparent">#000000</color>
 </resources>

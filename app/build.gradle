@@ -108,4 +108,5 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     implementation 'com.github.chaychan:ExpandableLinearLayout:1.0.1'
     implementation 'org.jsoup:jsoup:1.11.3'
+    implementation 'com.bm.photoview:library:1.4.1'
 }

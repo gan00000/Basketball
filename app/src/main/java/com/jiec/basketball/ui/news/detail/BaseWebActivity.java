@@ -1,14 +1,9 @@
 package com.jiec.basketball.ui.news.detail;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.webkit.WebChromeClient;
@@ -16,14 +11,13 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.blankj.utilcode.util.LogUtils;
+import com.gan.ctools.other.MJavascriptInterface;
+import com.gan.ctools.tool.HtmlUtil;
 import com.jiec.basketball.base.BaseActivity;
 import com.wangcj.common.utils.LogUtil;
 import com.wangcj.common.utils.ToastUtil;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -169,8 +163,12 @@ public class BaseWebActivity extends BaseActivity {
             @Override
             public void run() {
                 hideLoading();
-                if (mWebView != null)
+                if (mWebView != null){
+
+                    String[] imageUrls = HtmlUtil.returnImageUrlsFromHtml(finalContent);
+                    mWebView.addJavascriptInterface(new MJavascriptInterface(BaseWebActivity.this,imageUrls), "imagelistener");
                     mWebView.loadDataWithBaseURL(url, finalContent, "text/html", "UTF-8", null);
+                }
             }
         });
     }
@@ -228,12 +226,14 @@ public class BaseWebActivity extends BaseActivity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             LogUtil.d(TAG, "onPageStarted()---开始加载页面");
+            view.getSettings().setJavaScriptEnabled(true);
             super.onPageStarted(view, url, favicon);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             LogUtil.d(TAG, "onPageFinished()---加载页面结束");
+            view.getSettings().setJavaScriptEnabled(true);
             if (!mWebSettings.getLoadsImagesAutomatically()) {
                 mWebSettings.setLoadsImagesAutomatically(true);
             }
@@ -242,6 +242,21 @@ public class BaseWebActivity extends BaseActivity {
                 showLoadFailLayout();
             }
             super.onPageFinished(view, url);
+            addImageClickListener(view);
+        }
+
+
+        private void addImageClickListener(WebView webView) {
+            webView.loadUrl("javascript:(function(){" +
+                    "var objs = document.getElementsByTagName(\"img\"); " +
+                    "for(var i=0;i<objs.length;i++)  " +
+                    "{"
+                    + "    objs[i].onclick=function()  " +
+                    "    {  "
+                    + "        window.imagelistener.openImage(this.src);  " +//通过js代码找到标签为img的代码块，设置点击的监听方法与本地的openImage方法进行连接
+                    "    }  " +
+                    "}" +
+                    "})()");
         }
 
     }
