@@ -57,6 +57,7 @@
     <string name="data_tab_turnover">失誤</string>
     <string name="rank_ew">東西區排名</string>
     <string name="rank_zone">分賽區排名</string>
+    <string name="rank_zone_team">球隊排行</string>
 
 
     <string name="hello_world">Hello world!</string>

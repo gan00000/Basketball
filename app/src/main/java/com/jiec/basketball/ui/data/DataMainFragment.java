@@ -13,6 +13,7 @@ import com.jiec.basketball.adapter.ViewPageAdapter;
 import com.jiec.basketball.entity.response.HomeResponse;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.RetrofitClient;
+import com.jiec.basketball.ui.rank.RankEastWestFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +51,7 @@ public class DataMainFragment extends Fragment {
         ViewPageAdapter adapter = new ViewPageAdapter(getChildFragmentManager());
         adapter.addFragment(PlayerDataFragment.newInstance(), getString(R.string.data_player));
         adapter.addFragment(TeamDataFragment.newInstance(), getString(R.string.data_team));
+        adapter.addFragment(RankEastWestFragment.newInstance(), getString(R.string.rank_zone_team));
         mViewpager.setAdapter(adapter);
         mViewpager.setOffscreenPageLimit(1);
         mTabLayout.setViewPager(mViewpager, adapter.getTitles());
