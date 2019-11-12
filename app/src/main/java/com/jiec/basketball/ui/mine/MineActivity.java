@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -27,9 +26,7 @@ import com.jiec.basketball.ui.mine.notify.NotifyActivity;
 import com.jiec.basketball.ui.mine.setting.SettingActivity;
 import com.jiec.basketball.utils.ConstantUtils;
 import com.jiec.basketball.utils.EventBusEvent;
-import com.jiec.basketball.utils.EventBusUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
-import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.CircleSImageView;
 import com.wangcj.common.widget.ItemLayout;
 import com.wangcj.common.widget.PressRelativeLayout;
@@ -41,7 +38,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
 import static com.jiec.basketball.core.BallApplication.userInfo;
@@ -245,15 +241,15 @@ public class MineActivity extends BaseUIActivity {
                 LogUtils.e("登出EventBus");
                 break;
 
-                case ConstantUtils.EVENT_HAS_READ:
-                    qBadgeView.setBadgeNumber(0);
-                    LogUtils.e("消息已讀EventBus");
-                    break;
+            case ConstantUtils.EVENT_HAS_READ:
+                qBadgeView.setBadgeNumber(0);
+                LogUtils.e("消息已讀EventBus");
+                break;
 
-                case ConstantUtils.EVENT_LOGIN:
-                    update();
-                    getNotifyCounter();
-                    break;
+            case ConstantUtils.EVENT_LOGIN:
+                update();
+                getNotifyCounter();
+                break;
         }
     }
 
