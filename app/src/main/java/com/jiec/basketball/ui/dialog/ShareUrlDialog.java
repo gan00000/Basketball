@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -27,7 +28,16 @@ public class ShareUrlDialog extends Dialog {
     ShareDialog shareDialog;
 
     public ShareUrlDialog(final Activity activity, final NewsBean newsBean) {
+        this(activity,newsBean.getUrl());
+    }
+
+
+    public ShareUrlDialog(final Activity activity, final String shareUrl) {
         super(activity);
+
+        if (TextUtils.isEmpty(shareUrl)){
+            return;
+        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_share);
         setDialogDefaultSize(activity);
@@ -41,8 +51,8 @@ public class ShareUrlDialog extends Dialog {
             public void onClick(View v) {
                 dismiss();
                 ShareLinkContent content = new ShareLinkContent.Builder()
-                        .setContentUrl(Uri.parse(newsBean.getUrl()))
-                        .setImageUrl(Uri.parse(newsBean.getImgsrc()))
+                        .setContentUrl(Uri.parse(shareUrl))
+                        //.setImageUrl(Uri.parse(newsBean.getImgsrc()))
                         .build();
                 shareDialog.show(content);
             }
@@ -55,7 +65,7 @@ public class ShareUrlDialog extends Dialog {
                 dismiss();
 
                 try {
-                    String url = "http://line.me/R/msg/text/?" + newsBean.getUrl();
+                    String url = "http://line.me/R/msg/text/?" + shareUrl;
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent .setData(Uri.parse(url));
                     activity.startActivity(intent);

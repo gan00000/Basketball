@@ -66,21 +66,42 @@ public class TernBean {
     @SmartColumn(id = 5, name = "勝率")
     private String win_rate;
 
-    @SmartColumn(id = 6, name = "主場")
+//    @SmartColumn(id = 6, name = "主場")
     private String home;
 
-    @SmartColumn(id = 7, name = "賽場")
+//    @SmartColumn(id = 7, name = "賽場")
     private String away;
 
-    @SmartColumn(id = 8, name = "賽區")
+//    @SmartColumn(id = 8, name = "賽區")
     private String all;
 
-    @SmartColumn(id = 9, name = "得分")
+//    @SmartColumn(id = 9, name = "得分")
     private String winPt;
 
-    @SmartColumn(id = 10, name = "失分")
+//    @SmartColumn(id = 10, name = "失分")
     private String lostPt;
 
+    @SmartColumn(id = 7, name = "連勝/負")
+    private String streakDescription;
+
+    @SmartColumn(id = 6, name = "勝差")
+    private String gamesBack;
+
+    public String getStreakDescription() {
+        return streakDescription;
+    }
+
+    public void setStreakDescription(String streakDescription) {
+        this.streakDescription = streakDescription;
+    }
+
+    public String getGamesBack() {
+        return gamesBack;
+    }
+
+    public void setGamesBack(String gamesBack) {
+        this.gamesBack = gamesBack;
+    }
 
     public String getRank() {
         return rank;

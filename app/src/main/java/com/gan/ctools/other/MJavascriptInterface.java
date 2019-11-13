@@ -21,13 +21,16 @@ public class MJavascriptInterface {
 
     @android.webkit.JavascriptInterface
     public void openImage(String img) {
+
+        Log.i("MJavascriptInterface","點擊的图片地址 "+ img);
         Intent intent = new Intent();
-        intent.putExtra("imageUrls", imageUrls);
+        String[] clickImageUrls = new String[]{img};
+        intent.putExtra("imageUrls", clickImageUrls);
         intent.putExtra("curImageUrl", img);
         intent.setClass(context, PhotoBrowserActivity.class);
         context.startActivity(intent);
-        for (int i = 0; i < imageUrls.length; i++) {
-            Log.e("图片地址"+i,imageUrls[i].toString());
-        }
+//        for (int i = 0; i < imageUrls.length; i++) {
+//            Log.e("图片地址"+i,imageUrls[i].toString());
+//        }
     }
 }

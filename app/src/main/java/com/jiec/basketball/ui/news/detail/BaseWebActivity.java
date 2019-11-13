@@ -12,7 +12,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.gan.ctools.other.MJavascriptInterface;
-import com.gan.ctools.tool.HtmlUtil;
 import com.jiec.basketball.base.BaseActivity;
 import com.wangcj.common.utils.LogUtil;
 import com.wangcj.common.utils.ToastUtil;
@@ -165,8 +164,8 @@ public class BaseWebActivity extends BaseActivity {
                 hideLoading();
                 if (mWebView != null){
 
-                    String[] imageUrls = HtmlUtil.returnImageUrlsFromHtml(finalContent);
-                    mWebView.addJavascriptInterface(new MJavascriptInterface(BaseWebActivity.this,imageUrls), "imagelistener");
+//                    String[] imageUrls = HtmlUtil.returnImageUrlsFromHtml(finalContent);
+                    mWebView.addJavascriptInterface(new MJavascriptInterface(BaseWebActivity.this,null), "imagelistener");
                     mWebView.loadDataWithBaseURL(url, finalContent, "text/html", "UTF-8", null);
                 }
             }

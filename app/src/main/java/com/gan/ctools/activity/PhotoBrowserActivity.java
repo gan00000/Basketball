@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.gan.ctools.tool.FileUtils;
 import com.jiec.basketball.R;
+import com.jiec.basketball.ui.dialog.ShareUrlDialog;
 
 
 public class PhotoBrowserActivity extends Activity implements View.OnClickListener {
@@ -36,7 +38,7 @@ public class PhotoBrowserActivity extends Activity implements View.OnClickListen
     private ViewPager mPager;
     private ImageView centerIv;
     private TextView photoOrderTv;
-    private TextView saveTv;
+    private Button saveBtn, shareBtn;
     private String curImageUrl = "";
     private String[] imageUrls = new String[]{};
 
@@ -55,11 +57,14 @@ public class PhotoBrowserActivity extends Activity implements View.OnClickListen
         initialedPositions = new int[imageUrls.length];
         initInitialedPositions();
 
-        photoOrderTv = (TextView) findViewById(R.id.photoOrderTv);
-        saveTv = (TextView) findViewById(R.id.saveTv);
-        saveTv.setOnClickListener(this);
-        centerIv = (ImageView) findViewById(R.id.centerIv);
-        crossIv = (ImageView) findViewById(R.id.crossIv);
+        photoOrderTv =  findViewById(R.id.photoOrderTv);
+        saveBtn =  findViewById(R.id.saveBtn);
+        saveBtn.setOnClickListener(this);
+        shareBtn = findViewById(R.id.shareBtn);
+        shareBtn.setOnClickListener(this);
+
+        centerIv = findViewById(R.id.centerIv);
+        crossIv = findViewById(R.id.crossIv);
         crossIv.setOnClickListener(this);
 
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -204,12 +209,21 @@ public class PhotoBrowserActivity extends Activity implements View.OnClickListen
             case R.id.crossIv:
                 finish();
                 break;
-            case R.id.saveTv:
+            case R.id.saveBtn:
                 savePhotoToLocal();
+                break;
+            case R.id.shareBtn:
+                share();
                 break;
             default:
                 break;
         }
+    }
+
+    private void share() {
+
+        ShareUrlDialog dialog = new ShareUrlDialog(this, curImageUrl);
+        dialog.show();
     }
 
     private void showLoadingAnimation() {
