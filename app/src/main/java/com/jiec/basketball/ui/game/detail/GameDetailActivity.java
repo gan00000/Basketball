@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 public class GameDetailActivity extends BaseUIActivity implements GameDetailContract.View {
 
 
-    private static final String[] TITLES = {"文字直播", "對陣", "數據統計"};
+    private static final String[] TITLES = { "對陣", "數據統計","文字直播"};
 
     GameDetailContract.Presenter mPresenter;
     @BindView(R.id.iv_team_1)
@@ -118,9 +118,9 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             }
         });
 
-        mFragments.add(mGameLiveFragment);
         mFragments.add(mGameSummaryFragment);
         mFragments.add(mGameStatisticMainFragment);
+        mFragments.add(mGameLiveFragment);
 
         ArrayList<CustomTabEntity> tabEntities = new ArrayList<>();
 

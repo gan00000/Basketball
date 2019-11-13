@@ -84,7 +84,7 @@ public class GamePlayerData {
     private int fouls;
     @SmartColumn(id = 15, name = "封蓋", autoCount = true)
     private int blk;
-    @SmartColumn(id = 13, name = "搶斷", autoCount = true)
+    @SmartColumn(id = 13, name = "抄截", autoCount = true)
     private int stl;
     @SmartColumn(id = 14, name = "失誤", autoCount = true)
     private int blkagainst;

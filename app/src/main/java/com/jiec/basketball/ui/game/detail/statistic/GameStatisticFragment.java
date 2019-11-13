@@ -136,7 +136,7 @@ public class GameStatisticFragment extends BaseUIFragment {
                     @Override
                     protected void drawText(Canvas c, String value, Rect rect, Paint paint) {
                         if (col == 0) {
-                            paint.setTypeface(Typeface.DEFAULT_BOLD);
+                            paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                         }else {
                             paint.setTypeface(Typeface.DEFAULT);
                         }

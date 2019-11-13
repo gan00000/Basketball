@@ -52,8 +52,8 @@
     <string name="data_tab_pts">得分</string>
     <string name="data_tab_reb">籃板</string>
     <string name="data_tab_ast">助攻</string>
-    <string name="data_tab_stl">搶斷</string>
-    <string name="data_tab_blk">蓋帽</string>
+    <string name="data_tab_stl">抄截</string>
+    <string name="data_tab_blk">阻攻</string>
     <string name="data_tab_turnover">失誤</string>
     <string name="rank_ew">東西區排名</string>
     <string name="rank_zone">分賽區排名</string>
