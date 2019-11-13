@@ -74,10 +74,11 @@ public class GameListAdapter extends BaseListAdapter<GameInfo> {
                 ((ItemViewHolder) holder).mTvDate.setVisibility(View.VISIBLE);
             }
 
-
+            ((ItemViewHolder) holder).mTvTime.setVisibility(View.VISIBLE);
             if (gameInfo.getScheduleStatus().contains("F")) {
                 ((ItemViewHolder) holder).mTvStatus.setText(R.string.game_state_final);
                 ((ItemViewHolder) holder).mTvTime.setText("");
+                ((ItemViewHolder) holder).mTvTime.setVisibility(View.GONE);
             } else if (gameInfo.getScheduleStatus().equals("InProgress")) {
                 if (startedGame.containsKey(gameInfo.getId())) {
                     ((ItemViewHolder) holder).mTvStatus.setText(
