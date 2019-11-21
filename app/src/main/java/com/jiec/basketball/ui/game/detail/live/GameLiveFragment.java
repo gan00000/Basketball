@@ -10,8 +10,10 @@ import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseListAdapter;
 import com.jiec.basketball.base.BaseListFragment;
 import com.jiec.basketball.entity.GameLiveInfo;
+import com.jiec.basketball.entity.GameLivePost;
 import com.jiec.basketball.entity.MatchSummary;
 import com.jiec.basketball.entity.Matches;
+import com.jiec.basketball.entity.response.GameLivePostResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,8 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
 
     public interface GameLiveUpdateListener {
         void onUpdate(MatchSummary matchSummary, Matches matches);
+
+        void onUpdateLiveVideo(GameLivePost gameLivePost);
     }
 
     public void setGameLiveUpdateListener(GameLiveUpdateListener gameLiveUpdateListener) {
@@ -81,6 +85,11 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
         getPresenter().loadLive(mGameId);
     }
 
+    public void loadVideoLiveData() {
+        getPresenter().getLivePost(mGameId);
+    }
+
+
     @Override
     protected BaseListAdapter createAdapter() {
         mGameLiveAdapter = new GameLiveAdapter();
@@ -103,6 +112,14 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
     @Override
     public void setPresenter(GameLiveContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void loadLiveVideoSuccess(GameLivePostResponse info) {
+
+        if (info != null && mGameLiveUpdateListener != null && info.getResult() != null && !info.getResult().isEmpty()){
+            mGameLiveUpdateListener.onUpdateLiveVideo(info.getResult().get(0));
+        }
     }
 
     @Override

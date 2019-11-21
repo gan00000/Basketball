@@ -13,6 +13,7 @@ import com.jiec.basketball.entity.PlayerFirstFive;
 import com.jiec.basketball.entity.TeamData;
 import com.jiec.basketball.entity.TopPost;
 import com.jiec.basketball.entity.ZoneTeamRank;
+import com.jiec.basketball.entity.response.GameLivePostResponse;
 import com.jiec.basketball.entity.response.HomeResponse;
 import com.jiec.basketball.entity.response.NewListResponse;
 import com.jiec.basketball.entity.response.PostResponse;
@@ -113,5 +114,7 @@ public interface GameApi {
     @GET("/api/get_match_progress/")
     Observable<GameProgress> getGameProgress(@Query("game_id") String gameId);
 
+    @GET("/api/get_live_post_from_game/")
+    Observable<GameLivePostResponse> getLivePost(@Query("game_id") String gameId);
 
 }

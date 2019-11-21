@@ -21,6 +21,7 @@ import com.gan.video.SampleVideo;
 import com.gan.video.model.SwitchVideoModel;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIActivity;
+import com.jiec.basketball.entity.GameLivePost;
 import com.jiec.basketball.entity.GamePlayerData;
 import com.jiec.basketball.entity.MatchSummary;
 import com.jiec.basketball.entity.Matches;
@@ -34,6 +35,8 @@ import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.wangcj.common.widget.TitleBar;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,13 +78,14 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     @BindView(R.id.live_start)
     View liveStart;
 
-    List<SwitchVideoModel> list;
     private OrientationUtils orientationUtils;
     private MediaMetadataRetriever mCoverMedia;
     private ImageView coverImageView;
     private boolean isPlay;
     private boolean isPause;
     private boolean isRelease;
+
+    private boolean gameNeedPlay = false;
 
     private ArrayList<Fragment> mFragments;
 
@@ -105,27 +109,26 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         String game_id = getIntent().getStringExtra("game_id");
 
         //===================播放器start======================
-        String source1 = "http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8";
-        //String source1 = "https://res.exexm.com/cw_145225549855002";
-        String name = "普通";
-        SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
-
-        String source2 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f30.mp4";
-        String name2 = "清晰";
-        SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, source2);
-
-        list = new ArrayList<>();
-        list.add(switchVideoModel);
-        list.add(switchVideoModel2);
+//        String source1 = "http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8";
+//        //String source1 = "https://res.exexm.com/cw_145225549855002";
+//        String name = "普通";
+//        SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
+//
+//        String source2 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f30.mp4";
+//        String name2 = "清晰";
+//        SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, source2);
+//
+//        list = new ArrayList<>();
+//        list.add(switchVideoModel);
+//        list.add(switchVideoModel2);
 
 
         livePlayer.setEnlargeImageRes(R.drawable.img_full_screen);
-        livePlayer.setUp(list, true, "测试直播视频");
 
         //增加封面
         coverImageView = new ImageView(this);
         coverImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        //coverImageView.setImageResource(R.mipmap.xxx1);
+        coverImageView.setImageResource(R.drawable.live_player_bg);
         livePlayer.setThumbImageView(coverImageView);
 
         resolveNormalVideoUI();
@@ -165,6 +168,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
+
                 //开始播放了才能旋转和全屏
                 orientationUtils.setEnable(true);//是否可以旋转和全屏
                 isPlay = true;
@@ -178,7 +182,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             @Override
             public void onClickStartError(String url, Object... objects) {
                 super.onClickStartError(url, objects);
-                Toast.makeText(GameDetailActivity.this,"播放地址出错",Toast.LENGTH_SHORT).show();
+                Toast.makeText(GameDetailActivity.this,"播放出錯",Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -226,7 +230,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
         mFragments = new ArrayList<>();
 
-        mGameLiveFragment = GameLiveFragment.newInstance(game_id);
+        mGameLiveFragment = GameLiveFragment.newInstance(game_id);//文字直播
         mGameLiveFragment.setGameLiveUpdateListener(new GameLiveFragment.GameLiveUpdateListener() {
             @Override
             public void onUpdate(MatchSummary matchSummary, Matches matches) {
@@ -240,6 +244,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 if (matchSummary.getScheduleStatus().equals("Final")) {
                     mTvStatus.setText(R.string.game_state_final);
                     mTvTime.setVisibility(View.GONE);
+
                 } else if (matchSummary.getScheduleStatus().equals("InProgress")) {
                     mTvStatus.setText("");
                     mTvTime.setVisibility(View.VISIBLE);
@@ -249,14 +254,52 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                         mTvTime.setText("第" + matchSummary.getQuarter() + "节\n" + matchSummary.getTime());
                     }
 
+                    gameNeedPlay = true;//需要進行播放
+
+                    mGameLiveFragment.loadVideoLiveData();
+
                 } else {
                     mTvStatus.setText(R.string.game_state_unstart);
                     mTvTime.setVisibility(View.GONE);
+
                 }
 
                 mTitleBar.setTitle(matchSummary.getHomeName() + " vs " + matchSummary.getAwayName());
-                liveThumdLayout.setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            public void onUpdateLiveVideo(GameLivePost gameLivePost) {
+
+//                String source1 = "http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8";
+
+                List<String> videoUrls =gameLivePost.getLive_url();
+
+                if (videoUrls == null || videoUrls.isEmpty()){
+                    return;
+                }
+
+                List<SwitchVideoModel> switchVideoModels = new ArrayList<>();
+
+                for (int i = 0; i < videoUrls.size(); i++) {
+                    String videoUrl = videoUrls.get(i);
+
+                    if (StringUtils.isNotEmpty(videoUrl)){
+                        String name = "直播" + i + 1;
+                        SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, videoUrl);
+                        switchVideoModels.add(switchVideoModel);
+
+                    }
+                }
+
+                if (switchVideoModels.isEmpty()){
+                    return;
+                }
+                liveThumdLayout.setVisibility(View.GONE);
                 livePlayer.setVisibility(View.VISIBLE);
+                livePlayer.setUp(switchVideoModels, true, "");
+                rePlay();
+
             }
         });
 
@@ -270,9 +313,9 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             }
         });
 
-        mFragments.add(mGameSummaryFragment);
-        mFragments.add(mGameStatisticMainFragment);
-        mFragments.add(mGameLiveFragment);
+        mFragments.add(mGameSummaryFragment);//队长
+        mFragments.add(mGameStatisticMainFragment);//数据统计
+        mFragments.add(mGameLiveFragment);//文字直播
 
         ArrayList<CustomTabEntity> tabEntities = new ArrayList<>();
 
@@ -417,7 +460,6 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-//                getCurPlay().setUp(list, true, "测试直播视频");
                 getCurPlay().startPlayLogic();
                 isPlay = true;
                 isRelease = false;
