@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.TimeUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.google.android.gms.ads.AdRequest;
@@ -26,11 +25,11 @@ import com.jiec.basketball.adapter.PostCommentAdapter;
 import com.jiec.basketball.bean.EventReplyBean;
 import com.jiec.basketball.bean.NewsDetailModel;
 import com.jiec.basketball.core.BallApplication;
-import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.NewsBean;
 import com.jiec.basketball.entity.TopPost;
 import com.jiec.basketball.entity.response.HistoryResponse;
 import com.jiec.basketball.entity.response.NewsCommentResponse;
+import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean;
 import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean.ReplyBean;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.NetSubscriber;
@@ -40,7 +39,6 @@ import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.UserApi;
 import com.jiec.basketball.network.base.CommResponse;
 import com.jiec.basketball.ui.dialog.ShareUrlDialog;
-import com.jiec.basketball.ui.post.PostReplyActivity;
 import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.utils.ConstantUtils;
 import com.jiec.basketball.utils.EmptyUtils;
@@ -51,6 +49,11 @@ import com.wangcj.common.utils.ThreadUtils;
 import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.PressImageView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -58,13 +61,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.jiec.basketball.core.BallApplication.userInfo;
 
@@ -92,11 +88,11 @@ public class DetaillWebActivity extends BaseWebActivity {
     @BindView(R.id.tv_hot_comment)
     TextView tvHot;
     @BindView(R.id.rv_hot_comment)
-    RecyclerView rvHot;
+    RecyclerView rvHot; //热门评论
     @BindView(R.id.tv_all_comment)
     TextView tvAll;
     @BindView(R.id.rv_all_comment)
-    RecyclerView rvAll;
+    RecyclerView rvAll; //全部评论
     @BindView(R.id.tv_empty_comment)
     TextView tvEmptyComment;
     @BindView(R.id.ll_comment)
