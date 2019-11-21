@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
     package="com.jiec.basketball">
 
     <uses-sdk tools:overrideLibrary="com.linecorp.linesdk,com.chaychan.library"/>
@@ -89,6 +88,7 @@
 
         <activity
             android:name=".ui.game.detail.GameDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|smallestScreenSize"
             android:screenOrientation="portrait" />
 
         <activity

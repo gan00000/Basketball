@@ -2,16 +2,23 @@ package com.jiec.basketball.ui.game.detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
+import com.gan.video.SampleVideo;
+import com.gan.video.model.SwitchVideoModel;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIActivity;
 import com.jiec.basketball.entity.GamePlayerData;
@@ -21,6 +28,11 @@ import com.jiec.basketball.ui.game.detail.live.GameLiveFragment;
 import com.jiec.basketball.ui.game.detail.statistic.GameStatisticMainFragment;
 import com.jiec.basketball.ui.game.detail.summary.GameSummaryFragment;
 import com.jiec.basketball.utils.ImageLoaderUtils;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
+import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.wangcj.common.widget.TitleBar;
 
 import java.util.ArrayList;
@@ -34,6 +46,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
 
     private static final String[] TITLES = { "對陣", "數據統計","文字直播"};
+    private static final String TAG = "player";
 
     GameDetailContract.Presenter mPresenter;
     @BindView(R.id.iv_team_1)
@@ -52,6 +65,23 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     TitleBar mTitleBar;
     @BindView(R.id.tv_time)
     TextView mTvTime;
+
+    @BindView(R.id.live_player)
+    SampleVideo livePlayer;
+
+    @BindView(R.id.live_thumd_layout)
+    View liveThumdLayout;
+
+    @BindView(R.id.live_start)
+    View liveStart;
+
+    List<SwitchVideoModel> list;
+    private OrientationUtils orientationUtils;
+    private MediaMetadataRetriever mCoverMedia;
+    private ImageView coverImageView;
+    private boolean isPlay;
+    private boolean isPause;
+    private boolean isRelease;
 
     private ArrayList<Fragment> mFragments;
 
@@ -73,6 +103,126 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         ButterKnife.bind(this);
 
         String game_id = getIntent().getStringExtra("game_id");
+
+        //===================播放器start======================
+        String source1 = "http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8";
+        //String source1 = "https://res.exexm.com/cw_145225549855002";
+        String name = "普通";
+        SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
+
+        String source2 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f30.mp4";
+        String name2 = "清晰";
+        SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, source2);
+
+        list = new ArrayList<>();
+        list.add(switchVideoModel);
+        list.add(switchVideoModel2);
+
+
+        livePlayer.setEnlargeImageRes(R.drawable.img_full_screen);
+        livePlayer.setUp(list, true, "测试直播视频");
+
+        //增加封面
+        coverImageView = new ImageView(this);
+        coverImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //coverImageView.setImageResource(R.mipmap.xxx1);
+        livePlayer.setThumbImageView(coverImageView);
+
+        resolveNormalVideoUI();
+
+        //外部辅助的旋转，帮助全屏
+        orientationUtils = new OrientationUtils(this, livePlayer);
+        //初始化不打开外部的旋转
+        orientationUtils.setEnable(false);
+
+        livePlayer.setIsTouchWiget(true);
+        //livePlayer.setIsTouchWigetFull(false);
+        //关闭自动旋转
+        livePlayer.setRotateViewAuto(false);
+        livePlayer.setLockLand(false);
+
+        //打开  实现竖屏全屏动画
+        livePlayer.setShowFullAnimation(false);
+
+        livePlayer.setNeedLockFull(true);
+        livePlayer.setSeekRatio(1);
+        //livePlayer.setOpenPreView(false);
+        livePlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //屏蔽，实现竖屏全屏
+
+                //此处需要直接横屏
+                orientationUtils.resolveByClick();
+
+                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
+                livePlayer.startWindowFullscreen(GameDetailActivity.this, true, true);
+
+            }
+        });
+
+        livePlayer.setVideoAllCallBack(new GSYSampleCallBack() {
+            @Override
+            public void onPrepared(String url, Object... objects) {
+                super.onPrepared(url, objects);
+                //开始播放了才能旋转和全屏
+                orientationUtils.setEnable(true);//是否可以旋转和全屏
+                isPlay = true;
+            }
+
+            @Override
+            public void onAutoComplete(String url, Object... objects) {
+                super.onAutoComplete(url, objects);
+            }
+
+            @Override
+            public void onClickStartError(String url, Object... objects) {
+                super.onClickStartError(url, objects);
+                Toast.makeText(GameDetailActivity.this,"播放地址出错",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onQuitFullscreen(String url, Object... objects) {
+                super.onQuitFullscreen(url, objects);
+                //屏蔽，实现竖屏全屏
+
+                if (orientationUtils != null) {
+                    orientationUtils.backToProtVideo();
+                }
+            }
+
+            @Override
+            public void onEnterFullscreen(String url, Object... objects) {
+                super.onEnterFullscreen(url, objects);
+                Object title = objects[0];
+                SampleVideo fullSampleVideo = (SampleVideo)objects[1];
+                fullSampleVideo.getFullscreenButton().setImageResource(R.drawable.img_full_screen);
+                fullSampleVideo.getRefreshPlayerImageView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rePlay();
+                    }
+                });
+
+                Log.d(TAG,"onEnterFullscreen");
+            }
+        });
+
+        livePlayer.setLockClickListener(new LockClickListener() {
+            @Override
+            public void onClick(View view, boolean lock) {
+                //屏蔽，实现竖屏全屏
+                if (orientationUtils != null) {//锁定之后不能旋转和全屏
+                    //配合下方的onConfigurationChanged
+                    orientationUtils.setEnable(!lock);
+                }
+            }
+        });
+
+
+        //loadFirstFrameCover(source1);
+
+        //===================播放器end======================
 
         mFragments = new ArrayList<>();
 
@@ -105,6 +255,8 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 }
 
                 mTitleBar.setTitle(matchSummary.getHomeName() + " vs " + matchSummary.getAwayName());
+                liveThumdLayout.setVisibility(View.INVISIBLE);
+                livePlayer.setVisibility(View.VISIBLE);
             }
         });
 
@@ -167,4 +319,110 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     public void setPresenter(GameDetailContract.Presenter presenter) {
         mPresenter = presenter;
     }
+
+    @Override
+    public void onBackPressed() {
+
+        if (orientationUtils != null) {
+            orientationUtils.backToProtVideo();
+        }
+
+        if (GSYVideoManager.backFromWindowFull(this)) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+
+    @Override
+    protected void onPause() {
+        getCurPlay().onVideoPause();
+        super.onPause();
+        isPause = true;
+    }
+
+    @Override
+    protected void onResume() {
+        getCurPlay().onVideoResume();
+        super.onResume();
+        isPause = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isRelease = true;
+        if (isPlay) {
+            getCurPlay().release();
+        }
+        //GSYPreViewManager.instance().releaseMediaPlayer();
+        if (orientationUtils != null)
+            orientationUtils.releaseListener();
+        if (mCoverMedia != null) {
+            mCoverMedia.release();
+            mCoverMedia = null;
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (isPlay && !isPause) {
+            livePlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+        }
+    }
+
+    private GSYVideoPlayer getCurPlay() {
+        if (livePlayer.getFullWindowPlayer() != null) {
+            return  livePlayer.getFullWindowPlayer();
+        }
+        return livePlayer;
+    }
+
+
+    private void resolveNormalVideoUI() {
+        //增加title
+        livePlayer.getTitleTextView().setVisibility(View.GONE);
+        livePlayer.getBackButton().setVisibility(View.GONE);
+
+//        livePlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
+
+        livePlayer.getRefreshPlayerImageView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rePlay();
+
+            }
+        });
+    }
+
+    private void rePlay() {
+
+        if (isPlay){
+            getCurPlay().release();
+            isPlay = false;
+            isRelease = true;
+//        getCurPlay().onVideoPause();
+//        getCurPlay().getGSYVideoManager().releaseMediaPlayer();
+        }
+
+        Handler mHandler = new Handler();
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                getCurPlay().setUp(list, true, "测试直播视频");
+                getCurPlay().startPlayLogic();
+                isPlay = true;
+                isRelease = false;
+            }
+        },500);
+    }
+
 }
