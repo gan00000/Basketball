@@ -1,7 +1,7 @@
 package com.jiec.basketball.ui.news.detail;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,6 @@ import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.jiec.basketball.utils.InputCheckUtils;
-import com.jiec.basketball.widget.UserReplyView;
 import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.CircleSImageView;
 

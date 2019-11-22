@@ -3,13 +3,12 @@ package com.jiec.basketball.ui.film;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.jiec.basketball.R;
-import com.jiec.basketball.base.BaseActivity;
 import com.jiec.basketball.base.BaseUIActivity;
-import com.jiec.basketball.ui.mine.collection.CollectionActivity;
 import com.wangcj.common.widget.TitleBar;
 
 import butterknife.BindView;

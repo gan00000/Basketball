@@ -2,19 +2,19 @@ package com.jiec.basketball.ui.post;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.TimeUtils;
@@ -24,8 +24,8 @@ import com.jiec.basketball.R;
 import com.jiec.basketball.adapter.PostCommentAdapter;
 import com.jiec.basketball.base.BaseUIFragment;
 import com.jiec.basketball.core.BallApplication;
-import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.response.NewsCommentResponse;
+import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.NewsApi;
@@ -34,14 +34,12 @@ import com.jiec.basketball.network.base.CommResponse;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.wangcj.common.utils.ToastUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.jiec.basketball.core.BallApplication.userInfo;
 

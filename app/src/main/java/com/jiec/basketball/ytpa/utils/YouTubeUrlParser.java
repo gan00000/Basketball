@@ -1,6 +1,6 @@
 package com.jiec.basketball.ytpa.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

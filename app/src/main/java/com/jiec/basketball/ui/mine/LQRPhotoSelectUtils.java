@@ -10,9 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-
-import com.yalantis.ucrop.UCrop;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 
@@ -168,10 +166,10 @@ public class LQRPhotoSelectUtils {
         }
         Uri sourceUri = Uri.fromFile(inputFile);
         Uri destinationUri = Uri.fromFile(outputFile);
-        UCrop.of(sourceUri, destinationUri)
-                .withAspectRatio(mAspectX, mOutputY)
-                .withMaxResultSize(512, 512)
-                .start(mActivity);
+//        UCrop.of(sourceUri, destinationUri)
+//                .withAspectRatio(mAspectX, mOutputY)
+//                .withMaxResultSize(512, 512)
+//                .start(mActivity);
     }
 
     public void attachToActivityForResult(int requestCode, int resultCode, Intent data) {
@@ -226,13 +224,13 @@ public class LQRPhotoSelectUtils {
                     }
                     break;
 
-                case UCrop.REQUEST_CROP:
-                    final Uri resultUri = UCrop.getOutput(data);
-                    break;
-
-                case UCrop.RESULT_ERROR:
-                    final Throwable cropError = UCrop.getError(data);
-                    break;
+//                case UCrop.REQUEST_CROP:
+//                    final Uri resultUri = UCrop.getOutput(data);
+//                    break;
+//
+//                case UCrop.RESULT_ERROR:
+//                    final Throwable cropError = UCrop.getError(data);
+//                    break;
             }
         }
     }
