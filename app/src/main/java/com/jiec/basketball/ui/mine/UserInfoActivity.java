@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.SPUtils;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseActivity;
 import com.jiec.basketball.core.UserManager;
@@ -20,15 +19,18 @@ import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.network.UserApi;
-import com.jiec.basketball.utils.BallPreferencesUtils;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
+import com.jiec.basketball.utils.ImageUtil;
 import com.jiec.basketball.utils.InputCheckUtils;
+import com.jiec.basketball.utils.Lg;
 import com.jiec.basketball.widget.CircleSImageView;
 import com.wangcj.common.utils.ThreadUtils;
 import com.wangcj.common.utils.ToastUtil;
 
-import java.io.ByteArrayOutputStream;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,8 +59,9 @@ public class UserInfoActivity extends BaseActivity {
     @BindView(R.id.tv_oneTime)
     TextView tvOneTime;
 
-    private String mHeadBase64;
+//    private String mHeadBase64;
     private boolean isModify;  //是否可以更改
+    private  String selectImagePath;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +79,10 @@ public class UserInfoActivity extends BaseActivity {
         if (!TextUtils.isEmpty(userInfo.user_email)) {
             mTvEmail.setText("郵件（" + userInfo.user_email + "）");
         }
+        setHeadImage();
+    }
+
+    private void setHeadImage() {
         ImageLoaderUtils.display(this, mIvHead, EmptyUtils.emptyOfString(userInfo.user_img) ? " " : userInfo.user_img,
                 R.drawable.img_default_head, R.drawable.img_default_head);
     }
@@ -99,11 +106,29 @@ public class UserInfoActivity extends BaseActivity {
 
         if (requestCode == 10000 && resultCode == RESULT_OK) {
             try {
-                mHeadBase64 = encodeBase64File(data.getStringExtra("data"));
+                String mmselectImagePath = data.getStringExtra("data");//返回真是路径
+                String outputUriStr = data.getStringExtra("outputUri");
+                //mHeadBase64 = encodeBase64File(imagePath);
+                if (StringUtils.isEmpty(mmselectImagePath)){
+                    return;
+                }
+                File imageFile = new File(mmselectImagePath);
+                if (!imageFile.exists()){
+                    Lg.e("图片不存在");
+                    return;
+                }
                 ThreadUtils.postMainThread(new Runnable() {
                     @Override
                     public void run() {
-                        ImageLoaderUtils.loadBase64(mIvHead, mHeadBase64);
+                        //ImageLoaderUtils.loadBase64(mIvHead, mHeadBase64);
+                        Bitmap selectBitmap = BitmapFactory.decodeFile(mmselectImagePath);
+                        if (selectBitmap != null){
+                            selectImagePath = mmselectImagePath;
+                            mIvHead.setImageBitmap(selectBitmap);
+                        }else {
+                            ToastUtil.showMsg("圖片選擇出錯");
+                        }
+                       // mIvHead.setImageURI(Uri.parse(selectImagePath));
                     }
                 });
             } catch (Exception e) {
@@ -113,11 +138,16 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     public static String encodeBase64File(String path) throws Exception {
-        Bitmap bitmap = getCompressPhoto(path);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.WEBP, 80, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+//        Bitmap bitmap = getCompressPhoto(path);
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.WEBP, 80, byteArrayOutputStream);
+//        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        byte[] byteArray = ImageUtil.compressImage(path,512);
+        if (byteArray != null){
+
+            return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        }
+        return "";
     }
 
     public static Bitmap getCompressPhoto(String path) {
@@ -144,8 +174,12 @@ public class UserInfoActivity extends BaseActivity {
             }
             paramsMap.put("email", email);
         }
-        if (!EmptyUtils.emptyOfString(mHeadBase64)) {
-            paramsMap.put("file", mHeadBase64);
+        if (!EmptyUtils.emptyOfString(selectImagePath)) {
+            try {
+                paramsMap.put("file", encodeBase64File(selectImagePath));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (isModify) {
             if (EmptyUtils.emptyOfString(name)) {
@@ -174,8 +208,12 @@ public class UserInfoActivity extends BaseActivity {
                     @Override
                     protected void onFailed(int code, String reason) {
                         ToastUtil.showMsg("更新失敗");
+                        setHeadImage();
                         hideLoading();
                     }
                 });
     }
+
+
+
 }

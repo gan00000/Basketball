@@ -265,7 +265,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 }
 
                 mTitleBar.setTitle(matchSummary.getHomeName() + " vs " + matchSummary.getAwayName());
-
+                mGameLiveFragment.loadVideoLiveData();//放此處測試
             }
 
             @Override

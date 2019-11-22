@@ -10,6 +10,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 
@@ -23,7 +26,7 @@ public class LQRPhotoSelectUtils {
     public static final int REQ_SELECT_PHOTO = 10002;
     public static final int REQ_ZOOM_PHOTO = 10003;
 
-    private Activity mActivity;
+    private AppCompatActivity mActivity;
     //拍照或剪切后图片的存放位置(参考file_provider_paths.xml中的路径)
     private String imgPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + String.valueOf(System.currentTimeMillis()) + ".jpg";
     //FileProvider的主机名：一般是包名+".fileprovider"，严格上是build.gradle中defaultConfig{}中applicationId对应的值+".fileprovider"
@@ -50,7 +53,7 @@ public class LQRPhotoSelectUtils {
      * @param listener   选取图片监听
      * @param shouldCrop 是否裁剪
      */
-    public LQRPhotoSelectUtils(Activity activity, PhotoSelectListener listener, boolean shouldCrop) {
+    public LQRPhotoSelectUtils(AppCompatActivity activity, PhotoSelectListener listener, boolean shouldCrop) {
         mActivity = activity;
         mListener = listener;
         mShouldCrop = shouldCrop;
@@ -68,7 +71,7 @@ public class LQRPhotoSelectUtils {
      * @param outputX  图片裁剪后的宽度
      * @param outputY  图片裁剪后的高度
      */
-    public LQRPhotoSelectUtils(Activity activity, PhotoSelectListener listener, int aspectX, int aspectY, int outputX, int outputY) {
+    public LQRPhotoSelectUtils(AppCompatActivity activity, PhotoSelectListener listener, int aspectX, int aspectY, int outputX, int outputY) {
         this(activity, listener, true);
         mAspectX = aspectX;
         mAspectY = aspectY;
@@ -126,6 +129,8 @@ public class LQRPhotoSelectUtils {
         mActivity.startActivityForResult(intent, REQ_SELECT_PHOTO);
     }
 
+    //测试有些问题，剪裁相册的图片 后不知道什么原因 大小为0b
+    @Deprecated
     private void zoomPhoto(File inputFile, File outputFile) {
         File parentFile = outputFile.getParentFile();
         if (!parentFile.exists()) {
@@ -134,6 +139,7 @@ public class LQRPhotoSelectUtils {
         Intent intent = new Intent("com.android.camera.action.CROP");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setDataAndType(getImageContentUri(mActivity, inputFile), "image/*");
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         } else {
             intent.setDataAndType(Uri.fromFile(inputFile), "image/*");
         }
@@ -153,6 +159,19 @@ public class LQRPhotoSelectUtils {
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
 
         mActivity.startActivityForResult(intent, REQ_ZOOM_PHOTO);
+    }
+
+    private void zoomPhotoByUCrop(File inputFile, File outputFile) {
+        File parentFile = outputFile.getParentFile();
+        if (!parentFile.exists()) {
+            parentFile.mkdirs();
+        }
+        Uri sourceUri = Uri.fromFile(inputFile);
+        Uri destinationUri = Uri.fromFile(outputFile);
+        UCrop.of(sourceUri, destinationUri)
+                .withAspectRatio(mAspectX, mOutputY)
+                .withMaxResultSize(512, 512)
+                .start(mActivity);
     }
 
     public void attachToActivityForResult(int requestCode, int resultCode, Intent data) {
@@ -184,7 +203,7 @@ public class LQRPhotoSelectUtils {
                         if (mShouldCrop) {//裁剪
                             mOutputFile = new File(generateImgePath());
                             mOutputUri = Uri.fromFile(mOutputFile);
-                            zoomPhoto(mInputFile, mOutputFile);
+                            zoomPhotoByUCrop(mInputFile, mOutputFile);
                         } else {//不裁剪
                             mOutputUri = Uri.fromFile(mInputFile);
                             if (mListener != null) {
@@ -205,6 +224,14 @@ public class LQRPhotoSelectUtils {
                             }
                         }
                     }
+                    break;
+
+                case UCrop.REQUEST_CROP:
+                    final Uri resultUri = UCrop.getOutput(data);
+                    break;
+
+                case UCrop.RESULT_ERROR:
+                    final Throwable cropError = UCrop.getError(data);
                     break;
             }
         }
@@ -253,7 +280,7 @@ public class LQRPhotoSelectUtils {
         StringBuilder sb = new StringBuilder();
         sb.append(Environment.getExternalStorageDirectory().getAbsolutePath());
         sb.append(File.separator);
-        String ROOT_DIR = "Android/data/" + mActivity.getPackageName();
+        String ROOT_DIR = mActivity.getPackageName();
         sb.append(ROOT_DIR);
         sb.append(File.separator);
         return sb.toString();
