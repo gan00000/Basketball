@@ -46,6 +46,9 @@ public class BallApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         sContext = this;
+
+        MobileAds.initialize(this);
+
         Utils.init(this);
         ToastUtil.init(sContext);
         initUserInfo(getApplicationContext());
