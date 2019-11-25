@@ -468,4 +468,8 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         },500);
     }
 
+//    @Override
+//    public LifecycleTransformer getBindToLifecycle() {
+//        return bindUntilEvent(FragmentEvent.DESTROY);
+//    }
 }

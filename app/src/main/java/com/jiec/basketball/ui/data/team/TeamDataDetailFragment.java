@@ -1,13 +1,14 @@
 package com.jiec.basketball.ui.data.team;
 
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseFragment;
@@ -74,7 +75,7 @@ public class TeamDataDetailFragment extends BaseFragment {
         Observable<AllTeamData> observable = mService.getAllTeamData(DataUtils.getTypeStr(mType), "desc");
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(getBindToLifecycle())
+                //.compose(getBindToLifecycle())
                 .subscribe(new Subscriber<AllTeamData>() {
                     @Override
                     public void onCompleted() {

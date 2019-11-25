@@ -172,4 +172,16 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
         super.onPause();
         removeUiMessage(MSG_REFRESH);
     }
+
+
+//    @Override
+//    public LifecycleTransformer getBindToLifecycle() {
+//        return bindUntilEvent(FragmentEvent.DESTROY);
+//    }
+
+
+//    @Override
+//    public LifecycleTransformer getBindToLifecycle() {
+//        return bindUntilEvent(FragmentEvent.DESTROY);
+//    }
 }

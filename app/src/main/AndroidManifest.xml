@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.jiec.basketball">
 
-    <uses-sdk tools:overrideLibrary="com.linecorp.linesdk,com.chaychan.library"/>
+    <uses-sdk tools:overrideLibrary="com.linecorp.linesdk,com.chaychan.library" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,15 +12,14 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.CAMERA" /> <!-- 属于android6.0运行时权限 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 属于android6.0运行时权限 -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" /> <!-- 属于android6.0运行时权限 -->
     <!-- admaster所需权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 属于android6.0运行时权限 -->
-
-    <uses-feature android:name="android.hardware.Camera"
-        android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.Camera"
+        android:required="false" />
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="false" />
@@ -48,92 +47,85 @@
         <activity
             android:name=".ui.splash.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+<!--        <activity-->
+<!--            android:name="com.gan.ctools.activity.MainActivityTest"-->
+<!--            android:configChanges="orientation|keyboardHidden|screenSize"-->
+<!--            android:label="@string/app_name">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize" />
-
         <activity
             android:name=".ui.mine.setting.SettingActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.mine.setting.AboutActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.mine.setting.CustomerServiceActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.news.detail.DetaillWebActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.data.player.PlayerDataDetailActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.data.team.TeamDataDetailActivity"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.mine.MineActivity"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.game.detail.GameDetailActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|smallestScreenSize"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|smallestScreenSize" />
         <activity
             android:name=".ui.mine.login.LoginActivity"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.mine.UserInfoActivity"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.mine.collection.CollectionActivity"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.mine.comment.CommentActivity"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.mine.like.LikeActivity"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.mine.history.HistoryActivity"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.mine.notify.NotifyActivity"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".ui.youtube.PlayerViewDemoActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         <activity
             android:name=".ui.mine.HeadActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <service android:name=".service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -152,7 +144,8 @@
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
-            <intent-filter><action android:name="android.intent.action.VIEW" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -160,46 +153,36 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ytpa.YouTubePlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
         <activity
             android:name=".ui.film.FilmPlayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".ui.post.PostReplyActivity"
-            android:screenOrientation="portrait" />
-
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name="com.gan.ctools.activity.PhotoBrowserActivity"
-            android:theme="@android:style/Animation.Dialog"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-
-        <!--Need Your Google API Key-->
+            android:theme="@android:style/Animation.Dialog" /> <!-- android:screenOrientation="portrait"次设置会引起Only fullscreen activities can request orientation -->
+        <!-- Need Your Google API Key -->
         <meta-data
             android:name="com.jiec.basketball.ytpa.YouTubePlayerActivity.ApiKey"
             android:value="AIzaSyDW1-kH93W7Q5D1dF1pWRXsz_JeE6VCBkU" />
-
-     <!--   <meta-data
+        <!--
+   <meta-data
             android:name="580620c667e58ea572003bd0"
             android:value="YOUR_APP_KEY" />
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="Channel ID" />-->
-
-
+            android:value="Channel ID" />
+        -->
         <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4059643053601138~5597290401"/>
-
+            android:value="ca-app-pub-4059643053601138~5597290401" />
     </application>
 
 </manifest>

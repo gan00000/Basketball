@@ -1,9 +1,9 @@
 package com.jiec.basketball.ui.game.detail.live;
 
+import com.jiec.basketball.core.IView;
 import com.jiec.basketball.entity.GameLiveInfo;
 import com.jiec.basketball.entity.response.GameLivePostResponse;
 import com.wangcj.common.base.mvp.IPresenter;
-import com.wangcj.common.base.mvp.IView;
 
 
 public class GameLiveContract {

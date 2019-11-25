@@ -1,13 +1,14 @@
 package com.jiec.basketball.ui.data.player;
 
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseFragment;
@@ -16,15 +17,11 @@ import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.ui.data.DataUtils;
 import com.jiec.basketball.widget.TipsLayout;
-import com.trello.rxlifecycle.LifecycleTransformer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  *
@@ -71,32 +68,32 @@ public class PlayerDataDetailFragment extends BaseFragment {
     private void loadData() {
         GameApi mService = RetrofitClient.getInstance().create(GameApi.class);
         Observable<AllPlayerData> observable = mService.getAllPlayerData(DataUtils.getTypeStr(mType), "desc");
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose((LifecycleTransformer<AllPlayerData>) getBindToLifecycle())
-                .subscribe(new Subscriber<AllPlayerData>() {
-                    @Override
-                    public void onCompleted() {
-                        if (mSwipeRefreshWidget != null) {
-                            mSwipeRefreshWidget.setRefreshing(false);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mTipslayout.show(TipsLayout.TYPE_FAILED);
-                    }
-
-                    @Override
-                    public void onNext(AllPlayerData commResponse) {
-                        if (commResponse != null) {
-                            mTipslayout.hide();
-                            mPlayerDetailAdapter.setData(commResponse.getPlayers_rank());
-                        } else {
-                            mTipslayout.show(TipsLayout.TYPE_EMPTY_CONTENT);
-                        }
-                    }
-                });
+//        observable.subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .compose((LifecycleTransformer<AllPlayerData>) getBindToLifecycle())
+//                .subscribe(new Subscriber<AllPlayerData>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        if (mSwipeRefreshWidget != null) {
+//                            mSwipeRefreshWidget.setRefreshing(false);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        mTipslayout.show(TipsLayout.TYPE_FAILED);
+//                    }
+//
+//                    @Override
+//                    public void onNext(AllPlayerData commResponse) {
+//                        if (commResponse != null) {
+//                            mTipslayout.hide();
+//                            mPlayerDetailAdapter.setData(commResponse.getPlayers_rank());
+//                        } else {
+//                            mTipslayout.show(TipsLayout.TYPE_EMPTY_CONTENT);
+//                        }
+//                    }
+//                });
     }
 
     private void initView() {

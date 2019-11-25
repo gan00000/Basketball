@@ -1,9 +1,7 @@
 package com.jiec.basketball.base;
 
 import com.jiec.basketball.ui.dialog.LoadingDialog;
-import com.trello.rxlifecycle.LifecycleTransformer;
-import com.trello.rxlifecycle.android.FragmentEvent;
-import com.trello.rxlifecycle.components.support.RxFragment;
+import com.trello.rxlifecycle3.components.support.RxFragment;
 import com.wangcj.common.utils.ToastUtil;
 
 
@@ -50,7 +48,8 @@ public class BaseFragment extends RxFragment {
         ToastUtil.showMsg(error);
     }
 
-    public LifecycleTransformer getBindToLifecycle() {
-        return bindUntilEvent(FragmentEvent.DESTROY);
-    }
+//    public LifecycleTransformer getBindToLifecycle() {
+//        return bindUntilEvent(FragmentEvent.DESTROY);
+//    }
+
 }

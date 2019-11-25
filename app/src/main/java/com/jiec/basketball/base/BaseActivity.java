@@ -2,15 +2,15 @@ package com.jiec.basketball.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.annotation.Nullable;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jiec.basketball.ui.dialog.LoadingDialog;
-import com.trello.rxlifecycle.LifecycleTransformer;
-import com.trello.rxlifecycle.android.ActivityEvent;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
-import com.umeng.message.PushAgent;
+import com.trello.rxlifecycle3.LifecycleTransformer;
+import com.trello.rxlifecycle3.android.ActivityEvent;
+import com.trello.rxlifecycle3.components.support.RxAppCompatActivity;
 import com.wangcj.common.utils.ToastUtil;
 
 /**
@@ -30,7 +30,7 @@ public class BaseActivity extends RxAppCompatActivity {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        PushAgent.getInstance(this).onAppStart();
+//        PushAgent.getInstance(this).onAppStart();
     }
 
     @Override

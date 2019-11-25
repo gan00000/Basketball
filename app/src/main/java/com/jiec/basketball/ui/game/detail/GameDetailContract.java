@@ -1,7 +1,7 @@
 package com.jiec.basketball.ui.game.detail;
 
+import com.jiec.basketball.core.IView;
 import com.wangcj.common.base.mvp.IPresenter;
-import com.wangcj.common.base.mvp.IView;
 
 
 public class GameDetailContract {

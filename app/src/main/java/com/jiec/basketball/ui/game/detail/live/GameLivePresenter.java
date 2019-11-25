@@ -1,12 +1,12 @@
 package com.jiec.basketball.ui.game.detail.live;
 
+import com.jiec.basketball.core.BasePresenter;
 import com.jiec.basketball.entity.GameLiveInfo;
 import com.jiec.basketball.entity.response.GameLivePostResponse;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
-import com.wangcj.common.base.mvp.BasePresenter;
 import com.wangcj.common.base.mvp.IModel;
 import com.wangcj.common.utils.LogUtil;
 
@@ -26,7 +26,7 @@ public class GameLivePresenter extends BasePresenter<IModel, GameLiveContract.Vi
         GameApi gameApi = RetrofitClient.getInstance().create(GameApi.class);
 
         gameApi.getGameLiveInfo(gameId)
-                .compose(mView.getBindToLifecycle())
+               // .compose(mView.getBindToLifecycle())
                 .compose(new NetTransformer())
                 .subscribe(new NetSubscriber<GameLiveInfo>() {
                     @Override
@@ -49,7 +49,7 @@ public class GameLivePresenter extends BasePresenter<IModel, GameLiveContract.Vi
         GameApi gameApi = RetrofitClient.getInstance().create(GameApi.class);
 
         gameApi.getLivePost(gameId)
-                .compose(mView.getBindToLifecycle())
+              //  .compose(mView.getBindToLifecycle())
                 .compose(new NetTransformer())
                 .subscribe(new NetSubscriber<GameLivePostResponse>() {
                     @Override

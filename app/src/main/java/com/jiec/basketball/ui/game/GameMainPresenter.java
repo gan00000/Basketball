@@ -1,12 +1,12 @@
 package com.jiec.basketball.ui.game;
 
+import com.jiec.basketball.core.BasePresenter;
 import com.jiec.basketball.entity.GameList;
 import com.jiec.basketball.entity.GameProgress;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
-import com.wangcj.common.base.mvp.BasePresenter;
 import com.wangcj.common.base.mvp.IModel;
 import com.wangcj.common.utils.LogUtil;
 
@@ -26,7 +26,7 @@ public class GameMainPresenter extends BasePresenter<IModel, GameMainContract.Vi
         GameApi gameApi = RetrofitClient.getInstance().create(GameApi.class);
 
         gameApi.getGameList(start, end)
-                .compose(mView.getBindToLifecycle())
+               // .compose(mView.getBindToLifecycle())
                 .compose(new NetTransformer())
                 .subscribe(new NetSubscriber<GameList>() {
                     @Override
@@ -46,7 +46,7 @@ public class GameMainPresenter extends BasePresenter<IModel, GameMainContract.Vi
         GameApi gameApi = RetrofitClient.getInstance().create(GameApi.class);
 
         gameApi.getGameProgress(id)
-                .compose(mView.getBindToLifecycle())
+                //.compose(mView.getBindToLifecycle())
                 .compose(new NetTransformer())
                 .subscribe(new NetSubscriber<GameProgress>() {
                     @Override

@@ -1,11 +1,11 @@
 package com.jiec.basketball.ui.game.detail.statistic;
 
+import com.jiec.basketball.core.BasePresenter;
 import com.jiec.basketball.entity.GameDataInfo;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
-import com.wangcj.common.base.mvp.BasePresenter;
 import com.wangcj.common.base.mvp.IModel;
 import com.wangcj.common.utils.LogUtil;
 
@@ -25,7 +25,7 @@ public class GameStatisticMainPresenter extends BasePresenter<IModel, GameStatis
         GameApi gameApi = RetrofitClient.getInstance().create(GameApi.class);
 
         gameApi.getGameDataInfo(String.valueOf(gameId))
-                .compose(mView.getBindToLifecycle())
+               // .compose(mView.getBindToLifecycle())
                 .compose(new NetTransformer())
                 .subscribe(new NetSubscriber<GameDataInfo>() {
                     @Override
