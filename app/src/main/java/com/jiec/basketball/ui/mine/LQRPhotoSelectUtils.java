@@ -10,9 +10,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 
+import com.jiec.basketball.utils.Lg;
 import com.yalantis.ucrop.UCrop;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 
@@ -28,13 +32,13 @@ public class LQRPhotoSelectUtils {
 
     private AppCompatActivity mActivity;
     //拍照或剪切后图片的存放位置(参考file_provider_paths.xml中的路径)
-    private String imgPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + String.valueOf(System.currentTimeMillis()) + ".jpg";
+    private String imgPath;
     //FileProvider的主机名：一般是包名+".fileprovider"，严格上是build.gradle中defaultConfig{}中applicationId对应的值+".fileprovider"
     private String AUTHORITIES = "packageName" + ".fileprovider";
     private boolean mShouldCrop = false;//是否要裁剪（默认不裁剪）
-    private Uri mOutputUri = null;
-    private File mInputFile;
-    private File mOutputFile = null;
+    private Uri mTakePhoneOutputUri = null;
+//    private File mInputFile;
+//    private File mOutputFile = null;
 
     //剪裁图片宽高比
     private int mAspectX = 1;
@@ -103,6 +107,7 @@ public class LQRPhotoSelectUtils {
      * 拍照获取
      */
     public void takePhoto() {
+
         File imgFile = new File(imgPath);
         if (!imgFile.getParentFile().exists()) {
             imgFile.getParentFile().mkdirs();
@@ -112,9 +117,13 @@ public class LQRPhotoSelectUtils {
         if (Build.VERSION.SDK_INT < 24) {
             // 从文件中创建uri
             imgUri = Uri.fromFile(imgFile);
+        }else {
+            //适配Android 7.0文件权限，通过FileProvider创建一个content类型的Uri
+            imgUri = FileProvider.getUriForFile(mActivity, mActivity.getPackageName() + ".fileprovider", imgFile);
+
         }
 
-
+        mTakePhoneOutputUri = imgUri;
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
         mActivity.startActivityForResult(intent, REQ_TAKE_PHOTO);
@@ -124,9 +133,24 @@ public class LQRPhotoSelectUtils {
      * 从图库获取
      */
     public void selectPhoto() {
-        Intent intent = new Intent(Intent.ACTION_PICK, null);
-        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        mActivity.startActivityForResult(intent, REQ_SELECT_PHOTO);
+//        Intent intent = new Intent(Intent.ACTION_PICK, null);
+//        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//        mActivity.startActivityForResult(intent, REQ_SELECT_PHOTO);
+        pickFromGallery();
+    }
+
+    private void pickFromGallery() {
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT)
+                .setType("image/*")
+                .addCategory(Intent.CATEGORY_OPENABLE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String[] mimeTypes = {"image/jpeg", "image/png"};
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        }
+
+        mActivity.startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQ_SELECT_PHOTO);
     }
 
     //测试有些问题，剪裁相册的图片 后不知道什么原因 大小为0b
@@ -161,78 +185,91 @@ public class LQRPhotoSelectUtils {
         mActivity.startActivityForResult(intent, REQ_ZOOM_PHOTO);
     }
 
-    private void zoomPhotoByUCrop(File inputFile, File outputFile) {
-        File parentFile = outputFile.getParentFile();
-        if (!parentFile.exists()) {
-            parentFile.mkdirs();
-        }
-        Uri sourceUri = Uri.fromFile(inputFile);
-        Uri destinationUri = Uri.fromFile(outputFile);
-        UCrop.of(sourceUri, destinationUri)
-                .withAspectRatio(mAspectX, mOutputY)
-                .withMaxResultSize(512, 512)
+    private void zoomPhotoByUCrop(Uri inputUri) {
+
+
+        File destinationFile = new File(mActivity.getCacheDir(), "temp" + System.currentTimeMillis() + ".jpg");
+
+        UCrop.Options options = new UCrop.Options();
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+       // options.setCompressionQuality();
+
+        options.setHideBottomControls(false);
+        options.setFreeStyleCropEnabled(false);
+
+        UCrop.of(inputUri, Uri.fromFile(destinationFile))
+                //.withAspectRatio(mAspectX, mOutputY)
+                //.withMaxResultSize(512, 512)
+                .withOptions(options)
                 .start(mActivity);
+
     }
 
     public void attachToActivityForResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {//剪裁处理
+            final Uri resultUri = UCrop.getOutput(data);
+            Lg.i("resultUri:" + resultUri);
+            if (mListener != null) {
+                mListener.onFinish(null, resultUri);
+            }
+            return;
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+            Lg.e("cropError:" + cropError.getMessage());
+            if (mListener != null) {
+                mListener.onFinish(null, null);
+            }
+            return;
+        }
+
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case LQRPhotoSelectUtils.REQ_TAKE_PHOTO://拍照
-                    mInputFile = new File(imgPath);
                     if (mShouldCrop) {//裁剪
-                        mOutputFile = new File(generateImgePath());
-                        mOutputUri = Uri.fromFile(mOutputFile);
-                        zoomPhoto(mInputFile, mOutputFile);
+                        if (mTakePhoneOutputUri != null && StringUtils.isNotEmpty(mTakePhoneOutputUri.toString())){
+                            zoomPhotoByUCrop(mTakePhoneOutputUri);
+                        }
                     } else {//不裁剪
-                        mOutputUri = Uri.fromFile(mInputFile);
                         if (mListener != null) {
-                            mListener.onFinish(mInputFile, mOutputUri);
+                            mListener.onFinish(null, mTakePhoneOutputUri);
                         }
                     }
+                   // mTakePhoneOutputUri = null;
                     break;
                 case LQRPhotoSelectUtils.REQ_SELECT_PHOTO://图库
                     if (data != null) {
                         Uri sourceUri = data.getData();
-                        String[] proj = {MediaStore.Images.Media.DATA};
-                        Cursor cursor = mActivity.managedQuery(sourceUri, proj, null, null, null);
-                        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        cursor.moveToFirst();
-                        String imgPath = cursor.getString(columnIndex);
-                        mInputFile = new File(imgPath);
+//                        String[] proj = {MediaStore.Images.Media.DATA};
+//                        Cursor cursor = mActivity.managedQuery(sourceUri, proj, null, null, null);
+//                        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                        cursor.moveToFirst();
+//                        String imgPath = cursor.getString(columnIndex);
+//                        mInputFile = new File(imgPath);
 
                         if (mShouldCrop) {//裁剪
-                            mOutputFile = new File(generateImgePath());
-                            mOutputUri = Uri.fromFile(mOutputFile);
-                            zoomPhotoByUCrop(mInputFile, mOutputFile);
+                            zoomPhotoByUCrop(sourceUri);
                         } else {//不裁剪
-                            mOutputUri = Uri.fromFile(mInputFile);
                             if (mListener != null) {
-                                mListener.onFinish(mInputFile, mOutputUri);
+                                mListener.onFinish(null, sourceUri);
                             }
                         }
                     }
                     break;
-                case LQRPhotoSelectUtils.REQ_ZOOM_PHOTO://裁剪
-                    if (data != null) {
-                        if (mOutputUri != null) {
-                            //删除拍照的临时照片
-                            File tmpFile = new File(imgPath);
-                            if (tmpFile.exists())
-                                tmpFile.delete();
-                            if (mListener != null) {
-                                mListener.onFinish(mOutputFile, mOutputUri);
-                            }
-                        }
-                    }
-                    break;
+//                case LQRPhotoSelectUtils.REQ_ZOOM_PHOTO://裁剪
+//                    if (data != null) {
+//                        if (mOutputUri != null) {
+//                            //删除拍照的临时照片
+//                            File tmpFile = new File(imgPath);
+//                            if (tmpFile.exists())
+//                                tmpFile.delete();
+//                            if (mListener != null) {
+//                                mListener.onFinish(mOutputFile, mOutputUri);
+//                            }
+//                        }
+//                    }
+//                    break;
 
-                case UCrop.REQUEST_CROP:
-                    final Uri resultUri = UCrop.getOutput(data);
-                    break;
-
-                case UCrop.RESULT_ERROR:
-                    final Throwable cropError = UCrop.getError(data);
-                    break;
             }
         }
     }

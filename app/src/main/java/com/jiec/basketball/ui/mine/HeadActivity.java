@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.jiec.basketball.R;
-import com.yalantis.ucrop.UCrop;
+import com.wangcj.common.utils.ToastUtil;
 
 import java.io.File;
 
@@ -39,9 +39,13 @@ public class HeadActivity extends AppCompatActivity {
             @Override
             public void onFinish(File outputFile, Uri outputUri) {
                 // 4、当拍照或从图库选取图片成功后回调
+                if (outputUri == null){
+                    ToastUtil.showMsg("圖片選擇出錯");
+                    return;
+                }
                 Intent intent = new Intent();
-                intent.putExtra("data", outputFile.getAbsolutePath());
-                intent.putExtra("outputUri", outputUri.toString());
+                intent.putExtra("data", outputUri.getPath());
+                //intent.putExtra("outputUri", outputUri.toString());
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -109,12 +113,6 @@ public class HeadActivity extends AppCompatActivity {
         // 2、在Activity中的onActivityResult()方法里与LQRPhotoSelectUtils关联
         mLqrPhotoSelectUtils.attachToActivityForResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            final Uri resultUri = UCrop.getOutput(data);
-
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            final Throwable cropError = UCrop.getError(data);
-        }
     }
 
     public void showDialog() {
