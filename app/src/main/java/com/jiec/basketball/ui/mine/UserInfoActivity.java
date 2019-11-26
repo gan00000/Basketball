@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseActivity;
 import com.jiec.basketball.core.UserManager;
@@ -25,7 +26,6 @@ import com.jiec.basketball.utils.ImageUtil;
 import com.jiec.basketball.utils.InputCheckUtils;
 import com.jiec.basketball.utils.Lg;
 import com.jiec.basketball.widget.CircleSImageView;
-import com.wangcj.common.utils.ThreadUtils;
 import com.wangcj.common.utils.ToastUtil;
 
 import org.apache.commons.lang3.StringUtils;
@@ -107,30 +107,34 @@ public class UserInfoActivity extends BaseActivity {
         if (requestCode == 10000 && resultCode == RESULT_OK) {
             try {
                 String mmselectImagePath = data.getStringExtra("data");//返回真是路径
-                String outputUriStr = data.getStringExtra("outputUri");
+                //String outputUriStr = data.getStringExtra("outputUri");
                 //mHeadBase64 = encodeBase64File(imagePath);
                 if (StringUtils.isEmpty(mmselectImagePath)){
+                    ToastUtil.showMsg("圖片選擇出錯");
                     return;
                 }
                 File imageFile = new File(mmselectImagePath);
                 if (!imageFile.exists()){
                     Lg.e("图片不存在");
+                    ToastUtil.showMsg("圖片選擇出錯");
                     return;
                 }
-                ThreadUtils.postMainThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //ImageLoaderUtils.loadBase64(mIvHead, mHeadBase64);
-                        Bitmap selectBitmap = BitmapFactory.decodeFile(mmselectImagePath);
-                        if (selectBitmap != null){
-                            selectImagePath = mmselectImagePath;
-                            mIvHead.setImageBitmap(selectBitmap);
-                        }else {
-                            ToastUtil.showMsg("圖片選擇出錯");
-                        }
-                       // mIvHead.setImageURI(Uri.parse(selectImagePath));
-                    }
-                });
+//                ThreadUtils.postMainThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //ImageLoaderUtils.loadBase64(mIvHead, mHeadBase64);
+//                        Bitmap selectBitmap = BitmapFactory.decodeFile(mmselectImagePath);
+//                        if (selectBitmap != null){
+//                            selectImagePath = mmselectImagePath;
+//                            mIvHead.setImageBitmap(selectBitmap);
+//                        }else {
+//                            ToastUtil.showMsg("圖片選擇出錯");
+//                        }
+//                       // mIvHead.setImageURI(Uri.parse(selectImagePath));
+//                    }
+//                });
+                selectImagePath = mmselectImagePath;
+                Glide.with(UserInfoActivity.this).load(imageFile).into(mIvHead);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -176,7 +180,9 @@ public class UserInfoActivity extends BaseActivity {
         }
         if (!EmptyUtils.emptyOfString(selectImagePath)) {
             try {
-                paramsMap.put("file", encodeBase64File(selectImagePath));
+                String imageBase64Str = encodeBase64File(selectImagePath);
+                Lg.d("imageBase64Str:" + imageBase64Str);
+                paramsMap.put("file", imageBase64Str);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -208,7 +214,7 @@ public class UserInfoActivity extends BaseActivity {
                     @Override
                     protected void onFailed(int code, String reason) {
                         ToastUtil.showMsg("更新失敗");
-                        setHeadImage();
+                        //setHeadImage();
                         hideLoading();
                     }
                 });
