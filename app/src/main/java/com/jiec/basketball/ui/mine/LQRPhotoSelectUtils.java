@@ -44,8 +44,8 @@ public class LQRPhotoSelectUtils {
     private int mAspectX = 1;
     private int mAspectY = 1;
     //剪裁图片大小
-    private int mOutputX = 160;
-    private int mOutputY = 160;
+    private int mOutputX = 300;
+    private int mOutputY = 300;
     PhotoSelectListener mListener;
 
     /**
@@ -192,14 +192,14 @@ public class LQRPhotoSelectUtils {
 
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
-       // options.setCompressionQuality();
+        options.setCompressionQuality(90);
 
         options.setHideBottomControls(false);
         options.setFreeStyleCropEnabled(false);
 
         UCrop.of(inputUri, Uri.fromFile(destinationFile))
-                //.withAspectRatio(mAspectX, mOutputY)
-                //.withMaxResultSize(512, 512)
+                .withAspectRatio(mAspectX, mAspectY)
+                .withMaxResultSize(mOutputX, mOutputY)
                 .withOptions(options)
                 .start(mActivity);
 
