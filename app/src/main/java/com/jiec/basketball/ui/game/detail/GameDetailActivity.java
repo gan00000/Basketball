@@ -297,7 +297,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 }
                 liveThumdLayout.setVisibility(View.GONE);
                 livePlayer.setVisibility(View.VISIBLE);
-                livePlayer.setUp(switchVideoModels, true, "");
+                livePlayer.setUp(switchVideoModels, false, "");
                 rePlay();
 
             }
@@ -447,6 +447,12 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
     private void rePlay() {
 
+//        setUp(url, mCache, mCachePath, mTitle);
+//        setSeekOnStart(currentPosition);
+//        startPlayLogic();
+//        cancelProgressTimer();
+//        hideAllWidget();
+//
         if (isPlay){
             getCurPlay().release();
             isPlay = false;

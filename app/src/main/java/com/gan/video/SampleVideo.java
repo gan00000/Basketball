@@ -4,15 +4,20 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gan.video.model.SwitchVideoModel;
-import com.gan.video.view.SwitchVideoTypeDialog;
 import com.jiec.basketball.R;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -41,6 +46,10 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     private TextView mChangeTransform;
 
     private ImageView refreshPlayerImageView;
+
+    private RelativeLayout rightRelativeLayout;
+    private LinearLayout switchLayout;
+    private ListView switchListView;
 
     private List<SwitchVideoModel> mUrlList = new ArrayList<>();
 
@@ -84,6 +93,10 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mSwitchSize = (TextView) findViewById(R.id.switchSize);//标准，高清
         mChangeRotate = (TextView) findViewById(R.id.change_rotate);//旋转画面
         mChangeTransform = (TextView) findViewById(R.id.change_transform);//旋转镜头
+
+        rightRelativeLayout = findViewById(R.id.right_layout);
+        switchLayout = findViewById(R.id.switch_layout);
+        switchListView = findViewById(R.id.switch_list);
 
         refreshPlayerImageView = findViewById(R.id.refreshPlayer);
 
@@ -215,6 +228,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      */
     public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, String title) {
         mUrlList = url;
+        initSwitchView();
         return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, title);
     }
 
@@ -229,6 +243,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      */
     public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, File cachePath, String title) {
         mUrlList = url;
+        initSwitchView();
         return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, cachePath, title);
     }
 
@@ -327,19 +342,19 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mSwitchSize.setText(mTypeText);
     }
 
-    /**
-     * 弹出切换清晰度
-     */
-    private void showSwitchDialog() {
-        if (!mHadPlay) {
-            return;
-        }
-        SwitchVideoTypeDialog switchVideoTypeDialog = new SwitchVideoTypeDialog(getContext());
-        switchVideoTypeDialog.initList(mUrlList, new SwitchVideoTypeDialog.OnListItemClickListener() {
+
+   private void initSwitchView(){
+
+       mSwitchSize.setText(mUrlList.get(0).getName());
+        ArrayAdapter adapter = new ArrayAdapter<>(mContext, R.layout.switch_video_dialog_item, mUrlList);
+        switchListView.setAdapter(adapter);
+        switchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 final String name = mUrlList.get(position).getName();
                 if (mSourcePosition != position) {
+//                    int aa = 0;
                     if ((mCurrentState == GSYVideoPlayer.CURRENT_STATE_PLAYING
                             || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)) {
                         final String url = mUrlList.get(position).getUrl();
@@ -348,27 +363,124 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                         getGSYVideoManager().releaseMediaPlayer();
                         cancelProgressTimer();
                         hideAllWidget();
+                        getCurPlay().release();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 setUp(url, mCache, mCachePath, mTitle);
                                 setSeekOnStart(currentPosition);
+                                getCurPlay().release();
                                 startPlayLogic();
                                 cancelProgressTimer();
                                 hideAllWidget();
                             }
-                        }, 500);
+                        }, 1000);
                         mTypeText = name;
                         mSwitchSize.setText(name);
                         mSourcePosition = position;
                     }
+
                 } else {
-                    Toast.makeText(getContext(), "已经是 " + name, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "已經是 " + name, Toast.LENGTH_LONG).show();
                 }
+
+                mSwitchSize.setVisibility(VISIBLE);
+                switchLayout.setVisibility(GONE);
             }
         });
-        switchVideoTypeDialog.show();
     }
 
+    /**
+     * 弹出切换清晰度
+     */
+    private void showSwitchDialog() {
+        if (!mHadPlay) {
+            return;
+        }
+        mSwitchSize.setVisibility(GONE);
+        switchLayout.setVisibility(VISIBLE);
+
+//        int[] position = new int[2];
+//        rightRelativeLayout.getLocationOnScreen(position);
+//        int mWidth = rightRelativeLayout.getWidth();
+//        int mHeight = rightRelativeLayout.getHeight();
+//
+////        SwitchVideoTypeDialog switchVideoTypeDialog = new SwitchVideoTypeDialog(getContext(), mWidth,mHeight);
+//        SwitchVideoTypeDialog switchVideoTypeDialog = new SwitchVideoTypeDialog(getContext(), position,  mWidth, mHeight);
+//        switchVideoTypeDialog.initList(mUrlList, new SwitchVideoTypeDialog.OnListItemClickListener() {
+//            @Override
+//            public void onItemClick(int position) {
+//                final String name = mUrlList.get(position).getName();
+//                if (mSourcePosition != position) {
+//                    if ((mCurrentState == GSYVideoPlayer.CURRENT_STATE_PLAYING
+//                            || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)) {
+//                        final String url = mUrlList.get(position).getUrl();
+//                        onVideoPause();
+//                        final long currentPosition = mCurrentPosition;
+//                        getGSYVideoManager().releaseMediaPlayer();
+//                        cancelProgressTimer();
+//                        hideAllWidget();
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                setUp(url, mCache, mCachePath, mTitle);
+//                                setSeekOnStart(currentPosition);
+//                                startPlayLogic();
+//                                cancelProgressTimer();
+//                                hideAllWidget();
+//                            }
+//                        }, 500);
+//                        mTypeText = name;
+//                        mSwitchSize.setText(name);
+//                        mSourcePosition = position;
+//                    }
+//                } else {
+//                    Toast.makeText(getContext(), "已经是 " + name, Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//        switchVideoTypeDialog.show();
+    }
+
+    @Override
+    protected void hideAllWidget() {
+        super.hideAllWidget();
+
+//        rightRelativeLayout.setVisibility(GONE);
+    }
+
+    @Override
+    protected void changeUiToNormal() {
+        super.changeUiToNormal();
+//        rightRelativeLayout.setVisibility(VISIBLE);
+    }
+
+    @Override
+    protected void setViewShowState(View view, int visibility) {
+        super.setViewShowState(view, visibility);
+        if (view.getId() == R.id.layout_bottom){
+            //rightRelativeLayout.setVisibility(visibility);
+            mSwitchSize.setVisibility(visibility);
+            //switchLayout.setVisibility(GONE);
+        }
+    }
+
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        mSwitchSize.setVisibility(GONE);
+        switchLayout.setVisibility(GONE);
+
+        return super.onTouch(v, event);
+
+    }
+
+    private GSYVideoPlayer getCurPlay() {
+        if (this.getFullWindowPlayer() != null) {
+            return  this.getFullWindowPlayer();
+        }
+        return this;
+    }
 
 }
