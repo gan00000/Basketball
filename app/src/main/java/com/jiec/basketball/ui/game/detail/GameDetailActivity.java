@@ -93,6 +93,8 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     GameSummaryFragment mGameSummaryFragment;
     GameStatisticMainFragment mGameStatisticMainFragment;
 
+    List<SwitchVideoModel> switchVideoModels = new ArrayList<>();
+
     public static void show(Context context, String game_id) {
         Intent intent = new Intent(context, GameDetailActivity.class);
         intent.putExtra("game_id", game_id);
@@ -207,7 +209,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                         rePlay();
                     }
                 });
-
+                //fullSampleVideo.onEnterFullscreen(fullSampleVideo);
                 Log.d(TAG,"onEnterFullscreen");
             }
         });
@@ -279,13 +281,16 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                     return;
                 }
 
-                List<SwitchVideoModel> switchVideoModels = new ArrayList<>();
-
                 for (int i = 0; i < videoUrls.size(); i++) {
                     String videoUrl = videoUrls.get(i);
 
                     if (StringUtils.isNotEmpty(videoUrl)){
-                        String name = "直播" + i + 1;
+                        String name = "直播" + (i + 1);
+                        if (i != 0){
+                            videoUrl = "rtmp://ivi.bupt.edu.cn:1935/livetv/cctv2hd";
+                        }else {
+                            videoUrl = "http://m.567it.com/jade.m3u8";
+                        }
                         SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, videoUrl);
                         switchVideoModels.add(switchVideoModel);
 

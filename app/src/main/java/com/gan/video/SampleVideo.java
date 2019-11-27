@@ -61,7 +61,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     //数据源
     private int mSourcePosition = 0;
 
-    private String mTypeText = "标准";
+    private String mTypeText = "直播1";
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
@@ -269,6 +269,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         sampleVideo.mTransformSize = mTransformSize;
         sampleVideo.mUrlList = mUrlList;
         sampleVideo.mTypeText = mTypeText;
+        sampleVideo.mSwitchSize.setText(mSwitchSize.getText());
         //sampleVideo.resolveTransform();
         sampleVideo.resolveTypeUI();
         //sampleVideo.resolveRotateUI();
@@ -276,6 +277,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         //这只是单纯的作为全屏播放显示，如果需要做大小屏幕切换，请记得在这里耶设置上视频全屏的需要的自定义配置
         //比如已旋转角度之类的等等
         //可参考super中的实现
+        sampleVideo.initViewFullscreen(sampleVideo);
         return sampleVideo;
     }
 
@@ -343,9 +345,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     }
 
 
-   private void initSwitchView(){
+    private void initSwitchView() {
 
-       mSwitchSize.setText(mUrlList.get(0).getName());
+        mSwitchSize.setText(mUrlList.get(0).getName());
         ArrayAdapter adapter = new ArrayAdapter<>(mContext, R.layout.switch_video_dialog_item, mUrlList);
         switchListView.setAdapter(adapter);
         switchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -368,7 +370,10 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                             @Override
                             public void run() {
                                 setUp(url, mCache, mCachePath, mTitle);
-                                setSeekOnStart(currentPosition);
+                                int totalTimeDuration = getDuration();
+                                if (totalTimeDuration > 0){
+                                    setSeekOnStart(currentPosition);
+                                }
                                 getCurPlay().release();
                                 startPlayLogic();
                                 cancelProgressTimer();
@@ -482,5 +487,61 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         }
         return this;
     }
+
+    public ListView getSwitchListView(){
+        return switchListView;
+    }
+
+    public void initViewFullscreen(SampleVideo fullSampleVideo){
+//        this.mUrlList = mUrlList;
+//        this.mSourcePosition = playingPosition;
+       // mSwitchSize.setText(mUrlList.get(mSourcePosition).getName());
+        ArrayAdapter adapter = new ArrayAdapter<>(mContext, R.layout.switch_video_dialog_item, mUrlList);
+        fullSampleVideo.getSwitchListView().setAdapter(adapter);
+        fullSampleVideo.getSwitchListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                final String name = mUrlList.get(position).getName();
+                if (mSourcePosition != position) {
+                    int aa = 0;
+                    if (aa == 0) {
+                        final String url = mUrlList.get(position).getUrl();
+                        fullSampleVideo.onVideoPause();
+
+                        final long currentPosition = mCurrentPosition;
+                        getGSYVideoManager().releaseMediaPlayer();
+                        cancelProgressTimer();
+                        hideAllWidget();
+                        getCurPlay().release();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setUp(url, mCache, mCachePath, mTitle);
+                                int totalTimeDuration = getDuration();
+                                if (totalTimeDuration > 0){
+                                    setSeekOnStart(currentPosition);
+                                }
+                                getCurPlay().release();
+                                startPlayLogic();
+                                cancelProgressTimer();
+                                hideAllWidget();
+                            }
+                        }, 1000);
+                        mTypeText = name;
+                        mSwitchSize.setText(name);
+                        mSourcePosition = position;
+                    }
+
+                } else {
+                    Toast.makeText(getContext(), "已經是 " + name, Toast.LENGTH_LONG).show();
+                }
+
+                mSwitchSize.setVisibility(VISIBLE);
+                switchLayout.setVisibility(GONE);
+            }
+        });
+    }
+
 
 }
