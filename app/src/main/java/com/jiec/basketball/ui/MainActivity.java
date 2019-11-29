@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -27,7 +26,6 @@ import com.jiec.basketball.ui.game.GameMainFragment;
 import com.jiec.basketball.ui.mine.MineActivity;
 import com.jiec.basketball.ui.news.NewsListFragment;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
-import com.jiec.basketball.ui.rank.RankMainFragment;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.EventBusEvent;
 import com.jiec.basketball.utils.EventBusUtils;
@@ -58,7 +56,7 @@ public class MainActivity extends BaseActivity {
 
 
     private static final int[] TITLES = {R.string.tab_fight, R.string.tab_news, R.string.tab_films,
-                    R.string.tab_data, R.string.tab_rank};
+                    R.string.tab_data};
     private static final int[] UNSELECTED_ICONS = {R.drawable.icon_fight, R.drawable.icon_news,
             R.drawable.icon_film, R.drawable.icon_data, R.drawable.icon_rank};
     private static final int[] SELECTED_ICONS = {R.drawable.icon_fight_pressed, R.drawable.icon_news_pressed,
@@ -136,7 +134,7 @@ public class MainActivity extends BaseActivity {
         mFragments.add(NewsListFragment.newInstance());
         mFragments.add(FilmListFragment.newInstance());
         mFragments.add(DataMainFragment.newInstance());
-        mFragments.add(RankMainFragment.newInstance());
+       // mFragments.add(RankMainFragment.newInstance());
     }
 
 

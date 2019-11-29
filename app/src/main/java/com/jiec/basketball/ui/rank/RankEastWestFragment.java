@@ -102,6 +102,8 @@ public class RankEastWestFragment extends Fragment {
         smartTable.getConfig().setShowXSequence(false);
         smartTable.getConfig().setShowYSequence(false);
         smartTable.getConfig().setShowTableTitle(false);
+        smartTable.getConfig().setHorizontalPadding(30);
+        smartTable.getConfig().setColumnTitleHorizontalPadding(30);
 
         smartTable.getConfig().setContentGridStyle(new LineStyle() {
             @Override
@@ -117,10 +119,18 @@ public class RankEastWestFragment extends Fragment {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
                 if (cellInfo.row % 2 == 0) {
-                    return ContextCompat.getColor(getActivity(), R.color.gray_light);
+                    //return ContextCompat.getColor(getActivity(), R.color.gray_light);
+                    return TableConfig.INVALID_COLOR;
                 } else {
                     return TableConfig.INVALID_COLOR;
                 }
+//                if (cellInfo.col == 1) {
+//                    return ContextCompat.getColor(getActivity(), R.color.gray_light);
+//                }else if (cellInfo.col == 2) {
+//                    return ContextCompat.getColor(getActivity(), R.color.blue);
+//                }else {
+//                    return ContextCompat.getColor(getActivity(), R.color.red);
+//                }
             }
         };
 
