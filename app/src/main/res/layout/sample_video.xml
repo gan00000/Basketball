@@ -173,7 +173,7 @@
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="50dp"
+        android:layout_marginRight="100dp"
         android:scaleType="centerInside"
         android:src="@drawable/unlock"
         android:visibility="gone" />
@@ -262,7 +262,7 @@
         >
 
         <TextView
-            android:id="@+id/switchSize"
+            android:id="@+id/switchModel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="4dp"

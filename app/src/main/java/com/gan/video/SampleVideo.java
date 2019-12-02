@@ -1,22 +1,28 @@
 package com.gan.video;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gan.ctools.tool.ViewUtil;
 import com.gan.video.model.SwitchVideoModel;
 import com.jiec.basketball.R;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
@@ -90,7 +96,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
 
     private void initView() {
         mMoreScale = (TextView) findViewById(R.id.moreScale);//视频比例
-        mSwitchSize = (TextView) findViewById(R.id.switchSize);//标准，高清
+        mSwitchSize = (TextView) findViewById(R.id.switchModel);//标准，高清
         mChangeRotate = (TextView) findViewById(R.id.change_rotate);//旋转画面
         mChangeTransform = (TextView) findViewById(R.id.change_transform);//旋转镜头
 
@@ -356,9 +362,8 @@ public class SampleVideo extends StandardGSYVideoPlayer {
 
                 final String name = mUrlList.get(position).getName();
                 if (mSourcePosition != position) {
-//                    int aa = 0;
-                    if ((mCurrentState == GSYVideoPlayer.CURRENT_STATE_PLAYING
-                            || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)) {
+                    int aa = 0;
+                    if (aa == 0) {
                         final String url = mUrlList.get(position).getUrl();
                         onVideoPause();
                         final long currentPosition = mCurrentPosition;
@@ -543,5 +548,86 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         });
     }
 
+    @Override
+    protected int getVolumeLayoutId() {
+        return R.layout.video_volume_dialog_customize;
+    }
 
+    @Override
+    protected int getBrightnessLayoutId() {
+        return R.layout.video_brightness_custom;
+    }
+
+    /**
+     * 触摸亮度dialog，如需要自定义继承重写即可，记得重写dismissBrightnessDialog
+     */
+    @Override
+    protected void showBrightnessDialog(float percent) {
+        if (mBrightnessDialog == null) {
+            View localView = LayoutInflater.from(getActivityContext()).inflate(getBrightnessLayoutId(), null);
+            if (localView.findViewById(getBrightnessTextId()) instanceof TextView) {
+                mBrightnessDialogTv = (TextView) localView.findViewById(getBrightnessTextId());
+            }
+            mBrightnessDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
+            mBrightnessDialog.setContentView(localView);
+            mBrightnessDialog.getWindow().addFlags(8);
+            mBrightnessDialog.getWindow().addFlags(32);
+            mBrightnessDialog.getWindow().addFlags(16);
+            mBrightnessDialog.getWindow().setLayout(-2, -2);
+            WindowManager.LayoutParams localLayoutParams = mBrightnessDialog.getWindow().getAttributes();
+            localLayoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+            localLayoutParams.width = getWidth();
+            localLayoutParams.height = getHeight();
+            int location[] = new int[2];
+            getLocationOnScreen(location);
+            int statusBarHeight = ViewUtil.getStatusBarHeight(getContext());
+            localLayoutParams.x = location[0];
+            localLayoutParams.y = location[1] - statusBarHeight;
+            mBrightnessDialog.getWindow().setAttributes(localLayoutParams);
+        }
+        if (!mBrightnessDialog.isShowing()) {
+            mBrightnessDialog.show();
+        }
+        if (mBrightnessDialogTv != null)
+            mBrightnessDialogTv.setText((int) (percent * 100) + "%");
+    }
+
+
+    /**
+     * 触摸音量dialog，如需要自定义继承重写即可，记得重写dismissVolumeDialog
+     */
+    @Override
+    protected void showVolumeDialog(float deltaY, int volumePercent) {
+        if (mVolumeDialog == null) {
+            View localView = LayoutInflater.from(getActivityContext()).inflate(getVolumeLayoutId(), null);
+            if (localView.findViewById(getVolumeProgressId()) instanceof ProgressBar) {
+                mDialogVolumeProgressBar = ((ProgressBar) localView.findViewById(getVolumeProgressId()));
+                if (mVolumeProgressDrawable != null && mDialogVolumeProgressBar != null) {
+                    mDialogVolumeProgressBar.setProgressDrawable(mVolumeProgressDrawable);
+                }
+            }
+            mVolumeDialog = new Dialog(getActivityContext(), R.style.video_style_dialog_progress);
+            mVolumeDialog.setContentView(localView);
+            mVolumeDialog.getWindow().addFlags(8);
+            mVolumeDialog.getWindow().addFlags(32);
+            mVolumeDialog.getWindow().addFlags(16);
+            mVolumeDialog.getWindow().setLayout(-2, -2);
+            WindowManager.LayoutParams localLayoutParams = mVolumeDialog.getWindow().getAttributes();
+            localLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+            localLayoutParams.width = getWidth();
+            localLayoutParams.height = getHeight();
+            int location[] = new int[2];
+            getLocationOnScreen(location);
+            int statusBarHeight = ViewUtil.getStatusBarHeight(getContext());
+            localLayoutParams.x = location[0];
+            localLayoutParams.y = location[1] - statusBarHeight;
+            mVolumeDialog.getWindow().setAttributes(localLayoutParams);
+        }
+        if (!mVolumeDialog.isShowing()) {
+            mVolumeDialog.show();
+        }
+        if (mDialogVolumeProgressBar != null) {
+            mDialogVolumeProgressBar.setProgress(volumePercent);
+        }
+    }
 }

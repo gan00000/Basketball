@@ -104,6 +104,14 @@ public class GameListAdapter extends BaseListAdapter<GameInfo> {
                     }
                 }
             });
+            ((ItemViewHolder) holder).mPlayBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClickedListener != null) {
+                        mOnItemClickedListener.onClick(gameInfo);
+                    }
+                }
+            });
         }
     }
 
@@ -143,6 +151,8 @@ public class GameListAdapter extends BaseListAdapter<GameInfo> {
         TextView mTvTime;
         @BindView(R.id.tv_date)
         TextView mTvDate;
+        @BindView(R.id.tv_play)
+        TextView mPlayBtn;
         @BindView(R.id.layout_item)
         RelativeLayout mLayoutItem;
 
