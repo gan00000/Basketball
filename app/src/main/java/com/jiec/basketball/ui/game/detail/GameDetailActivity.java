@@ -54,12 +54,17 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     GameDetailContract.Presenter mPresenter;
     @BindView(R.id.iv_team_1)
     ImageView mIvTeam1;
-    @BindView(R.id.tv_score)
-    TextView mTvScore;
-    @BindView(R.id.tv_status)
-    TextView mTvStatus;
     @BindView(R.id.iv_team_2)
     ImageView mIvTeam2;
+
+    @BindView(R.id.tv_team_home_score)
+    TextView mTvScoreHome;
+    @BindView(R.id.tv_team_away_score)
+    TextView mTvScoreAway;
+
+    @BindView(R.id.tv_status)
+    TextView mTvStatus;
+
     @BindView(R.id.tab_layout)
     CommonTabLayout mTabLayout;
     @BindView(R.id.fl_layout)
@@ -69,6 +74,12 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     @BindView(R.id.tv_time)
     TextView mTvTime;
 
+    @BindView(R.id.tv_team_name_1)
+    TextView mTvTimeName_1;
+
+    @BindView(R.id.tv_team_name_2)
+    TextView mTvTimeName_2;
+
     @BindView(R.id.live_player)
     SampleVideo livePlayer;
 
@@ -77,6 +88,13 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
     @BindView(R.id.live_start)
     View liveStart;
+
+    @BindView(R.id.living_layout)
+    View livingView;
+
+    @BindView(R.id.tv_status_living)
+    TextView livingStatus;
+
 
     private OrientationUtils orientationUtils;
     private MediaMetadataRetriever mCoverMedia;
@@ -95,9 +113,10 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
     List<SwitchVideoModel> switchVideoModels = new ArrayList<>();
 
-    public static void show(Context context, String game_id) {
+    public static void show(Context context, String game_id, String game_time) {
         Intent intent = new Intent(context, GameDetailActivity.class);
         intent.putExtra("game_id", game_id);
+        intent.putExtra("game_time", game_time);
         context.startActivity(intent);
     }
 
@@ -109,6 +128,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         ButterKnife.bind(this);
 
         String game_id = getIntent().getStringExtra("game_id");
+        String gameTime = getIntent().getStringExtra("game_time");
 
         //===================播放器start======================
 //        String source1 = "http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8";
@@ -225,6 +245,17 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             }
         });
 
+        liveThumdLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gameNeedPlay){
+
+                    liveThumdLayout.setVisibility(View.GONE);
+                    livePlayer.setVisibility(View.VISIBLE);
+                    rePlay();
+                }
+            }
+        });
 
         //loadFirstFrameCover(source1);
 
@@ -241,33 +272,44 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
                 ImageLoaderUtils.display(GameDetailActivity.this, mIvTeam1, matchSummary.getHomeLogo());
                 ImageLoaderUtils.display(GameDetailActivity.this, mIvTeam2, matchSummary.getAwayLogo());
-                mTvScore.setText(matchSummary.getHome_pts() + "-" + matchSummary.getAway_pts());
+//                mTvScore.setText(matchSummary.getHome_pts() + "-" + matchSummary.getAway_pts());
+
 
                 if (matchSummary.getScheduleStatus().equals("Final")) {
                     mTvStatus.setText(R.string.game_state_final);
-                    mTvTime.setVisibility(View.GONE);
+                    mTvTime.setVisibility(View.INVISIBLE);
+                    mTvScoreHome.setText(matchSummary.getHome_pts());
+                    mTvScoreAway.setText(matchSummary.getAway_pts());
 
                 } else if (matchSummary.getScheduleStatus().equals("InProgress")) {
-                    mTvStatus.setText("");
-                    mTvTime.setVisibility(View.VISIBLE);
+                    mTvStatus.setVisibility(View.INVISIBLE);
+                    mTvTime.setVisibility(View.GONE);
+//                    liveStart.setVisibility(View.VISIBLE);
+//                    livingStatus.setVisibility(View.VISIBLE);
+                    livingView.setVisibility(View.VISIBLE);
                     if (matchSummary.getQuarter().contains("OT")) {
-                        mTvTime.setText(matchSummary.getQuarter());
+                        livingStatus.setText(matchSummary.getQuarter());
                     } else {
-                        mTvTime.setText("第" + matchSummary.getQuarter() + "节\n" + matchSummary.getTime());
+                        livingStatus.setText("第" + matchSummary.getQuarter() + "节\n" + matchSummary.getTime());
                     }
 
                     gameNeedPlay = true;//需要進行播放
 
-                    mGameLiveFragment.loadVideoLiveData();
+                    if (switchVideoModels.isEmpty()){
+
+                        mGameLiveFragment.loadVideoLiveData();
+                    }
 
                 } else {
                     mTvStatus.setText(R.string.game_state_unstart);
-                    mTvTime.setVisibility(View.GONE);
-
+                    mTvTime.setVisibility(View.VISIBLE);
+                    mTvTime.setText(gameTime);
                 }
 
                 mTitleBar.setTitle(matchSummary.getHomeName() + " vs " + matchSummary.getAwayName());
-                mGameLiveFragment.loadVideoLiveData();//放此處測試
+                mTvTimeName_1.setText(matchSummary.getHomeName());
+                mTvTimeName_2.setText(matchSummary.getAwayName());
+                //mGameLiveFragment.loadVideoLiveData();//放此處測試
             }
 
             @Override
@@ -280,17 +322,20 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 if (videoUrls == null || videoUrls.isEmpty()){
                     return;
                 }
-
+                gameNeedPlay = true;//需要進行播放
+                switchVideoModels.clear();
                 for (int i = 0; i < videoUrls.size(); i++) {
                     String videoUrl = videoUrls.get(i);
 
                     if (StringUtils.isNotEmpty(videoUrl)){
                         String name = "直播" + (i + 1);
-                        if (i != 0){
-                            videoUrl = "rtmp://ivi.bupt.edu.cn:1935/livetv/cctv2hd";
-                        }else {
-                            videoUrl = "http://m.567it.com/jade.m3u8";
-                        }
+//                        if (i == 0){
+//                            videoUrl = "http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8";
+//                        }else if (i == 1){
+//                            videoUrl = "http://m.567it.com/jade.m3u8";
+//                        }else {
+//                            videoUrl = "http://ivi.bupt.edu.cn/hls/cctv2hd.m3u8";
+//                        }
                         SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, videoUrl);
                         switchVideoModels.add(switchVideoModel);
 
@@ -300,10 +345,10 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 if (switchVideoModels.isEmpty()){
                     return;
                 }
-                liveThumdLayout.setVisibility(View.GONE);
-                livePlayer.setVisibility(View.VISIBLE);
+                //liveThumdLayout.setVisibility(View.GONE);
+                //livePlayer.setVisibility(View.VISIBLE);
                 livePlayer.setUp(switchVideoModels, false, "");
-                rePlay();
+//                rePlay();
 
             }
         });

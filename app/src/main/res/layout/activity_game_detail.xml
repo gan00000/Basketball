@@ -36,87 +36,168 @@
             android:background="@drawable/live_player_bg"
             >
 
-            <ImageView
-                android:id="@+id/iv_team_1"
-                android:layout_width="60dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
-                android:padding="2dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/img_default_team" />
+                android:paddingTop="30dp"
+                android:id="@+id/tv_team_layout"
+                android:gravity="center">
 
-            <TextView
+                <ImageView
+                    android:id="@+id/iv_team_1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:padding="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/img_default_team" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:text="(主隊)"
+                    android:id="@+id/tv_team_name_1"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_25" />
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="70dp"
+               >
+
+                <TextView
+                    android:id="@+id/tv_team_home_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_25" />
+
+
+                <TextView
+                    android:id="@+id/tv_team_away_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_25" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/iv_team_1"
-                android:text="(主隊)"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_14" />
-
-            <TextView
-                android:id="@+id/tv_score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:text="0 - 0"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_25" />
-
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:text=""
-                android:layout_below="@id/tv_score"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_14" />
-
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_score"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:text=""
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_14" />
-
-            <ImageView
-                android:id="@+id/iv_team_2"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
-                android:padding="2dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/img_default_team" />
+                android:layout_marginLeft="20dp"
+                android:paddingTop="30dp"
+                android:gravity="center">
 
-            <TextView
+
+                <ImageView
+                    android:id="@+id/iv_team_2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:padding="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/img_default_team" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:text="(客隊)"
+                    android:id="@+id/tv_team_name_2"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_25" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toLeftOf="@id/iv_team_2"
-                android:text="(客隊)"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_14" />
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:id="@+id/living_layout"
+                android:paddingTop="20dp"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <moe.codeest.enviews.ENPlayView
+                    android:id="@+id/live_start"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_vertical" />
 
 
-            <moe.codeest.enviews.ENPlayView
-                android:id="@+id/live_start"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical" />
+                <TextView
+                    android:id="@+id/tv_status_living"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:layout_below="@id/live_start"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="30dp">
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_centerInParent="true"
+
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_25" />
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"
+                    android:textStyle="bold"
+                    android:text="未开始"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_25" />
+
+            </LinearLayout>
+
+
+
+
+
 
         </RelativeLayout>
     </RelativeLayout>

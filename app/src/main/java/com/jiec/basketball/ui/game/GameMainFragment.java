@@ -94,7 +94,7 @@ public class GameMainFragment extends BaseListFragment implements GameMainContra
         return new BaseListAdapter.OnItemClickedListener<GameInfo>() {
             @Override
             public void onClick(GameInfo data) {
-                GameDetailActivity.show(getContext(), ((GameInfo) data).getId());
+                GameDetailActivity.show(getContext(), ((GameInfo) data).getId(), ((GameInfo) data).getGametime());
             }
         };
     }
