@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.gan.ctools.tool.ViewUtil;
 import com.gan.video.model.SwitchVideoModel;
 import com.jiec.basketball.R;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
@@ -33,6 +34,8 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import moe.codeest.enviews.ENDownloadView;
 
 /**
  * Created by shuyu on 2016/12/7.
@@ -56,6 +59,8 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     private RelativeLayout rightRelativeLayout;
     private LinearLayout switchLayout;
     private ListView switchListView;
+
+    private TextView playErrorTextView;
 
     private List<SwitchVideoModel> mUrlList = new ArrayList<>();
 
@@ -99,6 +104,8 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         mSwitchSize = (TextView) findViewById(R.id.switchModel);//标准，高清
         mChangeRotate = (TextView) findViewById(R.id.change_rotate);//旋转画面
         mChangeTransform = (TextView) findViewById(R.id.change_transform);//旋转镜头
+
+        playErrorTextView = findViewById(R.id.play_error_tips);
 
         rightRelativeLayout = findViewById(R.id.right_layout);
         switchLayout = findViewById(R.id.switch_layout);
@@ -629,5 +636,92 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         if (mDialogVolumeProgressBar != null) {
             mDialogVolumeProgressBar.setProgress(volumePercent);
         }
+    }
+
+    @Override
+    protected void changeUiToError() {
+        //super.changeUiToError();
+        Debuger.printfLog("changeUiToError");
+
+        setViewShowState(mTopContainer, VISIBLE);
+        setViewShowState(mBottomContainer, VISIBLE);
+        setViewShowState(mStartButton, VISIBLE);
+        setViewShowState(playErrorTextView, VISIBLE);
+        setViewShowState(mLoadingProgressBar, INVISIBLE);
+        setViewShowState(mThumbImageViewLayout, INVISIBLE);
+        setViewShowState(mBottomProgressBar, INVISIBLE);
+        setViewShowState(mLockScreen, (mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
+
+        if (mLoadingProgressBar instanceof ENDownloadView) {
+            ((ENDownloadView) mLoadingProgressBar).reset();
+        }
+        updateStartImage();
+
+    }
+
+    @Override
+    protected void changeUiToPreparingShow() {
+        super.changeUiToPreparingShow();
+        setViewShowState(playErrorTextView, GONE);
+    }
+
+    @Override
+    protected void changeUiToPlayingShow() {
+        super.changeUiToPlayingShow();
+        setViewShowState(playErrorTextView, GONE);
+    }
+
+    @Override
+    protected void changeUiToPauseShow() {
+        super.changeUiToPauseShow();
+        setViewShowState(playErrorTextView, GONE);
+    }
+
+    @Override
+    protected void changeUiToPlayingBufferingShow() {
+        super.changeUiToPlayingBufferingShow();
+        setViewShowState(playErrorTextView, GONE);
+    }
+
+    @Override
+    protected void changeUiToCompleteShow() {
+        super.changeUiToCompleteShow();
+        setViewShowState(playErrorTextView, GONE);
+    }
+
+    @Override
+    protected void changeUiToPrepareingClear() {
+        super.changeUiToPrepareingClear();
+        setViewShowState(playErrorTextView, GONE);
+    }
+
+    @Override
+    protected void changeUiToPlayingClear() {
+        super.changeUiToPlayingClear();
+        setViewShowState(playErrorTextView, GONE);
+    }
+
+    @Override
+    protected void changeUiToPauseClear() {
+        super.changeUiToPauseClear();
+        setViewShowState(playErrorTextView, GONE);
+    }
+
+    @Override
+    protected void changeUiToPlayingBufferingClear() {
+        super.changeUiToPlayingBufferingClear();
+        setViewShowState(playErrorTextView, GONE);
+    }
+
+    @Override
+    protected void changeUiToClear() {
+        super.changeUiToClear();
+        setViewShowState(playErrorTextView, GONE);
+    }
+
+    @Override
+    protected void changeUiToCompleteClear() {
+        super.changeUiToCompleteClear();
+        setViewShowState(playErrorTextView, GONE);
     }
 }

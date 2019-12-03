@@ -76,4 +76,6 @@
     <string name="mine_history">瀏覽歷史</string>
     <string name="mine_notify">消息通知</string>
     <string name="film_play">視頻</string>
+
+    <string name="play_error_tips">直播斷開，請刷新或切換直播源</string>
 </resources>

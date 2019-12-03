@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
@@ -32,6 +31,7 @@ import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.wangcj.common.widget.TitleBar;
@@ -204,7 +204,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             @Override
             public void onClickStartError(String url, Object... objects) {
                 super.onClickStartError(url, objects);
-                Toast.makeText(GameDetailActivity.this,"播放出錯",Toast.LENGTH_SHORT).show();
+               // Toast.makeText(GameDetailActivity.this,"播放出錯",Toast.LENGTH_SHORT).show();
             }
 
             @Override
