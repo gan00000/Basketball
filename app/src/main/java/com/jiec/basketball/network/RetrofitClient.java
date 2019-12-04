@@ -19,7 +19,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 public class RetrofitClient {
 
 
-    public static String HOST_NAME = "http://www.ballgametime.com";
+    public static String HOST_NAME = "http://app.ballgametime.com/";
 
     private static final RetrofitClient instance = new RetrofitClient();
 

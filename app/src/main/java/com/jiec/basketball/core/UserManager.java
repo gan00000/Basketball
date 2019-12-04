@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
+import com.gan.ctools.tool.DeviceUtil;
 import com.jiec.basketball.R;
 import com.jiec.basketball.bean.UserInfoBean;
 import com.jiec.basketball.dao.UserDao;
@@ -22,6 +23,7 @@ import com.linecorp.linesdk.api.LineApiClient;
 import com.linecorp.linesdk.api.LineApiClientBuilder;
 import com.wangcj.common.utils.ToastUtil;
 
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -134,8 +136,16 @@ public class UserManager {
      * @param token  facebook或者line授权token
      */
     public void login(int type, String token) {
+
+        if (StringUtils.isEmpty(token)){
+            ToastUtil.showMsg(R.string.login_fail);
+            return;
+        }
         BallPreferencesUtils.getInstance().setLoginType(type);
         UserApi userApi = RetrofitClient.getInstance().create(UserApi.class);
+        if (StringUtils.isEmpty(mDeviceToke)){
+            mDeviceToke = DeviceUtil.getDeviceType() + "-" + DeviceUtil.getAndroidId(BallApplication.getContext());
+        }
         userApi.login(type, token, mDeviceToke, 2)
                 .compose(new NetTransformer<>())
                 .subscribe(new NetSubscriber<LoginResult>() {
@@ -211,7 +221,7 @@ public class UserManager {
     private String getFacebookAccessToken() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
-        if (accessToken != null) {
+        if (accessToken != null && !accessToken.isExpired()) {
             return accessToken.getToken();
         }
 

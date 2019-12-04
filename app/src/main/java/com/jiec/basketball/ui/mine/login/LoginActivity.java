@@ -55,8 +55,7 @@ public class LoginActivity extends Activity {
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                UserManager.instance().login(
-                        UserApi.LOGIN_TYPE_FACEBOOK, loginResult.getAccessToken().getToken());
+                UserManager.instance().login(UserApi.LOGIN_TYPE_FACEBOOK, loginResult.getAccessToken().getToken());
                 finish();
             }
 

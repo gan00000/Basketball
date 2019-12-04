@@ -457,6 +457,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                                     getAllComment();
                                 } else {
                                     hotAdapter.addData(hotList);
+                                    hotAdapter.loadMoreComplete();
                                 }
                             }
 
@@ -497,18 +498,22 @@ public class DetaillWebActivity extends BaseWebActivity {
                             }
 
                             allAdapter.setEnableLoadMore(true);
+                            //默认第一次加载会进入回调，如果不需要可以配置：
+                            //mQuickAdapter.disableLoadMoreIfNotFullPage();
+
                             allAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
                                 @Override
                                 public void onLoadMoreRequested() {
                                     isAllRefresh = false;
                                     getAllComment();
                                 }
-                            }, rvHot);
+                            }, rvAll);
 
                         }else{
 //                            LogUtils.e("加載更多所有評論555");
                             if(isAllRefresh){
                                 allAdapter.setNewData(commentList);
+//                                allAdapter.disableLoadMoreIfNotFullPage();
                                 tvEmptyComment.setVisibility(View.GONE);
                                 llComment.setVisibility(View.VISIBLE);
                             }else {
@@ -516,7 +521,9 @@ public class DetaillWebActivity extends BaseWebActivity {
                                     allAdapter.loadMoreEnd();
                                 } else {
                                     allAdapter.addData(commentList);
+                                    allAdapter.loadMoreComplete();
                                 }
+
                             }
 
                         }
