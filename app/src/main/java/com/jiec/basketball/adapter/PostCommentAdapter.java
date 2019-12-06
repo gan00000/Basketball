@@ -2,18 +2,13 @@ package com.jiec.basketball.adapter;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-
-import java.util.List;
-
 import com.chaychan.library.ExpandableLinearLayout;
 import com.jiec.basketball.R;
 import com.jiec.basketball.core.BallApplication;
-import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.response.NewsCommentResponse;
 import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean;
 import com.jiec.basketball.network.NetSubscriber;
@@ -28,6 +23,8 @@ import com.jiec.basketball.utils.InputCheckUtils;
 import com.jiec.basketball.widget.UserReplyView;
 import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.CircleSImageView;
+
+import java.util.List;
 
 /**
  * Created by Deng
@@ -52,7 +49,7 @@ public class PostCommentAdapter extends BaseQuickAdapter<CommentsBean, BaseViewH
         baseViewHolder.setText(R.id.tv_name, hisBean.getComment_author())
                 .setText(R.id.tv_time, AppUtil.getCommentTime(hisBean.getComment_date()))
                 .setText(R.id.tv_comment, hisBean.getComment_content())
-                .setText(R.id.tv_reply_num, hisBean.getTotal_reply()+"回復")
+                .setText(R.id.tv_reply_num, hisBean.getTotal_reply()+"回覆")
                 .setText(R.id.tv_like, InputCheckUtils.compareIsEqual(hisBean.getTotal_like(), "0") ? "讃" : hisBean.getTotal_like())
                 .addOnClickListener(R.id.tv_reply);
 

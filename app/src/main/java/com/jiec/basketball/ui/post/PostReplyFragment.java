@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,8 @@ import com.jiec.basketball.R;
 import com.jiec.basketball.adapter.PostCommentAdapter;
 import com.jiec.basketball.base.BaseUIFragment;
 import com.jiec.basketball.core.BallApplication;
-import com.jiec.basketball.core.UserManager;
 import com.jiec.basketball.entity.response.NewsCommentResponse;
+import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.NewsApi;
@@ -34,14 +33,12 @@ import com.jiec.basketball.network.base.CommResponse;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.wangcj.common.utils.ToastUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import com.jiec.basketball.entity.response.NewsCommentResponse.ResultBean.CommentsBean;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.jiec.basketball.core.BallApplication.userInfo;
 
@@ -136,7 +133,7 @@ public class PostReplyFragment extends BaseUIFragment  {
 
                 mLayoutWriteComment.setVisibility(View.VISIBLE);
                 mEtComment.setText("");
-                mEtComment.setHint("回復  "+commentsBean.getComment_author());
+                mEtComment.setHint("回覆  "+commentsBean.getComment_author());
                 mEtComment.setFocusableInTouchMode(true);
                 mEtComment.setFocusable(true);
                 mEtComment.requestFocus();
@@ -164,7 +161,7 @@ public class PostReplyFragment extends BaseUIFragment  {
 
                 mLayoutWriteComment.setVisibility(View.VISIBLE);
                 mEtComment.setText("");
-                mEtComment.setHint("回復  "+commentsBean.getComment_author());
+                mEtComment.setHint("回覆  "+commentsBean.getComment_author());
                 mEtComment.setFocusableInTouchMode(true);
                 mEtComment.setFocusable(true);
                 mEtComment.requestFocus();
@@ -347,7 +344,7 @@ public class PostReplyFragment extends BaseUIFragment  {
                             allAdapter.addData(commentsBean);
 //                            rvAll.scrollToPosition(allAdapter.getItemCount()-1);
                         }else {
-                            ToastUtil.showMsg("回復成功");
+                            ToastUtil.showMsg("回覆成功");
                             List<CommentsBean.ReplyBean> replyList = null;
                             CommentsBean.ReplyBean replyBean = new CommentsBean.ReplyBean();
                             replyBean.setPost_id(postId);

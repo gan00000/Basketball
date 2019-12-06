@@ -81,7 +81,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="6dp"
         android:layout_toRightOf="@id/tv_time"
-        android:text="回復" />
+        android:text="回覆" />
 
     <TextView
         android:id="@+id/tv_reply_num"
@@ -92,7 +92,7 @@
         android:layout_marginTop="6dp"
         android:layout_toRightOf="@id/tv_reply"
         android:textColor="@color/blue"
-        tools:text="10回復" />
+        tools:text="10回覆" />
 
     <com.chaychan.library.ExpandableLinearLayout
         android:id="@+id/ll_reply"
@@ -108,7 +108,7 @@
         android:showDividers="middle"
         app:useDefaultBottom="true"
         app:defaultItemCount="3"
-        app:expandText="展開更多回復"
+        app:expandText="展開更多回覆"
         app:hideText="點擊收起"
         android:orientation="vertical">
 

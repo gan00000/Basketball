@@ -100,7 +100,7 @@
         android:textSize="@dimen/sp_12"
         android:layout_marginLeft="8dp"
         android:layout_toRightOf="@id/tv_time"
-        android:text="回復" />
+        android:text="回覆" />
 
 
         <TextView
@@ -114,7 +114,7 @@
             android:textSize="@dimen/sp_12"
             android:visibility="gone"
             android:gravity="center"
-            android:text="展開更多回復" />
+            android:text="展開更多回覆" />
 
 
 </RelativeLayout>

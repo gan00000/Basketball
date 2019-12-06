@@ -34,7 +34,7 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="15dp"
                     android:visibility="gone"
-                    android:text="熱門回復"
+                    android:text="熱門回覆"
                     android:textStyle="bold" />
 
                 <android.support.v7.widget.RecyclerView
@@ -54,7 +54,7 @@
                     android:background="#dfdbdb"
                     android:gravity="center_vertical"
                     android:paddingLeft="15dp"
-                    android:text="全部回復"
+                    android:text="全部回覆"
                     android:textStyle="bold" />
 
                 <android.support.v7.widget.RecyclerView
@@ -117,7 +117,7 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:gravity="center"
-                android:text="發布"
+                android:text="發佈"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/sp_14" />
 

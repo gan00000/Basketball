@@ -51,7 +51,7 @@ public class NotifyAdapter extends BaseListAdapter<NotifyResponse.Result.Notific
                 }else if(InputCheckUtils.compareIsEqual(bean.getType(), "reply")){
                     //評論回復消息通知
                     ((ItemViewHolder) holder).mTitle.setText(bean.getDisplay_name()
-                            + "回復了你的評論："+bean.getComment_content());
+                            + "回覆了你的評論："+bean.getComment_content());
                     ((ItemViewHolder) holder).tvReplyContent.setVisibility(View.VISIBLE);
                     ((ItemViewHolder) holder).tvReplyContent.setText(bean.getReply_msg());
                 }

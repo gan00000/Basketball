@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseActivity;
-import com.jiec.basketball.ui.mine.collection.CollectionActivity;
 import com.wangcj.common.widget.TitleBar;
 
 import butterknife.BindView;
@@ -36,7 +35,7 @@ public class PostReplyActivity extends BaseActivity {
         setContentView(R.layout.activity_fragment);
         ButterKnife.bind(this);
         postId = getIntent().getStringExtra("postId");
-        mTitleBar.setTitle("評論回復");
+        mTitleBar.setTitle("評論回覆");
 
         PostReplyFragment fragment = (PostReplyFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.layout_fragment);

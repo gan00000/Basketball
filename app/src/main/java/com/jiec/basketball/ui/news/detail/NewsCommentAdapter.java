@@ -21,7 +21,6 @@ import com.jiec.basketball.utils.AppUtil;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.jiec.basketball.utils.InputCheckUtils;
-import com.jiec.basketball.widget.UserReplyView;
 import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.CircleSImageView;
 
@@ -124,7 +123,7 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ItemViewHolder) holder).mTvComment.setText(news.getComment_content());
             ((ItemViewHolder) holder).mTvTime.setText(AppUtil.getCommentTime(news.getComment_date()));
             ((ItemViewHolder) holder).mTvLike.setText( InputCheckUtils.compareIsEqual(news.getTotal_like(), "0") ? "讃" : "（"+news.getTotal_like()+"）");
-            ((ItemViewHolder) holder).tvReplyNum.setText(news.getTotal_reply()+"回復");
+            ((ItemViewHolder) holder).tvReplyNum.setText(news.getTotal_reply()+"回覆");
 
             if (news.getMy_like() == 0) {
                 ((ItemViewHolder) holder).mIvLike.setImageResource(R.drawable.icon_great_normal);

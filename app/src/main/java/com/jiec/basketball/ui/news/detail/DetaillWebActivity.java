@@ -271,7 +271,7 @@ public class DetaillWebActivity extends BaseWebActivity {
 
         mLayoutWriteComment.setVisibility(View.VISIBLE);
         mEtComment.setText("");
-        mEtComment.setHint("回復  "+replyToUser);
+        mEtComment.setHint("回覆  "+replyToUser);
         mEtComment.setFocusableInTouchMode(true);
         mEtComment.setFocusable(true);
         mEtComment.requestFocus();
@@ -640,7 +640,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                             mNestedScrollView.scrollTo(0, llComment.getTop());
                             getAllComment();
                         }else {
-                            ToastUtil.showMsg("回復成功");
+                            ToastUtil.showMsg("回覆成功");
                             replySuccess = true;
                             switch (commentType){
                                 case 2:
