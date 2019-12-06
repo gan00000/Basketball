@@ -243,6 +243,7 @@ public class DetaillWebActivity extends BaseWebActivity {
 
     }
 
+    private int commentParentPosition = -1;
     /**
      * 显示回复子评论编辑试图
      * @param commentType
@@ -251,9 +252,10 @@ public class DetaillWebActivity extends BaseWebActivity {
      */
     private void showReplyEdit(int commentType, int parentPosition, int childPosition){
         this.commentType = commentType;
+        commentParentPosition = parentPosition;
         CommentsBean commentsBean ;
         String replyToUser;
-        if(commentType == 3){
+        if(commentType == 3){//全部
             commentsBean = allAdapter.getItem(parentPosition);
         }else {
             commentsBean = hotAdapter.getItem(parentPosition);
@@ -345,6 +347,18 @@ public class DetaillWebActivity extends BaseWebActivity {
     private void updateBottomInfo() {
         if (totalComment > 0) {
             mTvCommentNum.setText("" + mNewsBean.getTotal_comment());
+        } else {
+            mTvCommentNum.setVisibility(View.GONE);
+        }
+
+        mIsCollect = mNewsBean.getMy_save() > 0;
+        updateCollectState();
+    }
+
+    private void updateCommentNum(int commentNum) {
+        if (commentNum > 0) {
+            mTvCommentNum.setVisibility(View.VISIBLE);
+            mTvCommentNum.setText("" + commentNum);
         } else {
             mTvCommentNum.setVisibility(View.GONE);
         }
@@ -473,6 +487,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                 });
     }
 
+    private int allNum = 0;
 
     /**
      * 獲取所有評論
@@ -518,7 +533,26 @@ public class DetaillWebActivity extends BaseWebActivity {
                                 llComment.setVisibility(View.VISIBLE);
                             }else {
                                 if (commentList.size() < pageSize) {
+                                    allAdapter.addData(commentList);
                                     allAdapter.loadMoreEnd();
+//                                    mTvCommentNum.setText();
+                                    List<CommentsBean> mmmCommentsBeans = allAdapter.getData();
+                                    if (mmmCommentsBeans != null && !mmmCommentsBeans.isEmpty()) {
+                                        allNum = mmmCommentsBeans.size();
+                                        for (CommentsBean commentsBean : mmmCommentsBeans) {
+                                            if (commentsBean.getReply() != null && !commentsBean.getReply().isEmpty()){
+                                                allNum = allNum + commentsBean.getReply().size();
+                                            }
+                                        }
+                                    }
+                                    updateCommentNum(allNum);
+                                    allNum = 0;
+//                                    if (replySuccess && commentParentPosition > 0){//回復成功跳轉到相應評論位置
+//                                        moveToPosition((LinearLayoutManager)rvAll.getLayoutManager(),rvAll,commentParentPosition);
+//                                        replySuccess = false;
+//                                        commentParentPosition = -1;
+//                                    }
+
                                 } else {
                                     allAdapter.addData(commentList);
                                     allAdapter.loadMoreComplete();
@@ -586,6 +620,7 @@ public class DetaillWebActivity extends BaseWebActivity {
         }
     }
 
+    private boolean replySuccess = false;
 
     /**
      * 發表評論
@@ -606,6 +641,7 @@ public class DetaillWebActivity extends BaseWebActivity {
                             getAllComment();
                         }else {
                             ToastUtil.showMsg("回復成功");
+                            replySuccess = true;
                             switch (commentType){
                                 case 2:
                                     isHotRefresh = true;
@@ -719,6 +755,33 @@ public class DetaillWebActivity extends BaseWebActivity {
         super.onDestroy();
         mLayoutWriteComment.setVisibility(View.GONE);
         EventBusUtils.unRegisteredEvent(this);
+    }
+
+
+    /**
+     * RecyclerView 移动到当前位置，
+     *
+     * @param manager   设置RecyclerView对应的manager
+     * @param mRecyclerView  当前的RecyclerView
+     * @param n  要跳转的位置
+     */
+    public void moveToPosition(LinearLayoutManager manager, RecyclerView mRecyclerView, int n) {
+
+
+        int firstItem = manager.findFirstVisibleItemPosition();
+        int lastItem = manager.findLastVisibleItemPosition();
+
+//        int top = mRecyclerView.getChildAt(n).getTop();
+//        manager.scrollToPositionWithOffset(n,0);//        manager.scrollToPosition(n);
+//        if (n <= firstItem) {
+//            mRecyclerView.scrollToPosition(n);
+//        } else if (n <= lastItem) {
+//            int top = mRecyclerView.getChildAt(n - firstItem).getTop();
+//            mRecyclerView.scrollBy(0, top);
+//        } else {
+//            mRecyclerView.scrollToPosition(n);
+//        }
+
     }
 
 }
