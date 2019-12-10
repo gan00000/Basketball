@@ -63,7 +63,9 @@ public class BaseActivity extends RxAppCompatActivity {
         if (mLoadingDialog == null) {
             mLoadingDialog = new LoadingDialog(this, text);
         }
-
+        if (mLoadingDialog.isShowing()){
+            return;
+        }
         mLoadingDialog.setLoadingTips(text);
         mLoadingDialog.show();
     }

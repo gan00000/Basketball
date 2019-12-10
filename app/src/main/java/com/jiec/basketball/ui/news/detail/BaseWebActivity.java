@@ -3,6 +3,7 @@ package com.jiec.basketball.ui.news.detail;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
@@ -13,10 +14,14 @@ import android.webkit.WebViewClient;
 
 import com.gan.ctools.other.MJavascriptInterface;
 import com.jiec.basketball.base.BaseActivity;
+import com.jiec.basketball.utils.Lg;
 import com.wangcj.common.utils.LogUtil;
 import com.wangcj.common.utils.ToastUtil;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -112,12 +117,30 @@ public class BaseWebActivity extends BaseActivity {
         ToastUtil.showMsg("加载页面失败");
     }
 
+    @SuppressLint("StaticFieldLeak")
     protected void parseHtml(final String urlpath) {
-        new Thread(new Runnable() {
+
+        new AsyncTask<Void,Void,String>(){
+
             @Override
-            public void run() {
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showLoading();
+            }
+
+            @Override
+            protected void onPostExecute(String mString) {
+                super.onPostExecute(mString);
+                hideLoading();
+                if (StringUtils.isNotEmpty(mString)) {
+                    loadData(urlpath, mString);
+                }
+            }
+
+            @Override
+            protected String doInBackground(Void... voids) {
+
                 try {
-                    showLoading();
                     URL url = new URL(urlpath);
                     URLConnection URLconnection = url.openConnection();
                     HttpURLConnection httpConnection = (HttpURLConnection) URLconnection;
@@ -136,24 +159,61 @@ public class BaseWebActivity extends BaseActivity {
                         content = processData(content);
 
                         final String finalContent = content;
-//                        LogUtils.e("HTML： " + finalContent);
-//                        String sdCardDir = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                        File saveFile = new File(sdCardDir, "news.txt");
-//                        FileOutputStream outStream = new FileOutputStream(saveFile);
-//                        outStream.write(finalContent.getBytes());
-//                        outStream.close();
+                        return finalContent;
 
-                        loadData(urlpath, finalContent);
-                    } else {
+                    }else {
                         ToastUtil.showMsg("失败");
                     }
 
-
-                } catch (Exception e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
+                return null;
             }
-        }).start();
+
+        }.execute();
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    showLoading();
+//                    URL url = new URL(urlpath);
+//                    URLConnection URLconnection = url.openConnection();
+//                    HttpURLConnection httpConnection = (HttpURLConnection) URLconnection;
+//                    httpConnection.setRequestProperty("Accept-Charset", "UTF-8");
+//                    int responseCode = httpConnection.getResponseCode();
+//                    if (responseCode == HttpURLConnection.HTTP_OK) {
+//                        InputStream in = httpConnection.getInputStream();
+//                        InputStreamReader isr = new InputStreamReader(in, "UTF-8");
+//                        BufferedReader bufr = new BufferedReader(isr);
+//                        String content = "";
+//                        String temp;
+//                        while ((temp = bufr.readLine()) != null) {
+//                            content += temp;
+//                        }
+//                        bufr.close();
+//                        content = processData(content);
+//
+//                        final String finalContent = content;
+////                        LogUtils.e("HTML： " + finalContent);
+////                        String sdCardDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+////                        File saveFile = new File(sdCardDir, "news.txt");
+////                        FileOutputStream outStream = new FileOutputStream(saveFile);
+////                        outStream.write(finalContent.getBytes());
+////                        outStream.close();
+//
+//                        loadData(urlpath, finalContent);
+//                    } else {
+//                        ToastUtil.showMsg("失败");
+//                    }
+//
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
     }
 
 
@@ -161,9 +221,10 @@ public class BaseWebActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                hideLoading();
-                if (mWebView != null){
 
+                if (mWebView != null){
+//                    showLoading();
+                    Lg.i("loadDataWithBaseURL start...");
 //                    String[] imageUrls = HtmlUtil.returnImageUrlsFromHtml(finalContent);
                     mWebView.addJavascriptInterface(new MJavascriptInterface(BaseWebActivity.this,null), "imagelistener");
                     mWebView.loadDataWithBaseURL(url, finalContent, "text/html", "UTF-8", null);
@@ -218,6 +279,7 @@ public class BaseWebActivity extends BaseActivity {
         public void onReceivedError(WebView view, int errorCode, String description,
                                     String failingUrl) {
             LogUtil.d(TAG, "onReceivedError()---->" + errorCode);
+//            hideLoading();
             mLoadPageError = true;
         }
 
@@ -227,6 +289,7 @@ public class BaseWebActivity extends BaseActivity {
             LogUtil.d(TAG, "onPageStarted()---开始加载页面");
             view.getSettings().setJavaScriptEnabled(true);
             super.onPageStarted(view, url, favicon);
+//            showLoading();
         }
 
         @Override
@@ -242,6 +305,7 @@ public class BaseWebActivity extends BaseActivity {
             }
             super.onPageFinished(view, url);
             addImageClickListener(view);
+//            hideLoading();
         }
 
 
@@ -296,7 +360,7 @@ public class BaseWebActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        hideLoading();
         mWebView.stopLoading();
         mWebView.removeAllViews();
         mWebView.destroy();

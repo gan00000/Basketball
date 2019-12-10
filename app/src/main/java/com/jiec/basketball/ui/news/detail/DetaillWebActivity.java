@@ -316,6 +316,9 @@ public class DetaillWebActivity extends BaseWebActivity {
         tvViews.setText(mNewsBean.getSumViews() + "");
         mUrl = mNewsBean.getUrl();
         parseHtml(mUrl);
+//        this.mWebView.loadUrl(mUrl);
+
+//        loadData(mUrl, processData(mNewsBean.getContent()));
         loadTopPosts();
         updateBottomInfo();
         getHotComment();

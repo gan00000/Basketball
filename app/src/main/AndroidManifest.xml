@@ -43,13 +43,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
 
         <activity
             android:name=".ui.splash.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,73 +60,72 @@
 
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <activity
             android:name=".ui.mine.setting.SettingActivity"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".ui.mine.setting.AboutActivity"
-            android:screenOrientation="portrait" />
+            />
         <activity
             android:name=".ui.mine.setting.CustomerServiceActivity"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".ui.news.detail.DetaillWebActivity"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".ui.data.player.PlayerDataDetailActivity"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".ui.data.team.TeamDataDetailActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.mine.MineActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.game.detail.GameDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|smallestScreenSize"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.mine.login.LoginActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.mine.UserInfoActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.mine.collection.CollectionActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.mine.comment.CommentActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.mine.like.LikeActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.mine.history.HistoryActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.mine.notify.NotifyActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.youtube.PlayerViewDemoActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.mine.HeadActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <service android:name=".service.MyFirebaseMessagingService">
             <intent-filter>
@@ -164,23 +163,23 @@
         <activity
             android:name=".ytpa.YouTubePlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
+
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <activity
             android:name=".ui.film.FilmPlayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name=".ui.post.PostReplyActivity"
-            android:screenOrientation="portrait" />
+             />
 
         <activity
             android:name="com.gan.ctools.activity.PhotoBrowserActivity"
             android:theme="@android:style/Animation.Dialog"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
+            />
 
         <!--Need Your Google API Key-->
         <meta-data
@@ -197,7 +196,7 @@
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <provider
