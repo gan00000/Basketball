@@ -55,6 +55,7 @@ public class BaseWebActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT <= 10) {
             mWebView.setVerticalScrollBarEnabled(false);
         }
+        LogUtil.setDebug(true);
 
         mWebSettings = mWebView.getSettings();
         mWebSettings.setJavaScriptEnabled(true);
@@ -308,20 +309,19 @@ public class BaseWebActivity extends BaseActivity {
 //            hideLoading();
         }
 
+    }
 
-        private void addImageClickListener(WebView webView) {
-            webView.loadUrl("javascript:(function(){" +
-                    "var objs = document.getElementsByTagName(\"img\"); " +
-                    "for(var i=0;i<objs.length;i++)  " +
-                    "{"
-                    + "    objs[i].onclick=function()  " +
-                    "    {  "
-                    + "        window.imagelistener.openImage(this.src);  " +//通过js代码找到标签为img的代码块，设置点击的监听方法与本地的openImage方法进行连接
-                    "    }  " +
-                    "}" +
-                    "})()");
-        }
-
+    private void addImageClickListener(WebView webView) {
+        webView.loadUrl("javascript:(function(){" +
+                "var objs = document.getElementsByTagName(\"img\"); " +
+                "for(var i=0;i<objs.length;i++)  " +
+                "{"
+                + "    objs[i].onclick=function()  " +
+                "    {  "
+                + "        window.imagelistener.openImage(this.src);  " +//通过js代码找到标签为img的代码块，设置点击的监听方法与本地的openImage方法进行连接
+                "    }  " +
+                "}" +
+                "})()");
     }
 
     /**
@@ -332,6 +332,9 @@ public class BaseWebActivity extends BaseActivity {
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
             LogUtil.d(TAG, "onProgressChanged()--->" + newProgress);
+            if (newProgress > 70){
+                addImageClickListener(view);
+            }
         }
 
         // 常用出错提示语
