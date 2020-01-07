@@ -411,9 +411,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      * 弹出切换清晰度
      */
     private void showSwitchDialog() {
-        if (!mHadPlay) {
-            return;
-        }
+//        if (!mHadPlay) {
+//            return;
+//        }
         mSwitchSize.setVisibility(GONE);
         switchLayout.setVisibility(VISIBLE);
 
