@@ -6,10 +6,8 @@ import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.constant.TimeConstants;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.jiec.basketball.core.ServerTimeManager;
-import com.wangcj.common.utils.LogUtil;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,7 +15,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -193,7 +190,10 @@ public class AppUtil {
     public static String name(String name) {
         if (!TextUtils.isEmpty(name) && name.contains(" ")) {
             String[] names = name.split(" ");
-            return names[0].substring(0, 1) + "." + names[1];
+            if (names.length >= 2){
+                return names[0].substring(0, 1) + "." + names[1];
+            }
+            return names[0];
         }
         return name;
     }
