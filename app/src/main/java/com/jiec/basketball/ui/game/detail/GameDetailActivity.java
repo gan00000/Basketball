@@ -31,7 +31,6 @@ import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.wangcj.common.widget.TitleBar;
@@ -248,6 +247,29 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         liveThumdLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                /*for (int i = 0; i < 3; i++) {
+
+                    String name = "直播" + (i + 1);
+                    String videoUrl = "";
+                    if (i == 0){
+                        videoUrl = "http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8";
+                    }else if (i == 1){
+                        videoUrl = "http://m.567it.com/jade.m3u8";
+                    }else {
+                        videoUrl = "http://ivi.bupt.edu.cn/hls/cctv2hd.m3u8";
+                    }
+                    SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, videoUrl);
+                    switchVideoModels.add(switchVideoModel);
+
+                }
+
+                if (switchVideoModels.isEmpty()){
+                    return;
+                }
+                gameNeedPlay = true;
+                livePlayer.setUp(switchVideoModels, false, "");*/
+
                 if (gameNeedPlay){
 
                     liveThumdLayout.setVisibility(View.GONE);
