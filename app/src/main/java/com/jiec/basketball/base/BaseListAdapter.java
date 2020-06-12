@@ -1,7 +1,7 @@
 package com.jiec.basketball.base;
 
-import android.support.annotation.StringRes;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.StringRes;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jiec.basketball.core.BallApplication;
 import com.jiec.basketball.utils.EmptyUtils;

@@ -4,9 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.flyco.tablayout.CommonTabLayout;

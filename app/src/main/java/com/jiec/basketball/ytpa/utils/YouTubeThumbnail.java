@@ -1,6 +1,6 @@
 package com.jiec.basketball.ytpa.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.jiec.basketball.ytpa.enums.Quality;
 

@@ -28,13 +28,13 @@
                 android:orientation="vertical"
                 android:paddingTop="10dp">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycle_view_new"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="vertical">
 
-                </android.support.v7.widget.RecyclerView>
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <com.wangcj.common.widget.PressTextView
                     android:id="@+id/load_more_new"
@@ -55,13 +55,13 @@
                 android:orientation="vertical"
                 android:paddingTop="10dp">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycle_view_move"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="vertical">
 
-                </android.support.v7.widget.RecyclerView>
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <com.wangcj.common.widget.PressTextView
                     android:id="@+id/load_more_move"
@@ -82,13 +82,13 @@
                 android:orientation="vertical"
                 android:paddingTop="10dp">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycle_view_pic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="vertical">
 
-                </android.support.v7.widget.RecyclerView>
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <com.wangcj.common.widget.PressTextView
                     android:id="@+id/load_more_pic"
@@ -109,13 +109,13 @@
                 android:orientation="vertical"
                 android:paddingTop="10dp">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycle_view_teach"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="vertical">
 
-                </android.support.v7.widget.RecyclerView>
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <com.wangcj.common.widget.PressTextView
                     android:id="@+id/load_more_teach"

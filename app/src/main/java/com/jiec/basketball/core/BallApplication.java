@@ -2,19 +2,17 @@ package com.jiec.basketball.core;
 
 import android.app.Notification;
 import android.content.Context;
-import android.content.Intent;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
+
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.google.gson.JsonObject;
 import com.jiec.basketball.R;
 import com.jiec.basketball.bean.UserInfoBean;
 import com.jiec.basketball.dao.UserDao;
@@ -22,19 +20,15 @@ import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
 import com.jiec.basketball.utils.ConstantUtils;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.EventBusEvent;
-import com.jiec.basketball.utils.EventBusUtils;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
-import com.umeng.message.inapp.UmengSplashMessageActivity;
 import com.wangcj.common.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Map;
 
