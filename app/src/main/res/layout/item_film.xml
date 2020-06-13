@@ -17,7 +17,7 @@
         android:textStyle="bold"
         android:maxLines="2"
         android:textColor="@color/black"
-        android:textSize="@dimen/sp_14" />
+        android:textSize="@dimen/sp_16" />
 
     <WebView
         android:id="@+id/wv_film"
