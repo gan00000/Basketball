@@ -94,7 +94,7 @@ public class GamePlayerData {
     private String lastname;
     private String firstname;
     private String jerseynumber;
-    @SmartColumn(id = 2, name = "位置")
+//    @SmartColumn(id = 2, name = "位置")
     private String position;
     private String height;
     private String weight;

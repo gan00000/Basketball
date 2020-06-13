@@ -2,13 +2,14 @@ package com.jiec.basketball.ui.game.detail.statistic;
 
 import android.os.Bundle;
 import android.os.Message;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
@@ -180,8 +181,8 @@ public class GameStatisticMainFragment extends BaseUIFragment implements GameSta
             removeUiMessage(MSG_REFRESH);
         }
 
-        mHomeFragment.setData(gameDataInfo.getMatchDetailsMaps().get(homeId));
-        mAwayFragment.setData(gameDataInfo.getMatchDetailsMaps().get(awayId));
+        mHomeFragment.setData(gameDataInfo.getMatchDetailsMaps().get(homeId), mIsLiving);
+        mAwayFragment.setData(gameDataInfo.getMatchDetailsMaps().get(awayId), mIsLiving);
 
 
         if (mOnDataUpdateListener != null) {

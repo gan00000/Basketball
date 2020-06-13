@@ -36,7 +36,7 @@
             android:background="@drawable/live_player_bg"
             >
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -64,6 +64,37 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_25" />
 
+            </LinearLayout>-->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:paddingTop="30dp"
+                android:gravity="center">
+
+
+                <ImageView
+                    android:id="@+id/iv_team_2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:padding="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/img_default_team" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:text="(客隊)"
+                    android:id="@+id/tv_team_name_2"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_25" />
+
+
             </LinearLayout>
 
 
@@ -75,7 +106,7 @@
                >
 
                 <TextView
-                    android:id="@+id/tv_team_home_score"
+                    android:id="@+id/tv_team_away_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -85,7 +116,7 @@
 
 
                 <TextView
-                    android:id="@+id/tv_team_away_score"
+                    android:id="@+id/tv_team_home_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -97,6 +128,39 @@
 
 
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:paddingTop="30dp"
+                android:id="@+id/tv_team_layout"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_team_1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:padding="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/img_default_team" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:text="(主隊)"
+                    android:id="@+id/tv_team_name_1"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_25" />
+
+            </LinearLayout>
+
+
+           <!-- <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -127,7 +191,7 @@
                     android:textSize="@dimen/sp_25" />
 
 
-            </LinearLayout>
+            </LinearLayout>-->
 
 
             <LinearLayout
