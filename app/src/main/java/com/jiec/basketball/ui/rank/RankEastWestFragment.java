@@ -1,11 +1,13 @@
 package com.jiec.basketball.ui.rank;
 
+import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
@@ -13,6 +15,7 @@ import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
+import com.bin.david.form.data.format.draw.TextImageDrawFormat;
 import com.bin.david.form.data.format.grid.BaseGridFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
@@ -95,6 +98,8 @@ public class RankEastWestFragment extends Fragment {
         initTableview(mStTeamRankEast);
         initTableview(mStTeamRankWest);
     }
+
+    TextImageDrawFormat mTextImageDrawFormat;
 
     private void initTableview(SmartTable smartTable) {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(getContext(), 15));

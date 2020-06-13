@@ -42,9 +42,9 @@ public class TernBean {
     private String teamId;
     private String division;
     private String pts;
-    @SmartColumn(id = 3, name = "勝")
+//    @SmartColumn(id = 3, name = "勝")
     private String wins;
-    @SmartColumn(id = 4, name = "負")
+//    @SmartColumn(id = 4, name = "負")
     private String losses;
     private String ptsagainst;
     private String gamesplayed;
@@ -72,7 +72,7 @@ public class TernBean {
 //    @SmartColumn(id = 7, name = "賽場")
     private String away;
 
-//    @SmartColumn(id = 8, name = "賽區")
+    @SmartColumn(id = 3, name = "勝-負")
     private String all;
 
 //    @SmartColumn(id = 9, name = "得分")

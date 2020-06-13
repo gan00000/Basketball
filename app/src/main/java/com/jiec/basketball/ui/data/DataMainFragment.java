@@ -1,11 +1,12 @@
 package com.jiec.basketball.ui.data;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.jiec.basketball.R;
@@ -50,8 +51,8 @@ public class DataMainFragment extends Fragment {
     private void initView(View view) {
         ViewPageAdapter adapter = new ViewPageAdapter(getChildFragmentManager());
         adapter.addFragment(PlayerDataFragment.newInstance(), getString(R.string.data_player));
-        adapter.addFragment(TeamDataFragment.newInstance(), getString(R.string.data_team));
         adapter.addFragment(RankEastWestFragment.newInstance(), getString(R.string.rank_zone_team));
+        adapter.addFragment(TeamDataFragment.newInstance(), getString(R.string.data_team));
         mViewpager.setAdapter(adapter);
         mViewpager.setOffscreenPageLimit(1);
         mTabLayout.setViewPager(mViewpager, adapter.getTitles());
