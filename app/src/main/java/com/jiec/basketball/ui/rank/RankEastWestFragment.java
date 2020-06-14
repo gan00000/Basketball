@@ -1,11 +1,18 @@
 package com.jiec.basketball.ui.rank;
 
-import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.drawable.PictureDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -20,11 +27,22 @@ import com.bin.david.form.data.format.grid.BaseGridFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.utils.DensityUtils;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.gan.table.KKTextImageDrawFormat;
 import com.jiec.basketball.R;
 import com.jiec.basketball.entity.EastWestTeamRank;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.RetrofitClient;
+import com.jiec.basketball.utils.svg.GlideApp;
+import com.jiec.basketball.utils.svg.SvgSoftwareLayerSetterInBitmap;
 import com.wangcj.common.utils.ToastUtil;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +65,9 @@ public class RankEastWestFragment extends Fragment {
     @BindView(R.id.st_team_rank_west)
     SmartTable mStTeamRankWest;
 
+    private Map<String,Bitmap> bitmapHashMap = new HashMap<>();
+    private EastWestTeamRank eastWestTeamRank;
+
 
     public static RankEastWestFragment newInstance() {
         RankEastWestFragment fragment = new RankEastWestFragment();
@@ -59,7 +80,6 @@ public class RankEastWestFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_east_west_rank, container, false);
         unbinder = ButterKnife.bind(this, view);
-
         initView();
         loadData();
 
@@ -84,9 +104,9 @@ public class RankEastWestFragment extends Fragment {
                     @Override
                     public void onNext(EastWestTeamRank commResponse) {
                         if (commResponse != null && commResponse.getStatus().equals("ok")) {
+                            eastWestTeamRank = commResponse;
                             mStTeamRankEast.setData(commResponse.getEastern());
                             mStTeamRankWest.setData(commResponse.getWestern());
-
                         } else {
                             ToastUtil.showMsg(R.string.network_error);
                         }
@@ -99,7 +119,7 @@ public class RankEastWestFragment extends Fragment {
         initTableview(mStTeamRankWest);
     }
 
-    TextImageDrawFormat mTextImageDrawFormat;
+    KKTextImageDrawFormat mTextImageDrawFormat;
 
     private void initTableview(SmartTable smartTable) {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(getContext(), 15));
@@ -108,7 +128,7 @@ public class RankEastWestFragment extends Fragment {
         smartTable.getConfig().setShowYSequence(false);
         smartTable.getConfig().setShowTableTitle(false);
         smartTable.getConfig().setHorizontalPadding(30);
-        smartTable.getConfig().setColumnTitleHorizontalPadding(30);
+        smartTable.getConfig().setColumnTitleHorizontalPadding(10);
 
         smartTable.getConfig().setContentGridStyle(new LineStyle() {
             @Override
@@ -117,12 +137,118 @@ public class RankEastWestFragment extends Fragment {
             }
         });
 
+        int imgSize = DensityUtils.dp2px(this.getContext(),16);
+        int pading = DensityUtils.dp2px(this.getContext(),4);
+        mTextImageDrawFormat = new KKTextImageDrawFormat<String>(imgSize,imgSize,TextImageDrawFormat.LEFT, pading) {
+
+//            @Override
+//            protected Context getContext() {
+//
+//                return RankEastWestFragment.this.getContext();
+//            }
+//
+//            @Override
+//            protected int getResourceID(String s, String value, int position) {
+//                return 0;
+//            }
+
+
+            @Override
+            protected String getFirstString(CellInfo<String> cellInfo, Paint paint) {
+                int row = cellInfo.row;
+
+                if (cellInfo.row < 8){
+                    paint.setColor(getContext().getResources().getColor(R.color.fd7f23));
+                    paint.setTypeface(Typeface.DEFAULT_BOLD);
+                }
+                paint.setTextAlign(Paint.Align.CENTER);
+                if (smartTable == mStTeamRankEast){
+                    return eastWestTeamRank.getEastern().get(row).getRank();
+                }
+                return eastWestTeamRank.getWestern().get(row).getRank();
+            }
+
+            @Override
+            protected Bitmap getBitmap(String s, String value, int position) { //position 行的行数
+
+                if (bitmapHashMap.get(value) != null){
+                    return bitmapHashMap.get(value);
+                }
+                String logoUrl = "";
+                if (eastWestTeamRank != null){
+
+//                    if (eastWestTeamRank.getEastern() != null && !eastWestTeamRank.getEastern().isEmpty()){
+//                        for (TernBean ternBean: eastWestTeamRank.getEastern()) {
+//                            if (ternBean.getCh_name().equals(value)){
+//                                logoUrl = ternBean.getTeam_logo();
+//                                break;
+//                            }
+//                        }
+//                    }
+//
+//                    if (StringUtils.isEmpty(logoUrl)){
+//
+//                        if (eastWestTeamRank.getWestern() != null && !eastWestTeamRank.getWestern().isEmpty()){
+//                            for (TernBean ternBean: eastWestTeamRank.getWestern()) {
+//                                if (ternBean.getCh_name().equals(value)){
+//                                    logoUrl = ternBean.getTeam_logo();
+//                                    break;
+//                                }
+//                            }
+//                        }
+//
+//                    }
+
+                    if (smartTable == mStTeamRankEast){
+                        logoUrl =eastWestTeamRank.getEastern().get(position).getTeam_logo();
+                    }else {
+                        logoUrl =eastWestTeamRank.getWestern().get(position).getTeam_logo();
+                    }
+
+                    if(StringUtils.isNotEmpty(logoUrl)) {
+
+                        RequestBuilder<PictureDrawable> requestBuilder = GlideApp.with(RankEastWestFragment.this)
+                                .as(PictureDrawable.class)
+                                .listener(new SvgSoftwareLayerSetterInBitmap());
+
+                        Uri uri = Uri.parse(logoUrl);
+                        requestBuilder.load(uri).into(new SimpleTarget<PictureDrawable>() {
+                            @Override
+                            public void onResourceReady(@NonNull PictureDrawable pictureDrawable, @Nullable Transition<? super PictureDrawable> transition) {
+
+                                Bitmap bitmap = Bitmap.createBitmap(pictureDrawable.getIntrinsicWidth(), pictureDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                                Canvas canvas = new Canvas(bitmap);
+                                canvas.drawPicture(pictureDrawable.getPicture());
+
+                                bitmapHashMap.put(value, bitmap);
+                                smartTable.invalidate();
+                            }
+                        });
+//                        Glide.with(RankEastWestFragment.this).asBitmap().load(logoUrl)
+//                                .apply(bitmapTransform(new CenterCrop())).into(new SimpleTarget<Bitmap>() {
+//                            @Override
+//                            public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+//                                bitmapHashMap.put(value, bitmap);
+//                                smartTable.invalidate();
+//                            }
+//                        });
+                    }
+
+                }
+                return bitmapHashMap.get(value);
+            }
+        };
+
 
         smartTable.getConfig().setTableTitleStyle(new FontStyle(getContext(), 18,
                 getResources().getColor(R.color.black)));
         ICellBackgroundFormat<CellInfo> backgroundFormat = new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
+
+                if (cellInfo.col== 0){
+                    cellInfo.column.setDrawFormat(mTextImageDrawFormat);
+                }
                 if (cellInfo.row % 2 == 0) {
                     //return ContextCompat.getColor(getActivity(), R.color.gray_light);
                     return TableConfig.INVALID_COLOR;

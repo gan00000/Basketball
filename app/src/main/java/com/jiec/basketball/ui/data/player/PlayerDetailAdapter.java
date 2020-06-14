@@ -1,14 +1,18 @@
 package com.jiec.basketball.ui.data.player;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jiec.basketball.R;
 import com.jiec.basketball.entity.AllPlayerData;
+import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.jiec.basketball.utils.NumberUtils;
 
 import java.util.ArrayList;
@@ -29,9 +33,11 @@ public class PlayerDetailAdapter extends RecyclerView.Adapter<PlayerDetailAdapte
     List<AllPlayerData.PlayersRankBean> mData = new ArrayList<>();
 
     int mType;
+    private  Context context;
 
-    public PlayerDetailAdapter(int type) {
+    public PlayerDetailAdapter(Context mContext, int type) {
         mType = type;
+        this.context = mContext;
     }
 
     public void setData(List<AllPlayerData.PlayersRankBean> data) {
@@ -57,6 +63,8 @@ public class PlayerDetailAdapter extends RecyclerView.Adapter<PlayerDetailAdapte
                 holder.mTvName.setText(playerInfo.getFirstname().substring(0, 1) + "." + playerInfo.getLastname());
                 holder.mTvTeam.setText(playerInfo.getTeamName());
                 holder.mTvValue.setText(NumberUtils.formatAmount(playerInfo.getType_avg()));
+
+                ImageLoaderUtils.display(this.context,holder.mPlayerIcon, playerInfo.getOfficialImagesrc(),R.drawable.img_default_head, R.drawable.img_default_head);
             }
         }
     }
@@ -75,6 +83,9 @@ public class PlayerDetailAdapter extends RecyclerView.Adapter<PlayerDetailAdapte
         TextView mTvTeam;
         @BindView(R.id.tv_value)
         TextView mTvValue;
+
+        @BindView(R.id.tv_player_icon)
+        ImageView mPlayerIcon;
 
         ItemViewHolder(View view) {
             super(view);

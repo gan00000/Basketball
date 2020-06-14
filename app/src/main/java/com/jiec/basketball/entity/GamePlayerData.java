@@ -111,6 +111,21 @@ public class GamePlayerData {
     @SmartColumn(id = 1, name = "球员", fixed = true, width = 80, minHeight = 40)
     private String name;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFg3pt() {
+        return fg3pt;
+    }
+
+    public void setFg3pt(String fg3pt) {
+        this.fg3pt = fg3pt;
+    }
 
     public String getGameId() {
         return gameId;
@@ -418,6 +433,23 @@ public class GamePlayerData {
 
     public void setIsStarter(String isStarter) {
         this.isStarter = isStarter;
+    }
+
+
+    public String getShoot() {
+        return shoot;
+    }
+
+    public void setShoot(String shoot) {
+        this.shoot = shoot;
+    }
+
+    public String getFt() {
+        return ft;
+    }
+
+    public void setFt(String ft) {
+        this.ft = ft;
     }
 }
 

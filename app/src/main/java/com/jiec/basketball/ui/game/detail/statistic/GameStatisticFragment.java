@@ -30,6 +30,8 @@ import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIFragment;
 import com.jiec.basketball.entity.GamePlayerData;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,6 +52,8 @@ public class GameStatisticFragment extends BaseUIFragment {
     boolean isLiving = false;
 
     Unbinder unbinder;
+
+    private List<GamePlayerData> gamePlayerDatas;
 
     public static GameStatisticFragment newInstance() {
         GameStatisticFragment fragment = new GameStatisticFragment();
@@ -125,7 +129,6 @@ public class GameStatisticFragment extends BaseUIFragment {
             }
         };
 
-
         smartTable.getConfig().setContentCellBackgroundFormat(backgroundFormat);
 
         smartTable.getConfig().setTableGridFormat(new BaseGridFormat() {
@@ -153,6 +156,13 @@ public class GameStatisticFragment extends BaseUIFragment {
                         }else {
                             paint.setTypeface(Typeface.DEFAULT);
                         }
+                        if (row == gamePlayerDatas.size() - 1){
+                            if (StringUtils.isEmpty(cellInfo.value) || "0".equals(cellInfo.value)){
+                                super.drawText(c, "-", rect, paint);
+                                return;
+                            }
+                        }
+
                         super.drawText(c, value, rect, paint);
                     }
                 });
@@ -180,16 +190,67 @@ public class GameStatisticFragment extends BaseUIFragment {
         initTable(mStStatistic);
     }
 
-    public void setData(List<GamePlayerData> gamePlayerData, boolean isLiving) {
+    public void setData(List<GamePlayerData> gamePlayerDatas, boolean isLiving) {
         this.isLiving = isLiving;
-        mStStatistic.setData(gamePlayerData);
+
+        float all_3ptatt = 0;
+        float all_3pmade = 0;
+
+        float all_fgatt = 0;//投篮总数
+        float all_fgmade = 0;//投篮投中总数
+
+        float all_ftatt = 0;
+        float all_ftmade = 0;
+
+
+        for (GamePlayerData mGamePlayerData: gamePlayerDatas) {
+
+            all_3ptatt = all_3ptatt + mGamePlayerData.getFg3ptatt();
+            all_3pmade = all_3pmade + mGamePlayerData.getFg3ptmade();
+
+            all_fgatt += mGamePlayerData.getFgatt();
+            all_fgmade += mGamePlayerData.getFgmade();
+
+            all_ftatt += mGamePlayerData.getFtatt();
+            all_ftmade += mGamePlayerData.getFtmade();
+
+        }
+
+        GamePlayerData mmGamePlayerData = new GamePlayerData();
+        mmGamePlayerData.setName("命中率");
+
+        if (all_3ptatt==0 || all_3pmade == 0){
+            mmGamePlayerData.setFg3pt("0");
+        }else {
+            float m =  (Math.round(all_3pmade/all_3ptatt * 10000) / 10000f) * 100;
+            mmGamePlayerData.setFg3pt(m + "%");
+        }
+
+        if (all_fgatt==0 || all_fgmade == 0){
+            mmGamePlayerData.setShoot("0");
+        }else {
+            float m =  (Math.round(all_fgmade/all_fgatt * 10000) / 10000f) * 100;
+            mmGamePlayerData.setShoot(m + "%");
+        }
+
+        if (all_ftatt==0 || all_ftmade == 0){
+            mmGamePlayerData.setFt("0");
+        }else {
+            float m =  (Math.round(all_ftmade / all_ftatt * 10000) / 10000f) * 100;
+            mmGamePlayerData.setFt(m + "%");
+        }
+
+        gamePlayerDatas.add(mmGamePlayerData);
+
+        this.gamePlayerDatas = gamePlayerDatas;
+        mStStatistic.setData(gamePlayerDatas);
 
         if (mStStatistic.getTableData() != null)
             mStStatistic.getTableData().setShowCount(true);
 
         Message msg = Message.obtain();
         msg.what = MSG_UPDATE_COUNT;
-        msg.obj = gamePlayerData;
+        msg.obj = gamePlayerDatas;
 
         sendUiMessageDelayed(msg, 1000);
     }
@@ -302,4 +363,5 @@ public class GameStatisticFragment extends BaseUIFragment {
             }
         }
     }
+
 }

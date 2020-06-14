@@ -74,6 +74,7 @@ public class AllPlayerData extends CommResponse {
         private String blk;
         private String turnover;
         private String type_avg;
+        private String officialImagesrc;
 
         public String getLastname() {
             return lastname;
@@ -241,6 +242,14 @@ public class AllPlayerData extends CommResponse {
 
         public void setType_avg(String type_avg) {
             this.type_avg = type_avg;
+        }
+
+        public String getOfficialImagesrc() {
+            return officialImagesrc;
+        }
+
+        public void setOfficialImagesrc(String officialImagesrc) {
+            this.officialImagesrc = officialImagesrc;
         }
     }
 }

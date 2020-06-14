@@ -1,5 +1,7 @@
 package com.jiec.basketball.entity;
 
+import android.graphics.Paint;
+
 import com.bin.david.form.annotation.SmartColumn;
 import com.bin.david.form.annotation.SmartTable;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
@@ -37,7 +39,7 @@ public class TernBean {
      * awaylose : 4
      */
 
-    @SmartColumn(id = 1, name = "排名", fixed = true)
+//    @SmartColumn(id = 1, name = "排名", fixed = true)
     private String rank;
     private String teamId;
     private String division;
@@ -51,7 +53,7 @@ public class TernBean {
     private String season_name;
     private String id;
     private String name;
-    @SmartColumn(id = 2, name = "隊名", fixed = true, width = 60)
+    @SmartColumn(id = 1, name = "隊名", fixed = true, width = 100, align = Paint.Align.LEFT)
     private String ch_name;
     private String city;
     private Object ch_city;

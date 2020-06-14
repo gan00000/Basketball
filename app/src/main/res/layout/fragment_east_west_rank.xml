@@ -23,6 +23,12 @@
 
         <include layout="@layout/layout_divider" />
 
+        <com.gan.table.ExceltableLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/mExceltableLinearLayout"/>
+
         <com.bin.david.form.core.SmartTable
             android:id="@+id/st_team_rank_east"
             android:layout_width="match_parent"
