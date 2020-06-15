@@ -119,7 +119,7 @@ public class RankEastWestFragment extends Fragment {
         initTableview(mStTeamRankWest);
     }
 
-    KKTextImageDrawFormat mTextImageDrawFormat;
+//    KKTextImageDrawFormat mTextImageDrawFormat;
 
     private void initTableview(SmartTable smartTable) {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(getContext(), 15));
@@ -139,19 +139,7 @@ public class RankEastWestFragment extends Fragment {
 
         int imgSize = DensityUtils.dp2px(this.getContext(),16);
         int pading = DensityUtils.dp2px(this.getContext(),4);
-        mTextImageDrawFormat = new KKTextImageDrawFormat<String>(imgSize,imgSize,TextImageDrawFormat.LEFT, pading) {
-
-//            @Override
-//            protected Context getContext() {
-//
-//                return RankEastWestFragment.this.getContext();
-//            }
-//
-//            @Override
-//            protected int getResourceID(String s, String value, int position) {
-//                return 0;
-//            }
-
+        final KKTextImageDrawFormat mTextImageDrawFormat = new KKTextImageDrawFormat<String>(imgSize,imgSize,TextImageDrawFormat.LEFT, pading) {
 
             @Override
             protected String getFirstString(CellInfo<String> cellInfo, Paint paint) {
@@ -174,7 +162,6 @@ public class RankEastWestFragment extends Fragment {
                 if (bitmapHashMap.get(value) != null){
                     return bitmapHashMap.get(value);
                 }
-                String logoUrl = "";
                 if (eastWestTeamRank != null){
 
 //                    if (eastWestTeamRank.getEastern() != null && !eastWestTeamRank.getEastern().isEmpty()){
@@ -199,6 +186,7 @@ public class RankEastWestFragment extends Fragment {
 //
 //                    }
 
+                    String logoUrl = "";
                     if (smartTable == mStTeamRankEast){
                         logoUrl =eastWestTeamRank.getEastern().get(position).getTeam_logo();
                     }else {

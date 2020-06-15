@@ -6,12 +6,13 @@
     <TextView
         android:id="@+id/tv_rank"
         style="@style/MainText"
-        android:layout_width="28dp"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:textAlignment="center"
+        android:lines="1"
         android:layout_marginLeft="@dimen/page_padding"
-        android:text="1、" />
+        android:text="1." />
 
     <ImageView
         android:id="@+id/tv_player_icon"

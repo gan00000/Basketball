@@ -59,7 +59,7 @@ public class PlayerDetailAdapter extends RecyclerView.Adapter<PlayerDetailAdapte
         if (mData != null && mData.size() > position) {
             AllPlayerData.PlayersRankBean playerInfo = mData.get(position);
             if (playerInfo != null) {
-                holder.mTvRank.setText((position + 1) + "、");
+                holder.mTvRank.setText((position + 1) + ".");
                 holder.mTvName.setText(playerInfo.getFirstname().substring(0, 1) + "." + playerInfo.getLastname());
                 holder.mTvTeam.setText(playerInfo.getTeamName());
                 holder.mTvValue.setText(NumberUtils.formatAmount(playerInfo.getType_avg()));
