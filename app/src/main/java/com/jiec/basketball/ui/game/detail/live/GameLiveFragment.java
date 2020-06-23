@@ -36,7 +36,7 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
     GameLiveUpdateListener mGameLiveUpdateListener;
 
     public interface GameLiveUpdateListener {
-        void onUpdate(MatchSummary matchSummary, Matches matches);
+        void onUpdate(MatchSummary matchSummary, Matches matches,  ArrayList<Integer> minScoreGap);
 
         void onUpdateLiveVideo(GameLivePost gameLivePost);
     }
@@ -122,6 +122,8 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
         }
     }
 
+    ArrayList<Integer> minScoreGap = new ArrayList<>();
+
     @Override
     public void loadLiveSuccess(GameLiveInfo gameLiveInfo) {
         if (gameLiveInfo == null) return;
@@ -131,6 +133,22 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
             List<GameLiveInfo.LiveFeedBean> liveFeedBeans = new ArrayList<>();
             for (List<GameLiveInfo.LiveFeedBean> beans : gameLiveInfo.getLive_feed()) {
                 liveFeedBeans.addAll(beans);
+
+                for (int i = 11; i >= 0; i--) {
+
+                    for (GameLiveInfo.LiveFeedBean liveFeedBean: beans) {
+                        String min = liveFeedBean.getMinutes().trim();
+                        if (Integer.valueOf(min) == i){
+                            int homePts = Integer.valueOf(liveFeedBean.getHomePts());
+                            int awayPts = Integer.valueOf(liveFeedBean.getAwayPts());
+                            minScoreGap.add(homePts - awayPts);
+                            break;
+
+                        }
+
+                    }
+                }
+
             }
             mGameLiveAdapter.setData(liveFeedBeans);
             showData(1, liveFeedBeans);
@@ -138,11 +156,15 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
             showEmpty();
         }
 
+//        for (int i = 0; i < minScoreGap.size(); i++) {
+//            Log.i("minScoreGap","minScoreGap:" + minScoreGap.size() + " -- " + minScoreGap.get(i));
+//        }
+
         if (mGameLiveUpdateListener != null
                 && gameLiveInfo.getMatch_summary() != null
                 && gameLiveInfo.getMatches() != null) {
             mGameLiveUpdateListener.onUpdate(
-                    gameLiveInfo.getMatch_summary().get(0), gameLiveInfo.getMatches().get(0));
+                    gameLiveInfo.getMatch_summary().get(0), gameLiveInfo.getMatches().get(0),  minScoreGap);
         }
 
         if (gameLiveInfo.getMatch_summary() != null

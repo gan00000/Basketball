@@ -1,13 +1,17 @@
 package com.jiec.basketball.ui.game.detail.summary;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
+import com.gan.ctools.tool.BarChartUtils;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarEntry;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIFragment;
 import com.jiec.basketball.entity.GamePlayerData;
@@ -15,6 +19,7 @@ import com.jiec.basketball.entity.MatchSummary;
 import com.jiec.basketball.utils.NumberUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -129,6 +134,11 @@ public class GameSummaryFragment extends BaseUIFragment {
     @BindView(R.id.tv_away_ot3)
     TextView mTvAwayOt3;
 
+    @BindView(R.id.smmaryBarChart)
+    BarChart smmaryBarChart;
+
+    BarChartUtils mBarChartUtils;
+
     public static GameSummaryFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -144,10 +154,29 @@ public class GameSummaryFragment extends BaseUIFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_summary, container, false);
 
-
         unbinder = ButterKnife.bind(this, view);
+
+        mBarChartUtils = new BarChartUtils(smmaryBarChart);
+
         return view;
     }
+    public void showData(ArrayList<Integer> minScoreGap){
+
+        List<BarEntry> yValuesTest = new ArrayList<>();
+        ArrayList<String> xValuesTest = new ArrayList<>();
+
+        for (int i = 0; i < minScoreGap.size(); i++) {
+            BarEntry barEntry = new BarEntry(i, minScoreGap.get(i));
+            yValuesTest.add(barEntry);
+            xValuesTest.add(i + "");
+        }
+
+        String lable = "mmTest";
+
+
+        mBarChartUtils.showData(yValuesTest, lable, getResources().getColor(R.color.green), xValuesTest);
+    }
+
 
     public void setSummary(MatchSummary matchSummary) {
         if (matchSummary == null) return;

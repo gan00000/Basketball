@@ -13,6 +13,7 @@ import com.jiec.basketball.entity.PlayerFirstFive;
 import com.jiec.basketball.entity.TeamData;
 import com.jiec.basketball.entity.TopPost;
 import com.jiec.basketball.entity.ZoneTeamRank;
+import com.jiec.basketball.entity.response.GameLikeResponse;
 import com.jiec.basketball.entity.response.GameLivePostResponse;
 import com.jiec.basketball.entity.response.HomeResponse;
 import com.jiec.basketball.entity.response.NewListResponse;
@@ -116,5 +117,12 @@ public interface GameApi {
 
     @GET("/api/get_live_post_from_game/")
     Observable<GameLivePostResponse> getLivePost(@Query("game_id") String gameId);
+
+    // api/like_match_team/?game_id=&type=
+    // game_id 比赛赛程id
+    //type   1-主队;2-客队
+    @GET("/api/like_match_team/")
+    Observable<GameLikeResponse> summitLike(@Query("game_id") String gameId, @Query("type") int type);
+
 
 }

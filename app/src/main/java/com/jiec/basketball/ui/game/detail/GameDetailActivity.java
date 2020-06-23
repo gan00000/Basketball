@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,8 +16,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.allen.comparsechart.CompareIndicator;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
+import com.gan.ctools.tool.SPUtil;
 import com.gan.video.SampleVideo;
 import com.gan.video.model.SwitchVideoModel;
 import com.jiec.basketball.R;
@@ -25,6 +28,11 @@ import com.jiec.basketball.entity.GameLivePost;
 import com.jiec.basketball.entity.GamePlayerData;
 import com.jiec.basketball.entity.MatchSummary;
 import com.jiec.basketball.entity.Matches;
+import com.jiec.basketball.entity.response.GameLikeResponse;
+import com.jiec.basketball.network.GameApi;
+import com.jiec.basketball.network.NetSubscriber;
+import com.jiec.basketball.network.NetTransformer;
+import com.jiec.basketball.network.RetrofitClient;
 import com.jiec.basketball.ui.game.detail.live.GameLiveFragment;
 import com.jiec.basketball.ui.game.detail.statistic.GameStatisticMainFragment;
 import com.jiec.basketball.ui.game.detail.summary.GameSummaryFragment;
@@ -34,6 +42,8 @@ import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
+import com.wangcj.common.utils.LogUtil;
+import com.wangcj.common.utils.ToastUtil;
 import com.wangcj.common.widget.TitleBar;
 
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +60,8 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
     private static final String[] TITLES = { "對陣", "數據統計","文字直播"};
     private static final String TAG = "player";
+    private static final String SP_DATA_FILE_NAME = "SP_DATA_FILE_NAME.xml";
+    private static final String SP_DATA_GAME_LIKE_KEY = "SP_DATA_GAME_LIKE_KEY_";
 
     GameDetailContract.Presenter mPresenter;
     @BindView(R.id.iv_team_1)
@@ -95,6 +107,26 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     @BindView(R.id.tv_status_living)
     TextView livingStatus;
 
+    @BindView(R.id.btn_zan_ke)
+    Button btn_zan_ke_btn;
+
+    @BindView(R.id.btn_zan_zhu)
+    Button btn_zan_zhu_btn;
+
+    @BindView(R.id.zan_ke_count_tv)
+    TextView zan_ke_count_tv;
+
+    @BindView(R.id.zan_zhu_count_tv)
+    TextView zan_zhu_count_tv;
+
+    @BindView(R.id.zan_compareIndicator)
+    CompareIndicator mZanCompareIndicator;
+
+    @BindView(R.id.zan_like_zhu_layout)
+    View zan_like_zhu_layout;
+
+    @BindView(R.id.zan_like_ke_layout)
+    View zan_like_ke_layout;
 
     private OrientationUtils orientationUtils;
     private MediaMetadataRetriever mCoverMedia;
@@ -289,9 +321,12 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         mGameLiveFragment = GameLiveFragment.newInstance(game_id);//文字直播
         mGameLiveFragment.setGameLiveUpdateListener(new GameLiveFragment.GameLiveUpdateListener() {
             @Override
-            public void onUpdate(MatchSummary matchSummary, Matches matches) {
+            public void onUpdate(MatchSummary matchSummary, Matches matches,  ArrayList<Integer> minScoreGap) {
 
-                mGameSummaryFragment.setSummary(matchSummary);
+                if (mGameSummaryFragment != null) {
+                    mGameSummaryFragment.setSummary(matchSummary);
+                    mGameSummaryFragment.showData(minScoreGap);
+                }
 
                 ImageLoaderUtils.display(GameDetailActivity.this, mIvTeam1, matchSummary.getHomeLogo());
                 ImageLoaderUtils.display(GameDetailActivity.this, mIvTeam2, matchSummary.getAwayLogo());
@@ -333,6 +368,11 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 mTvTimeName_1.setText(matchSummary.getHomeName());
                 mTvTimeName_2.setText(matchSummary.getAwayName());
                 //mGameLiveFragment.loadVideoLiveData();//放此處測試
+
+                zan_zhu_count_tv.setText(matches.getHomeTeamLike());
+                zan_ke_count_tv.setText(matches.getAwayTeamLike());
+
+                mZanCompareIndicator.updateView(Integer.parseInt(matches.getAwayTeamLike()), Integer.parseInt(matches.getHomeTeamLike()));
             }
 
             @Override
@@ -398,6 +438,36 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
         mTabLayout.setTabData(tabEntities, this, R.id.fl_layout, mFragments);
 
+        mZanCompareIndicator.updateView(0, 0);
+
+        zan_like_ke_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (checkIsLike(game_id)){
+                    ToastUtil.showMsg("您已經點讚過了");
+                    return;
+                }
+                summitLike(game_id,2);
+            }
+        });
+
+        zan_like_zhu_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (checkIsLike(game_id)){
+                    ToastUtil.showMsg("您已經點讚過了");
+                    return;
+                }
+                summitLike(game_id,1);
+            }
+        });
+
+    }
+
+    private boolean checkIsLike(String gameId) {
+        return SPUtil.getSimpleBoolean(this,SP_DATA_FILE_NAME,SP_DATA_GAME_LIKE_KEY + gameId);
     }
 
     /**
@@ -544,6 +614,36 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 isRelease = false;
             }
         },500);
+    }
+
+    // game_id 比赛赛程id
+    //type   1-主队;2-客队
+    private void summitLike(String gameId, int type){
+
+        GameApi gameApi = RetrofitClient.getInstance().create(GameApi.class);
+
+        gameApi.summitLike(gameId, type)
+//                .compose(mView.getBindToLifecycle())
+                .compose(new NetTransformer())
+                .subscribe(new NetSubscriber<GameLikeResponse>() {
+                    @Override
+                    protected void onSuccess(GameLikeResponse info) {
+                        if (info.getStatus().equals("ok") && info.getTeam_like() != null) {
+
+                            zan_zhu_count_tv.setText(info.getTeam_like().getHomeTeamLike());
+                            zan_ke_count_tv.setText(info.getTeam_like().getAwayTeamLike());
+
+                            mZanCompareIndicator.updateView(Integer.parseInt(info.getTeam_like().getAwayTeamLike()), Integer.parseInt(info.getTeam_like().getHomeTeamLike()));
+
+                            SPUtil.saveSimpleInfo(GameDetailActivity.this,SP_DATA_FILE_NAME, SP_DATA_GAME_LIKE_KEY + gameId, true);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(int code, String reason) {
+                        LogUtil.e(reason);
+                    }
+                });
     }
 
 }

@@ -266,6 +266,113 @@
         </RelativeLayout>
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/zan_like_ke_layout"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_zan"
+                    android:id="@+id/btn_zan_ke"
+                    />
+
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="@dimen/sp_16"
+                    android:id="@+id/zan_ke_tv"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:text="客"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/sp_16"
+                    android:textColor="@color/black"
+                    android:id="@+id/zan_ke_count_tv"
+                    android:text="0"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal"
+                android:id="@+id/zan_like_zhu_layout"
+
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/sp_16"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/black"
+                    android:id="@+id/zan_zhu_count_tv"
+                    android:text="0"/>
+
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:textSize="@dimen/sp_16"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:id="@+id/zan_zhu_tv"
+                    android:text="主"/>
+
+
+                <Button
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_zan"
+                    android:id="@+id/btn_zan_zhu"
+                    />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <com.allen.comparsechart.CompareIndicator
+            android:id="@+id/zan_compareIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            app:approve_line_color="@android:color/holo_red_dark"
+            app:oppose_line_color="@android:color/holo_blue_dark"
+            />
+
+    </LinearLayout>
+
+
 
 
     <com.flyco.tablayout.CommonTabLayout

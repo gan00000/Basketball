@@ -25,6 +25,8 @@ public class GameMainPresenter extends BasePresenter<IModel, GameMainContract.Vi
     public void getGameInfo(String start, String end) {
         GameApi gameApi = RetrofitClient.getInstance().create(GameApi.class);
 
+        start = "2020-01-02";
+        end = "2020-01-08";
         gameApi.getGameList(start, end)
                 .compose(mView.getBindToLifecycle())
                 .compose(new NetTransformer())

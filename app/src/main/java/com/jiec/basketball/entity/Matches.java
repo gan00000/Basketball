@@ -55,6 +55,8 @@ public class Matches {
     private String gamedate;
     private String away_quarter_scores;
     private String home_quarter_scores;
+    private String homeTeamLike = "0";
+    private String awayTeamLike = "0";
 
     public String getId() {
         return id;
@@ -230,5 +232,21 @@ public class Matches {
 
     public void setHome_quarter_scores(String home_quarter_scores) {
         this.home_quarter_scores = home_quarter_scores;
+    }
+
+    public String getHomeTeamLike() {
+        return homeTeamLike;
+    }
+
+    public void setHomeTeamLike(String homeTeamLike) {
+        this.homeTeamLike = homeTeamLike;
+    }
+
+    public String getAwayTeamLike() {
+        return awayTeamLike;
+    }
+
+    public void setAwayTeamLike(String awayTeamLike) {
+        this.awayTeamLike = awayTeamLike;
     }
 }

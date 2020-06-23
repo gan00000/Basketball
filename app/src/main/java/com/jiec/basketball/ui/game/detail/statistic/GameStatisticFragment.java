@@ -191,6 +191,10 @@ public class GameStatisticFragment extends BaseUIFragment {
     }
 
     public void setData(List<GamePlayerData> gamePlayerDatas, boolean isLiving) {
+
+        if (gamePlayerDatas == null){
+            return;
+        }
         this.isLiving = isLiving;
 
         float all_3ptatt = 0;
