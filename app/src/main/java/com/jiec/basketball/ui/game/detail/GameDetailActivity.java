@@ -369,10 +369,10 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 mTvTimeName_2.setText(matchSummary.getAwayName());
                 //mGameLiveFragment.loadVideoLiveData();//放此處測試
 
-                zan_zhu_count_tv.setText(matches.getHomeTeamLike());
-                zan_ke_count_tv.setText(matches.getAwayTeamLike());
+                zan_zhu_count_tv.setText(matchSummary.getHomeTeamLike());
+                zan_ke_count_tv.setText(matchSummary.getAwayTeamLike());
 
-                mZanCompareIndicator.updateView(Integer.parseInt(matches.getAwayTeamLike()), Integer.parseInt(matches.getHomeTeamLike()));
+                mZanCompareIndicator.updateView(Integer.parseInt(matchSummary.getAwayTeamLike()), Integer.parseInt(matchSummary.getHomeTeamLike()));
             }
 
             @Override

@@ -46,6 +46,25 @@ public class MatchSummary {
     private String seconds;
     private String time;
 
+    private String homeTeamLike = "0";
+    private String awayTeamLike = "0";
+
+    public String getHomeTeamLike() {
+        return homeTeamLike;
+    }
+
+    public void setHomeTeamLike(String homeTeamLike) {
+        this.homeTeamLike = homeTeamLike;
+    }
+
+    public String getAwayTeamLike() {
+        return awayTeamLike;
+    }
+
+    public void setAwayTeamLike(String awayTeamLike) {
+        this.awayTeamLike = awayTeamLike;
+    }
+
     public String getHomeLogo() {
         return homeLogo;
     }
