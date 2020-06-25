@@ -1,4 +1,4 @@
-package com.allen.comparsechart;
+package com.gan.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -134,8 +134,8 @@ public class CompareIndicator extends View {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.compareindicator);
 //        int approveIconId = typedArray.getResourceId(R.styleable.compareindicator_approve_res, R.mipmap.good);
 //        int oppositeIconId = typedArray.getResourceId(R.styleable.compareindicator_opposite_res, R.mipmap.bad);
-         approveLineColor = typedArray.getColor(R.styleable.compareindicator_approve_line_color, getResources().getColor(R.color.good));
-         oppositeLineColor = typedArray.getColor(R.styleable.compareindicator_oppose_line_color, getResources().getColor(R.color.bad));
+         approveLineColor = typedArray.getColor(R.styleable.compareindicator_left_line_color, getResources().getColor(R.color.good));
+         oppositeLineColor = typedArray.getColor(R.styleable.compareindicator_right_line_color, getResources().getColor(R.color.bad));
         float lineWidthDimen = typedArray.getDimension(R.styleable.compareindicator_lineWidth, 6f);
         typedArray.recycle();
 //        mOppositeBitmap = BitmapFactory.decodeResource(getResources(), approveIconId);

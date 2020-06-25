@@ -1,7 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <LinearLayout
@@ -319,6 +320,321 @@
 
         <include layout="@layout/layout_divider" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:text="@string/data_tab_pts"
+                        android:id="@+id/compareIndicator_centerValue_score"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/compareIndicator_leftValue_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/compareIndicator_centerValue_score"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="0"
+                        android:id="@+id/compareIndicator_rightValue_score"
+                        android:layout_toEndOf="@id/compareIndicator_centerValue_score"
+                        android:layout_marginStart="20dp"
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        />
+
+                </RelativeLayout>
+
+                <com.gan.widget.CompareIndicatorView2
+
+                    android:layout_below="@id/compareIndicator_centerValue_score"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:id="@+id/compareIndicator2_score"
+                    app:lineMarginWidth = "8dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                   >
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="籃板"
+                    android:id="@+id/compareIndicator_centerValue_lanban"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/compareIndicator_leftValue_lanban"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="40dp"
+                    android:layout_toStartOf="@id/compareIndicator_centerValue_lanban"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="0"
+                    android:id="@+id/compareIndicator_rightValue_lanban"
+                    android:layout_toEndOf="@id/compareIndicator_centerValue_lanban"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    />
+
+                </RelativeLayout>
+
+                <com.gan.widget.CompareIndicatorView2
+
+                    android:layout_below="@id/compareIndicator_centerValue_lanban"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:id="@+id/compareIndicator2_lanban"
+                    app:lineMarginWidth = "8dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="助攻"
+                    android:id="@+id/compareIndicator_centerValue_zhugong"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/compareIndicator_leftValue_zhugong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40dp"
+                    android:layout_toStartOf="@id/compareIndicator_centerValue_zhugong"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/compareIndicator_rightValue_zhugong"
+                    android:layout_toEndOf="@id/compareIndicator_centerValue_zhugong"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    />
+
+                </RelativeLayout>
+
+                <com.gan.widget.CompareIndicatorView2
+
+                    android:layout_below="@id/compareIndicator_centerValue_zhugong"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:id="@+id/compareIndicator2_zhugong"
+                    app:lineMarginWidth = "8dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="搶斷"
+                    android:id="@+id/compareIndicator_centerValue_qiangduan"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/compareIndicator_leftValue_qiangduan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40dp"
+                    android:layout_toStartOf="@id/compareIndicator_centerValue_qiangduan"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/compareIndicator_rightValue_qiangduan"
+                    android:layout_toEndOf="@id/compareIndicator_centerValue_qiangduan"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    />
+                </RelativeLayout>
+
+                <com.gan.widget.CompareIndicatorView2
+
+                    android:layout_below="@id/compareIndicator_centerValue_qiangduan"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:id="@+id/compareIndicator2_qiangduan"
+                    app:lineMarginWidth = "8dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="封蓋"
+                    android:id="@+id/compareIndicator_centerValue_fenggai"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/compareIndicator_leftValue_fenggai"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40dp"
+                    android:layout_toStartOf="@id/compareIndicator_centerValue_fenggai"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/compareIndicator_rightValue_fenggai"
+                    android:layout_toEndOf="@id/compareIndicator_centerValue_fenggai"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    />
+
+            </RelativeLayout>
+
+                <com.gan.widget.CompareIndicatorView2
+
+                    android:layout_below="@id/compareIndicator_centerValue_fenggai"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:id="@+id/compareIndicator2_fenggai"
+                    app:lineMarginWidth = "8dp"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/layout_divider" />
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"

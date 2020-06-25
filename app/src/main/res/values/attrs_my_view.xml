@@ -1,10 +1,13 @@
 <resources>
     <declare-styleable name="compareindicator">
-        <attr name="approve_res" format="reference"/>
-        <attr name="opposite_res" format="reference"/>
-        <attr name="approve_line_color" format="color"/>
-        <attr name="oppose_line_color" format="color"/>
+
+        <attr name="left_line_color" format="color"/>
+        <attr name="right_line_color" format="color"/>
+        <attr name="left_line_bg_color" format="color"/>
+        <attr name="right_line_bg_color" format="color"/>
+
         <attr name="lineWidth" format="dimension"/>
+        <attr name="lineMarginWidth" format="dimension"/>
 
     </declare-styleable>
 </resources>

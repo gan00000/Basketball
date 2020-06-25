@@ -16,12 +16,12 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.allen.comparsechart.CompareIndicator;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.gan.ctools.tool.SPUtil;
 import com.gan.video.SampleVideo;
 import com.gan.video.model.SwitchVideoModel;
+import com.gan.widget.CompareIndicator;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIActivity;
 import com.jiec.basketball.entity.GameLivePost;

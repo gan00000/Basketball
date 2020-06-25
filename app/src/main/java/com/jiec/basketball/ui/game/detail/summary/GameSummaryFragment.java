@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.gan.ctools.tool.BarChartUtils;
+import com.gan.widget.CompareIndicatorView2;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarEntry;
 import com.jiec.basketball.R;
@@ -17,6 +18,8 @@ import com.jiec.basketball.base.BaseUIFragment;
 import com.jiec.basketball.entity.GamePlayerData;
 import com.jiec.basketball.entity.MatchSummary;
 import com.jiec.basketball.utils.NumberUtils;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -134,6 +137,43 @@ public class GameSummaryFragment extends BaseUIFragment {
     @BindView(R.id.tv_away_ot3)
     TextView mTvAwayOt3;
 
+    @BindView(R.id.compareIndicator2_score)
+    CompareIndicatorView2 compareIndicator2Score;
+    @BindView(R.id.compareIndicator_leftValue_score)
+    TextView tvLeftScore;
+    @BindView(R.id.compareIndicator_rightValue_score)
+    TextView tvRightScore;
+
+    @BindView(R.id.compareIndicator2_lanban)
+    CompareIndicatorView2 compareIndicator2Lanban;
+    @BindView(R.id.compareIndicator_leftValue_lanban)
+    TextView tvLeftLanban;
+    @BindView(R.id.compareIndicator_rightValue_lanban)
+    TextView tvRightLanban;
+
+
+    @BindView(R.id.compareIndicator2_zhugong)
+    CompareIndicatorView2 compareIndicator2Zhugong;
+    @BindView(R.id.compareIndicator_leftValue_zhugong)
+    TextView tvLeftZhugong;
+    @BindView(R.id.compareIndicator_rightValue_zhugong)
+    TextView tvRightZhugong;
+
+
+    @BindView(R.id.compareIndicator2_qiangduan)
+    CompareIndicatorView2 compareIndicator2Qiangduan;
+    @BindView(R.id.compareIndicator_leftValue_qiangduan)
+    TextView tvLeftQiangduan;
+    @BindView(R.id.compareIndicator_rightValue_qiangduan)
+    TextView tvRightQiangduan;
+
+    @BindView(R.id.compareIndicator2_fenggai)
+    CompareIndicatorView2 compareIndicator2Fenggai;
+    @BindView(R.id.compareIndicator_leftValue_fenggai)
+    TextView tvLeftFenggai;
+    @BindView(R.id.compareIndicator_rightValue_fenggai)
+    TextView tvRightFenggai;
+
     @BindView(R.id.smmaryBarChart)
     BarChart smmaryBarChart;
 
@@ -158,6 +198,20 @@ public class GameSummaryFragment extends BaseUIFragment {
 
         mBarChartUtils = new BarChartUtils(smmaryBarChart);
 
+        compareIndicator2Score.setBigCountColor(getResources().getColor(R.color.af3138));
+        compareIndicator2Score.setLessCountColor(getResources().getColor(R.color.c_939aa0));
+
+        compareIndicator2Lanban.setBigCountColor(getResources().getColor(R.color.af3138));
+        compareIndicator2Lanban.setLessCountColor(getResources().getColor(R.color.c_939aa0));
+
+        compareIndicator2Fenggai.setBigCountColor(getResources().getColor(R.color.af3138));
+        compareIndicator2Fenggai.setLessCountColor(getResources().getColor(R.color.c_939aa0));
+
+        compareIndicator2Qiangduan.setBigCountColor(getResources().getColor(R.color.af3138));
+        compareIndicator2Qiangduan.setLessCountColor(getResources().getColor(R.color.c_939aa0));
+
+        compareIndicator2Zhugong.setBigCountColor(getResources().getColor(R.color.af3138));
+        compareIndicator2Zhugong.setLessCountColor(getResources().getColor(R.color.c_939aa0));
         return view;
     }
     public void showData(ArrayList<Integer> minScoreGap){
@@ -251,11 +305,46 @@ public class GameSummaryFragment extends BaseUIFragment {
 
         mTvAwaySum.setText(matchSummary.getAway_pts());
         mTvAwayPts.setText(matchSummary.getAway_pts());
+
+        tvLeftScore.setText(matchSummary.getHome_pts());
+        tvRightScore.setText(matchSummary.getAway_pts());
+        compareIndicator2Score.updateView(stringToInt(matchSummary.getHome_pts()), stringToInt(matchSummary.getAway_pts()));
+    }
+
+    private int stringToInt(String stringValue){
+
+        try {
+            if (StringUtils.isEmpty(stringValue)){
+                return 0;
+            }
+            int m = Integer.valueOf(stringValue);
+            return m;
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     public void refreshData(List<GamePlayerData> homeData, List<GamePlayerData> awayDat) {
         updateHomeDataView(homeData);
         updateAwayDataView(awayDat);
+
+        tvLeftLanban.setText(mTvHomeReb.getText());
+        tvRightLanban.setText(mTvAwayReb.getText());
+
+        compareIndicator2Lanban.updateView(stringToInt(mTvHomeReb.getText().toString()), stringToInt(mTvAwayReb.getText().toString()));
+
+        tvLeftZhugong.setText(mTvHomeAss.getText());
+        tvRightZhugong.setText(mTvAwayAss.getText());
+        compareIndicator2Zhugong.updateView(stringToInt(mTvHomeAss.getText().toString()), stringToInt(mTvAwayAss.getText().toString()));
+
+
+        tvLeftQiangduan.setText(mTvHomeBlk.getText());
+        tvRightQiangduan.setText(mTvAwayBlk.getText());
+        compareIndicator2Qiangduan.updateView(stringToInt(mTvHomeBlk.getText().toString()), stringToInt(mTvAwayBlk.getText().toString()));
+
+        tvLeftFenggai.setText(mTvHomeStl.getText());
+        tvRightFenggai.setText(mTvAwayStl.getText());
+        compareIndicator2Fenggai.updateView(stringToInt(mTvHomeStl.getText().toString()), stringToInt(mTvAwayStl.getText().toString()));
     }
 
     private void updateHomeDataView(List<GamePlayerData> homeData) {

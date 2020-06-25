@@ -362,12 +362,12 @@
 
         </RelativeLayout>
 
-        <com.allen.comparsechart.CompareIndicator
+        <com.gan.widget.CompareIndicator
             android:id="@+id/zan_compareIndicator"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            app:approve_line_color="@android:color/holo_red_dark"
-            app:oppose_line_color="@android:color/holo_blue_dark"
+            app:left_line_color="@android:color/holo_red_dark"
+            app:right_line_color="@android:color/holo_blue_dark"
             />
 
     </LinearLayout>
