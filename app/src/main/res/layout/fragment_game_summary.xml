@@ -353,7 +353,7 @@
 
                     <TextView
                         android:id="@+id/compareIndicator_leftValue_score"
-                        android:layout_width="wrap_content"
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="40dp"
                         android:layout_centerVertical="true"
@@ -364,7 +364,7 @@
                         android:textSize="12sp"/>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="0"
@@ -417,7 +417,7 @@
 
                 <TextView
                     android:id="@+id/compareIndicator_leftValue_lanban"
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="40dp"
@@ -428,7 +428,7 @@
                     android:textSize="12sp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="0"
@@ -479,7 +479,7 @@
 
                 <TextView
                     android:id="@+id/compareIndicator_leftValue_zhugong"
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="40dp"
                     android:layout_toStartOf="@id/compareIndicator_centerValue_zhugong"
@@ -489,7 +489,7 @@
                     android:textSize="12sp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:id="@+id/compareIndicator_rightValue_zhugong"
@@ -539,7 +539,7 @@
 
                 <TextView
                     android:id="@+id/compareIndicator_leftValue_qiangduan"
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="40dp"
                     android:layout_toStartOf="@id/compareIndicator_centerValue_qiangduan"
@@ -549,7 +549,7 @@
                     android:textSize="12sp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:id="@+id/compareIndicator_rightValue_qiangduan"
@@ -598,7 +598,7 @@
 
                 <TextView
                     android:id="@+id/compareIndicator_leftValue_fenggai"
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="40dp"
                     android:layout_toStartOf="@id/compareIndicator_centerValue_fenggai"
@@ -608,7 +608,7 @@
                     android:textSize="12sp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:id="@+id/compareIndicator_rightValue_fenggai"
@@ -634,7 +634,7 @@
         </LinearLayout>
 
         <include layout="@layout/layout_divider" />
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
