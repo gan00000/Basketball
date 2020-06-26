@@ -1,21 +1,19 @@
 package com.gan.ctools.tool;
 
-import android.graphics.Color;
-import android.util.Log;
+import android.content.Context;
+
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.jiec.basketball.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,129 +22,133 @@ public class BarChartUtils {
     private static final String TAG = "BarChartUtils";
     private BarChart bar_chart;
     private XAxis xAxis;
-    public BarChartUtils(BarChart chart){
+    private Context mContext;
+    public BarChartUtils(Context mContext,BarChart chart){
         this.bar_chart = chart;
-        initX();
-        initY();
+        this.mContext = mContext;
+        initChart(bar_chart);
+        initX(bar_chart);
+        initY(bar_chart);
     }
 
-    private void initX(){
-        bar_chart.setDrawGridBackground(false); // 是否显示表格颜色
-//        bar_chart.setTouchEnabled(true); // 设置是否可以触摸
-//        bar_chart.setDragEnabled(true);// 是否可以拖拽
-//        bar_chart.setScaleEnabled(true);// 是否可以缩放
-        bar_chart.getDescription().setText("");//设置不显示右下角的描述
-        bar_chart.setDrawBorders(false);//设置无边框
-//        bar_chart.setExtraBottomOffset(10); //偏移 为了使x轴的文字显示完全
-        bar_chart.setDrawValueAboveBar(true);// 如果设置为true,在条形图上方显示值。如果为false，会显示在顶部下方。
-        //设置阴影
-        bar_chart.setDrawBarShadow(false);
-        Legend legend = bar_chart.getLegend();//设置比例图
-        legend.setEnabled(false); //设置是否显示比例图
-        legend.setForm(Legend.LegendForm.CIRCLE);//图示 标签的形状。  圆
-        //显示位置
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        legend.setDrawInside(false);
-        bar_chart.setPinchZoom(true);//设置按比例放缩柱状图
-        bar_chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                Log.i(TAG,"---"+e.getX()); //点击第几个柱子
-            }
+    private void initChart(BarChart chart) {
 
-            @Override
-            public void onNothingSelected() {
+        chart.setDrawBarShadow(false);
+        chart.setDrawValueAboveBar(true);// 如果设置为true,在条形图上方显示值。如果为false，会显示在顶部下方。
+        chart.getDescription().setEnabled(false);
 
-            }
-        });
+        // scaling can now only be done on x- and y-axis separately
+        chart.setPinchZoom(false);
 
-        ////获得x轴对象实例
-        xAxis= bar_chart.getXAxis();
-        xAxis.setDrawAxisLine(false); //设置显示x轴的线
-        xAxis.setDrawGridLines(false); //设置是否显示网格
-        xAxis.setGranularity(2f);//设置最小的区间，避免标签的迅速增多
-        xAxis.setCenterAxisLabels(true);//设置标签居中
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//数据位于底部
-        xAxis.setTextColor(Color.RED);//设置x轴文字颜色
+        chart.setTouchEnabled(false);//禁止触摸放大
+        chart.setDragEnabled(false);
 
-//        xAxis.setAxisMinimum(-0.5f);//设置离左边位置0.5个柱状图的宽度,否则最左侧的柱子会显示半个
+        chart.setDrawGridBackground(false);
+        chart.setFitBars(true);
+        chart.getLegend().setEnabled(false);
+
+//        chart.setExtraLeftOffset(20f);
+//        chart.setExtraRightOffset(20f);
+
+//        Legend l = chart.getLegend();
+//        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+//        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+//        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+//        l.setDrawInside(false);
+//        l.setForm(Legend.LegendForm.SQUARE);
+//        l.setFormSize(9f);
+//        l.setTextSize(11f);
+//        l.setXEntrySpace(4f);
+    }
+
+    private void initX(BarChart chart){
+
+        XAxis xAxis = chart.getXAxis();//获得x轴对象实例
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置XAxis应该出现的位置。可以选择TOP，BOTTOM，BOTH_SIDED，TOP_INSIDE或者BOTTOM_INSIDE。
+//        xAxis.setTypeface(tfLight);
+        xAxis.setDrawGridLines(false);//设置为true绘制网格线。
+        xAxis.setDrawLabels(false);//设置为true打开绘制轴的标签。
+        xAxis.setGranularity(1f); // only intervals of 1 day //设置最小的区间，避免标签的迅速增多
+//        xAxis.setLabelCount(2);
+//        xAxis.setValueFormatter(xAxisFormatter);
+
+//        xAxis.setDrawAxisLine(false); //设置显示x轴的线
+//        xAxis.setCenterAxisLabels(true);//设置标签居中
+//        xAxis.setTextColor(Color.RED);//设置x轴文字颜色
+        xAxis.setAxisMinimum(0);//设置离左边位置0.5个柱状图的宽度,否则最左侧的柱子会显示半个
+
+        xAxis.setEnabled(false);
     }
 
     //设置Y轴
-    private void initY() {
-        YAxis leftY = bar_chart.getAxisLeft();
-        YAxis rightY = bar_chart.getAxisRight();
-        leftY.setDrawAxisLine(false);//显示左侧y轴的线
-        leftY.setTextSize(8);//显示左侧y轴字体大小
-        leftY.setLabelCount(0, false);//设置左侧y轴显示文字数量
+    private void initY(BarChart chart) {
 
-        //保证Y轴从0开始，不然会上移一点
-//        leftY.setAxisMinimum(-20);
-//        leftY.setAxisMaximum(20);
-        leftY.setStartAtZero(false);
-        rightY.setAxisMinimum(-10f);
-        rightY.setEnabled(false);//设置y轴关闭
-        //设置左侧Y轴上文字的样式
-        /*leftY.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                int v = (int)value;
-                if (v == 0){
-                    return "";
-                }else{
-                    return v+"%";
-                }
-            }
-        });*/
+        YAxis leftAxis = chart.getAxisLeft();
+//        leftAxis.setTypeface(tfLight);
+//        leftAxis.setLabelCount(8, false);
+//        leftAxis.setValueFormatter(custom);
+//        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setSpaceTop(15f);
+        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
+        leftAxis.setEnabled(false);
 
-        leftY.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                int v = (int)value;
-                if (v == 0){
-                    return "";
-                }else{
-                    return v+"%";
-                }
-            }
-        });
+        YAxis rightAxis = chart.getAxisRight();
+//        rightAxis.setDrawGridLines(false);
+//        rightAxis.setTypeface(tfLight);
+//        rightAxis.setLabelCount(8, false);
+//        rightAxis.setValueFormatter(custom);
+        rightAxis.setSpaceTop(15f);
+        rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+        rightAxis.setEnabled(false);
     }
 
     /**
      * 显示柱状图 单个柱子
      * @param yValues 柱子上的数据
      * @param lable
-     * @param color
-     * @param xValues x轴上显示的数据
+//     * @param color
+//     * @param xValues x轴上显示的数据
      */
-    public void showData(List<BarEntry> yValues, String lable, int color, ArrayList<String> xValues){
+//    public void showData(List<BarEntry> yValues, String lable, int color, ArrayList<String> xValues){
+    public void showData(List<BarEntry> yValues, String lable){
 
+        BarDataSet set;
+        if (bar_chart.getData() != null &&
+                bar_chart.getData().getDataSetCount() > 0) {
+            set = (BarDataSet) bar_chart.getData().getDataSetByIndex(0);
+            set.setValues(yValues);
+            bar_chart.getData().notifyDataChanged();
+            bar_chart.notifyDataSetChanged();
+            return;
+        }
 
         //装载显示数据
         BarDataSet barDataSet = new BarDataSet(yValues,lable);
-        barDataSet.setColor(color);
-        barDataSet.setValueTextSize(14f);//设置柱子上字体大小
-        barDataSet.setDrawValues(false);//设置是否显示柱子上的文字
-        barDataSet.setHighLightAlpha(37);//设置点击后柱子透明度改变
-        //设置柱子上文字的格式
-        /*barDataSet.setValueFormatter(new IValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                int v = (int)value;
-                return v+"%";
-            }
-        });*/
+        int endColor4 = ContextCompat.getColor(mContext, R.color.c_5c8fd3);
+        int endColor5 = ContextCompat.getColor(mContext, R.color.c_d84a7e);
 
-//        CustomX customX = new CustomX(xValues);
-//        xAxis.setValueFormatter(customX);
+        barDataSet.setColors(endColor4, endColor5);
+        barDataSet.setValueTextSize(14f);//设置柱子上字体大小
+        barDataSet.setDrawValues(true);//设置是否显示柱子上的文字
+//        barDataSet.setHighLightAlpha(37);//设置点击后柱子透明度改变
+
+        //设置柱子上文字的格式
+        barDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return (int)value + "";
+            }
+        });
+
         //装载数据
         ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
         dataSets.add(barDataSet);
         BarData data = new BarData(dataSets);
+        data.setBarWidth(1.2f);//设置树状图的宽度
         bar_chart.setData(data);
+        bar_chart.invalidate();
     }
 
     class CustomX extends ValueFormatter {

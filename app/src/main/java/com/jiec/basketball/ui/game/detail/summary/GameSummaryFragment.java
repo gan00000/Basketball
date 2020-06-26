@@ -5,10 +5,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.gan.ctools.tool.BarChartUtils;
 import com.gan.widget.CompareIndicatorView2;
 import com.github.mikephil.charting.charts.BarChart;
@@ -174,10 +176,51 @@ public class GameSummaryFragment extends BaseUIFragment {
     @BindView(R.id.compareIndicator_rightValue_fenggai)
     TextView tvRightFenggai;
 
+    @BindView(R.id.compare_player_lefticon)
+    ImageView compare_player_lefticon;
+    @BindView(R.id.compare_player_righticon)
+    ImageView compare_player_righticon;
+    @BindView(R.id.compare_player_leftname)
+    TextView compare_player_leftname;
+    @BindView(R.id.compare_player_rightname)
+    TextView compare_player_rightname;
+
+    @BindView(R.id.compare_player_reb_lefticon)
+    ImageView compare_player_reb_lefticon;
+    @BindView(R.id.compare_player_reb_righticon)
+    ImageView compare_player_reb_righticon;
+    @BindView(R.id.compare_player_reb_leftname)
+    TextView compare_player_reb_leftname;
+    @BindView(R.id.compare_player_reb_rightname)
+    TextView compare_player_reb_rightname;
+
+    @BindView(R.id.compare_player_ass_lefticon)
+    ImageView compare_player_ass_lefticon;
+    @BindView(R.id.compare_player_ass_righticon)
+    ImageView compare_player_ass_righticon;
+    @BindView(R.id.compare_player_ass_leftname)
+    TextView compare_player_ass_leftname;
+    @BindView(R.id.compare_player_ass_rightname)
+    TextView compare_player_ass_rightname;
+
+
     @BindView(R.id.smmaryBarChart)
     BarChart smmaryBarChart;
 
+    @BindView(R.id.smmaryBarChartComparePlayer)
+    BarChart smmaryBarChartComparePlayer;
+
+    @BindView(R.id.smmaryBarChartComparePlayerReb)
+    BarChart smmaryBarChartComparePlayerReb;
+
+    @BindView(R.id.smmaryBarChartComparePlayerAss)
+    BarChart smmaryBarChartComparePlayerAss;
+
     BarChartUtils mBarChartUtils;
+    BarChartUtils mBarChartUtils_smmaryBarChartComparePlayer;//得分
+    BarChartUtils mBarChartUtils_smmaryBarChartComparePlayer_reb;//籃板
+    BarChartUtils mBarChartUtils_smmaryBarChartComparePlayer_ass;//助攻
+
 
     public static GameSummaryFragment newInstance() {
 
@@ -196,7 +239,10 @@ public class GameSummaryFragment extends BaseUIFragment {
 
         unbinder = ButterKnife.bind(this, view);
 
-        mBarChartUtils = new BarChartUtils(smmaryBarChart);
+        mBarChartUtils = new BarChartUtils(requireContext(), smmaryBarChart);
+        mBarChartUtils_smmaryBarChartComparePlayer = new BarChartUtils(requireContext(),smmaryBarChartComparePlayer);
+        mBarChartUtils_smmaryBarChartComparePlayer_reb = new BarChartUtils(requireContext(),smmaryBarChartComparePlayerReb);
+        mBarChartUtils_smmaryBarChartComparePlayer_ass = new BarChartUtils(requireContext(),smmaryBarChartComparePlayerAss);
 
         compareIndicator2Score.setBigCountColor(getResources().getColor(R.color.af3138));
         compareIndicator2Score.setLessCountColor(getResources().getColor(R.color.c_939aa0));
@@ -228,7 +274,7 @@ public class GameSummaryFragment extends BaseUIFragment {
         String lable = "mmTest";
 
 
-        mBarChartUtils.showData(yValuesTest, lable, getResources().getColor(R.color.green), xValuesTest);
+        mBarChartUtils.showData(yValuesTest, lable);
     }
 
 
@@ -308,7 +354,10 @@ public class GameSummaryFragment extends BaseUIFragment {
 
         tvLeftScore.setText(matchSummary.getHome_pts());
         tvRightScore.setText(matchSummary.getAway_pts());
-        compareIndicator2Score.updateView(stringToInt(matchSummary.getHome_pts()), stringToInt(matchSummary.getAway_pts()));
+        int homePts = stringToInt(matchSummary.getHome_pts());
+        int awayPts = stringToInt(matchSummary.getAway_pts());
+        compareIndicator2Score.updateView(homePts, awayPts);
+
     }
 
     private int stringToInt(String stringValue){
@@ -330,7 +379,6 @@ public class GameSummaryFragment extends BaseUIFragment {
 
         tvLeftLanban.setText(mTvHomeReb.getText());
         tvRightLanban.setText(mTvAwayReb.getText());
-
         compareIndicator2Lanban.updateView(stringToInt(mTvHomeReb.getText().toString()), stringToInt(mTvAwayReb.getText().toString()));
 
         tvLeftZhugong.setText(mTvHomeAss.getText());
@@ -345,7 +393,47 @@ public class GameSummaryFragment extends BaseUIFragment {
         tvLeftFenggai.setText(mTvHomeStl.getText());
         tvRightFenggai.setText(mTvAwayStl.getText());
         compareIndicator2Fenggai.updateView(stringToInt(mTvHomeStl.getText().toString()), stringToInt(mTvAwayStl.getText().toString()));
+
+
+        //球員主柱狀圖對比
+        Glide.with(this).load(homePlayer_maxPts.getOfficialImagesrc()).into(compare_player_lefticon);
+        compare_player_leftname.setText(homePlayer_maxPts.getFirstname() + homePlayer_maxPts.getLastname());
+        Glide.with(this).load(homePlayer_maxReb.getOfficialImagesrc()).into(compare_player_reb_lefticon);
+        compare_player_reb_leftname.setText(homePlayer_maxReb.getFirstname() + homePlayer_maxReb.getLastname());
+        Glide.with(this).load(homePlayer_maxAss.getOfficialImagesrc()).into(compare_player_ass_lefticon);
+        compare_player_ass_leftname.setText(homePlayer_maxAss.getFirstname() + homePlayer_maxAss.getLastname());
+
+        Glide.with(this).load(awayPlayer_maxPts.getOfficialImagesrc()).into(compare_player_righticon);
+        compare_player_rightname.setText(awayPlayer_maxPts.getFirstname() + awayPlayer_maxPts.getLastname());
+        Glide.with(this).load(awayPlayer_maxReb.getOfficialImagesrc()).into(compare_player_reb_righticon);
+        compare_player_reb_rightname.setText(awayPlayer_maxReb.getFirstname() + awayPlayer_maxReb.getLastname());
+        Glide.with(this).load(awayPlayer_maxAss.getOfficialImagesrc()).into(compare_player_ass_righticon);
+        compare_player_ass_rightname.setText(awayPlayer_maxAss.getFirstname() + awayPlayer_maxAss.getLastname());
+
+        List<BarEntry> yValues = new ArrayList<>();
+        BarEntry homePtsBarEntry = new BarEntry(1, homePlayer_maxPts.getPts());
+        BarEntry awayPtsBarEntry = new BarEntry(3, awayPlayer_maxPts.getPts());
+        yValues.add(homePtsBarEntry);
+        yValues.add(awayPtsBarEntry);
+        mBarChartUtils_smmaryBarChartComparePlayer.showData(yValues,"pts");
+
+        List<BarEntry> yRebValues = new ArrayList<>();//籃板
+        BarEntry homeRebBarEntry = new BarEntry(1, homePlayer_maxReb.getReb());
+        BarEntry awayRebBarEntry = new BarEntry(3, awayPlayer_maxReb.getReb());
+        yRebValues.add(homeRebBarEntry);
+        yRebValues.add(awayRebBarEntry);
+        mBarChartUtils_smmaryBarChartComparePlayer_reb.showData(yRebValues,"reb");
+
+        List<BarEntry> yAssValues = new ArrayList<>();//助攻
+        BarEntry homeAssBarEntry = new BarEntry(1, homePlayer_maxAss.getAst());
+        BarEntry awayAssBarEntry = new BarEntry(3, awayPlayer_maxAss.getAst());
+        yAssValues.add(homeAssBarEntry);
+        yAssValues.add(awayAssBarEntry);
+        mBarChartUtils_smmaryBarChartComparePlayer_ass.showData(yAssValues,"ass");
     }
+
+    GamePlayerData homePlayer_maxPts, homePlayer_maxAss, homePlayer_maxReb;
+    GamePlayerData awayPlayer_maxPts, awayPlayer_maxAss, awayPlayer_maxReb;
 
     private void updateHomeDataView(List<GamePlayerData> homeData) {
         int homeAss = 0, homeReb = 0, homeStl = 0, homeblk = 0, homemake = 0, homeatt = 0;
@@ -373,6 +461,10 @@ public class GameSummaryFragment extends BaseUIFragment {
         mTvHomeStl.setText(homeStl + "");
         mTvHomeBlk.setText(homeblk + "");
 
+        homePlayer_maxPts = maxPts;
+        homePlayer_maxAss = maxAss;
+        homePlayer_maxReb = maxReb;
+
         mTvHomeRateShoot.setText(NumberUtils.formatAmount(String.valueOf(
                 (float) (homemake * 100) / homeatt), BigDecimal.ROUND_HALF_UP, 2) + "%");
         mTvHomeRate3shoot.setText(NumberUtils.formatAmount(String.valueOf(
@@ -388,6 +480,7 @@ public class GameSummaryFragment extends BaseUIFragment {
 
         mTvHomeMaxReb.setText(maxReb.getReb() + "");
         mTvHomeMaxRebName.setText(maxReb.getFirstname() + maxReb.getLastname() + "\n位置：" + maxReb.getPosition());
+
     }
 
     private void updateAwayDataView(List<GamePlayerData> homeData) {
@@ -416,6 +509,10 @@ public class GameSummaryFragment extends BaseUIFragment {
         mTvAwayStl.setText(stl + "");
         mTvAwayBlk.setText(blk + "");
 
+        awayPlayer_maxPts = maxPts;
+        awayPlayer_maxAss = maxAss;
+        awayPlayer_maxReb = maxReb;
+
         mTvAwayRateShoot.setText(NumberUtils.formatAmount(String.valueOf(
                 (float) (homemake * 100) / homeatt), BigDecimal.ROUND_HALF_UP, 2) + "%");
         mTvAwayRate3shoot.setText(NumberUtils.formatAmount(String.valueOf(
@@ -431,6 +528,7 @@ public class GameSummaryFragment extends BaseUIFragment {
 
         mTvAwayMaxReb.setText(maxReb.getReb() + "");
         mTvAwayMaxRebName.setText(maxReb.getFirstname() + maxReb.getLastname() + "\n位置：" + maxReb.getPosition());
+
     }
 
 

@@ -941,6 +941,294 @@
             android:paddingLeft="15dp"
             android:text="球員本場數據對比" />
 
+        <!-- 條狀對比圖-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/compare_player_barchar_ll"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_centerInParent="true">
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/smmaryBarChartComparePlayer"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:text="得分"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical"
+                    android:layout_toStartOf="@id/compare_player_barchar_ll"
+                    android:gravity="center_horizontal"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:id="@+id/compare_player_lefticon"
+                        android:scaleType="fitCenter"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:id="@+id/compare_player_leftname"
+                        android:text="leftname"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@id/compare_player_barchar_ll"
+                    android:gravity="center_horizontal"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:id="@+id/compare_player_righticon"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:id="@+id/compare_player_rightname"
+                        android:text="rightname"/>
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:gravity="center_vertical">
+
+                <include layout="@layout/layout_divider" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/compare_player_reb_barchar_ll"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_centerInParent="true">
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/smmaryBarChartComparePlayerReb"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:text="籃板"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical"
+                    android:layout_toStartOf="@id/compare_player_reb_barchar_ll"
+                    android:gravity="center_horizontal"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:id="@+id/compare_player_reb_lefticon"
+                        android:scaleType="fitCenter"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:id="@+id/compare_player_reb_leftname"
+                        android:text="leftname"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@id/compare_player_reb_barchar_ll"
+                    android:gravity="center_horizontal"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:id="@+id/compare_player_reb_righticon"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:id="@+id/compare_player_reb_rightname"
+                        android:text="rightname"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:gravity="center_vertical">
+
+                <include layout="@layout/layout_divider" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/compare_player_ass_barchar_ll"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_centerInParent="true">
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/smmaryBarChartComparePlayerAss"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:text="助攻"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical"
+                    android:layout_toStartOf="@id/compare_player_ass_barchar_ll"
+                    android:gravity="center_horizontal"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:id="@+id/compare_player_ass_lefticon"
+                        android:scaleType="fitCenter"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:id="@+id/compare_player_ass_leftname"
+                        android:text="leftname"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@id/compare_player_ass_barchar_ll"
+                    android:gravity="center_horizontal"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:id="@+id/compare_player_ass_righticon"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:id="@+id/compare_player_ass_rightname"
+                        android:text="rightname"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center_vertical">
+
+            <include layout="@layout/layout_divider" />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
