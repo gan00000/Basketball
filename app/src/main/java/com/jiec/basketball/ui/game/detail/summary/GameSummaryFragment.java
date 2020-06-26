@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.gan.ctools.tool.BarChartUtil2;
 import com.gan.ctools.tool.BarChartUtils;
 import com.gan.widget.CompareIndicatorView2;
 import com.github.mikephil.charting.charts.BarChart;
@@ -204,8 +205,8 @@ public class GameSummaryFragment extends BaseUIFragment {
     TextView compare_player_ass_rightname;
 
 
-    @BindView(R.id.smmaryBarChart)
-    BarChart smmaryBarChart;
+    @BindView(R.id.barChart_compare_team_score)
+    BarChart barChart_compare_team_score;
 
     @BindView(R.id.smmaryBarChartComparePlayer)
     BarChart smmaryBarChartComparePlayer;
@@ -216,7 +217,7 @@ public class GameSummaryFragment extends BaseUIFragment {
     @BindView(R.id.smmaryBarChartComparePlayerAss)
     BarChart smmaryBarChartComparePlayerAss;
 
-    BarChartUtils mBarChartUtils;
+    BarChartUtil2 mBarChartUtil2;
     BarChartUtils mBarChartUtils_smmaryBarChartComparePlayer;//得分
     BarChartUtils mBarChartUtils_smmaryBarChartComparePlayer_reb;//籃板
     BarChartUtils mBarChartUtils_smmaryBarChartComparePlayer_ass;//助攻
@@ -239,7 +240,7 @@ public class GameSummaryFragment extends BaseUIFragment {
 
         unbinder = ButterKnife.bind(this, view);
 
-        mBarChartUtils = new BarChartUtils(requireContext(), smmaryBarChart);
+        mBarChartUtil2 = new BarChartUtil2(requireContext(), barChart_compare_team_score);
         mBarChartUtils_smmaryBarChartComparePlayer = new BarChartUtils(requireContext(),smmaryBarChartComparePlayer);
         mBarChartUtils_smmaryBarChartComparePlayer_reb = new BarChartUtils(requireContext(),smmaryBarChartComparePlayerReb);
         mBarChartUtils_smmaryBarChartComparePlayer_ass = new BarChartUtils(requireContext(),smmaryBarChartComparePlayerAss);
@@ -265,16 +266,24 @@ public class GameSummaryFragment extends BaseUIFragment {
         List<BarEntry> yValuesTest = new ArrayList<>();
         ArrayList<String> xValuesTest = new ArrayList<>();
 
+        int maxGrap = 0;
+        int minGrap = 0;
         for (int i = 0; i < minScoreGap.size(); i++) {
-            BarEntry barEntry = new BarEntry(i, minScoreGap.get(i));
+            int mgrap = minScoreGap.get(i);
+            if (mgrap > maxGrap) maxGrap = mgrap;
+            if (mgrap < minGrap) minGrap = mgrap;
+            BarEntry barEntry = new BarEntry(i + 1, minScoreGap.get(i));
             yValuesTest.add(barEntry);
-            xValuesTest.add(i + "");
+            xValuesTest.add(i + 1 + "");
         }
 
-        String lable = "mmTest";
+//        maxGrap = maxGrap + 1;
+//        minGrap = minGrap - 1;
+
+        String lable = "ScoreGrap";
 
 
-        mBarChartUtils.showData(yValuesTest, lable);
+        mBarChartUtil2.showData(yValuesTest, lable, maxGrap, minGrap);
     }
 
 

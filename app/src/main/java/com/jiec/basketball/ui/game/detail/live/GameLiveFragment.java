@@ -134,19 +134,29 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
             for (List<GameLiveInfo.LiveFeedBean> beans : gameLiveInfo.getLive_feed()) {
                 liveFeedBeans.addAll(beans);
 
-                for (int i = 11; i >= 0; i--) {
+                for (int i = 10; i >= -1; i--) {//计算每分钟分差
 
-                    for (GameLiveInfo.LiveFeedBean liveFeedBean: beans) {
-                        String min = liveFeedBean.getMinutes().trim();
-                        if (Integer.valueOf(min) == i){
-                            int homePts = Integer.valueOf(liveFeedBean.getHomePts());
-                            int awayPts = Integer.valueOf(liveFeedBean.getAwayPts());
-                            minScoreGap.add(homePts - awayPts);
-                            break;
+                    if (i == -1){
+                        GameLiveInfo.LiveFeedBean liveFeedBean = beans.get(beans.size() - 1);
+                        int homePts = Integer.valueOf(liveFeedBean.getHomePts());
+                        int awayPts = Integer.valueOf(liveFeedBean.getAwayPts());
+                        minScoreGap.add(homePts - awayPts);
+                    }else{
+
+                        for (GameLiveInfo.LiveFeedBean liveFeedBean: beans) {
+                            String min = liveFeedBean.getMinutes().trim();
+                            if (Integer.valueOf(min) == i){
+                                int homePts = Integer.valueOf(liveFeedBean.getHomePts());
+                                int awayPts = Integer.valueOf(liveFeedBean.getAwayPts());
+                                minScoreGap.add(homePts - awayPts);
+                                break;
+
+                            }
 
                         }
 
                     }
+
                 }
 
             }
