@@ -92,7 +92,7 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
 
     @Override
     protected BaseListAdapter createAdapter() {
-        mGameLiveAdapter = new GameLiveAdapter();
+        mGameLiveAdapter = new GameLiveAdapter(requireActivity());
         return mGameLiveAdapter;
     }
 
@@ -160,6 +160,7 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
                 }
 
             }
+            mGameLiveAdapter.setGameLiveInfo(gameLiveInfo);
             mGameLiveAdapter.setData(liveFeedBeans);
             showData(1, liveFeedBeans);
         } else {

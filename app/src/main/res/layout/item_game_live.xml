@@ -2,11 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/item_game_live_ll"
         android:background="@color/white"
         android:clickable="true"
         android:minHeight="40dp"
@@ -14,65 +17,49 @@
 
         <TextView
             android:id="@+id/tv_time"
-            android:layout_width="0dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_12"
             android:text="10:01" />
 
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/divider" />
 
-
-        <TextView
-            android:id="@+id/tv_team"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_12"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/tv_team_iv"
+            android:layout_marginEnd="6dp"
+            android:layout_marginStart="2dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="热火" />
-
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/divider" />
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="fitCenter"
+             />
 
 
         <TextView
+            android:layout_marginStart="2dp"
             android:id="@+id/tv_event"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_12"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="3"
-            android:gravity="center"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
             android:padding="2dp"
             android:text="J.R. Smith上籃,LeBron James助攻" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/divider" />
 
 
         <TextView
             android:id="@+id/tv_score"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_12"
-            android:layout_width="0dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:textStyle="bold"
             android:gravity="center"
             android:text="23 - 17" />
 
