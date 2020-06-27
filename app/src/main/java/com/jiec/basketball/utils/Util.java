@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -202,5 +204,19 @@ public class Util {
 		}
 
 		return null;
+	}
+
+
+	public static int stringToInt(String stringValue){
+
+		try {
+			if (StringUtils.isEmpty(stringValue)){
+				return 0;
+			}
+			int m = Integer.valueOf(stringValue);
+			return m;
+		} catch (NumberFormatException e) {
+			return 0;
+		}
 	}
 }

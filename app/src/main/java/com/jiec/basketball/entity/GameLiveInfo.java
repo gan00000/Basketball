@@ -75,6 +75,16 @@ public class GameLiveInfo extends CommResponse {
         private String type;
         private String time;
 
+        private boolean isGetPts = false; //是否得分
+
+        public boolean isGetPts() {
+            return isGetPts;
+        }
+
+        public void setGetPts(boolean getPts) {
+            isGetPts = getPts;
+        }
+
         public String getId() {
             return id;
         }

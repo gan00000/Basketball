@@ -14,6 +14,7 @@ import com.jiec.basketball.entity.GameLivePost;
 import com.jiec.basketball.entity.MatchSummary;
 import com.jiec.basketball.entity.Matches;
 import com.jiec.basketball.entity.response.GameLivePostResponse;
+import com.jiec.basketball.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,8 +132,23 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
         if (gameLiveInfo.getLive_feed() != null) {
 
             List<GameLiveInfo.LiveFeedBean> liveFeedBeans = new ArrayList<>();
+
+            GameLiveInfo.LiveFeedBean currentGameInfo = null;
+
             for (List<GameLiveInfo.LiveFeedBean> beans : gameLiveInfo.getLive_feed()) {
                 liveFeedBeans.addAll(beans);
+
+                for (GameLiveInfo.LiveFeedBean gameInfo: beans) {//判断是否得分
+
+                    if (currentGameInfo != null) {
+                        if(Util.stringToInt(gameInfo.getHomePts()) >  Util.stringToInt(currentGameInfo.getHomePts()) ||
+                                Util.stringToInt(gameInfo.getAwayPts()) >  Util.stringToInt(currentGameInfo.getAwayPts()) ){
+                            gameInfo.setGetPts(true);
+
+                        }
+                    }
+                    currentGameInfo = gameInfo;
+                }
 
                 for (int i = 10; i >= -1; i--) {//计算每分钟分差
 

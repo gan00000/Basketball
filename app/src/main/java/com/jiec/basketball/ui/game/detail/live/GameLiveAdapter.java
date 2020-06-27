@@ -59,27 +59,29 @@ public class GameLiveAdapter extends BaseListAdapter<GameLiveInfo.LiveFeedBean> 
 
         if (holder instanceof ItemViewHolder && gameInfo != null) {
 
+            if (gameInfo.isGetPts()){//得分字体加粗
+                ((ItemViewHolder) holder).mTvTime.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
+                ((ItemViewHolder) holder).mTvScore.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
+                ((ItemViewHolder) holder).mTvEvent.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
+            }else{
+                ((ItemViewHolder) holder).mTvTime.setTypeface(Typeface.DEFAULT,Typeface.NORMAL);
+                ((ItemViewHolder) holder).mTvScore.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+                ((ItemViewHolder) holder).mTvEvent.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+            }
+
+
             ((ItemViewHolder) holder).mTvTime.setText(gameInfo.getTime());
 //            ((ItemViewHolder) holder).mTvTeam.setText(gameInfo.getTeamName());
             ((ItemViewHolder) holder).mTvEvent.setText(gameInfo.getDescription());
-            if (!"0".equals(gameInfo.getPts())){
-                ((ItemViewHolder) holder).mTvScore.setTypeface(Typeface.DEFAULT_BOLD);
-            }else{
-                ((ItemViewHolder) holder).mTvScore.setTypeface(Typeface.DEFAULT);
-            }
+
             ((ItemViewHolder) holder).mTvScore.setText(gameInfo.getPts());
+
             if (mMatchSummary != null){
-
                 if (mMatchSummary.getHomeName().equals(gameInfo.getTeamName())){
-
                     Glide.with(context).load(mMatchSummary.getHomeLogo()).into(((ItemViewHolder) holder).tv_team_iv);
-
-//                    ((ItemViewHolder) holder).mTvTeam.setText(gameInfo.getTeamName());
                 }else {
-
                     Glide.with(context).load(mMatchSummary.getAwayLogo()).into(((ItemViewHolder) holder).tv_team_iv);
                 }
-
             }
 
 
@@ -97,6 +99,7 @@ public class GameLiveAdapter extends BaseListAdapter<GameLiveInfo.LiveFeedBean> 
             }else {
                 ((ItemViewHolder) holder).mView.setBackgroundColor(context.getResources().getColor(R.color.c_f9f9fb));
             }
+
         }
     }
 
