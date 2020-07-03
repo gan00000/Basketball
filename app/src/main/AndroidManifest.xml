@@ -119,6 +119,10 @@
              />
 
         <activity
+            android:name=".ui.search.SearchActivity"
+            />
+
+        <activity
             android:name=".ui.youtube.PlayerViewDemoActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
              />

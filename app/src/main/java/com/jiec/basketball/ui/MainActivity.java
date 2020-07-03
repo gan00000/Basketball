@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
@@ -27,6 +28,7 @@ import com.jiec.basketball.ui.game.GameMainFragment;
 import com.jiec.basketball.ui.mine.MineActivity;
 import com.jiec.basketball.ui.news.NewsListFragment;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
+import com.jiec.basketball.ui.search.SearchActivity;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.EventBusEvent;
 import com.jiec.basketball.utils.EventBusUtils;
@@ -65,6 +67,8 @@ public class MainActivity extends BaseActivity {
 
     private CommonTabLayout mTabLayout;
     private CircleSImageView ivMine;
+
+    private Button start_search_btn;
 
     private ArrayList<Fragment> mFragments;
 
@@ -140,6 +144,16 @@ public class MainActivity extends BaseActivity {
 
 
     private void initView() {
+
+        start_search_btn = findViewById(R.id.start_search_btn);
+        start_search_btn.setVisibility(View.GONE);
+        start_search_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
+            }
+        });
+
         mTabLayout = (CommonTabLayout) findViewById(R.id.tab_layout);
 
         ArrayList<CustomTabEntity> tabEntities = new ArrayList<>();
@@ -153,6 +167,11 @@ public class MainActivity extends BaseActivity {
         mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
+                if (position == 1 || position == 2){
+                    start_search_btn.setVisibility(View.VISIBLE);
+                }else {
+                    start_search_btn.setVisibility(View.GONE);
+                }
             }
 
             @Override
