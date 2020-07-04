@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gan.ctools.tool.SPUtil;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIActivity;
-import com.jiec.basketball.ui.game.detail.summary.GameSummaryFragment;
 import com.wangcj.common.utils.ToastUtil;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -109,7 +108,7 @@ public class SearchActivity  extends BaseUIActivity {
                 addSearchHistoryData(searchText);
 
                 setSearchSettingVisable(false);
-                fragmentManager.beginTransaction().replace(search_result_fragment_layout.getId(),new GameSummaryFragment()).commit();
+                fragmentManager.beginTransaction().replace(search_result_fragment_layout.getId(),SearchResultListFragment.newInstance(searchText)).commit();
             }
         });
 

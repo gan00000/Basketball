@@ -124,5 +124,8 @@ public interface GameApi {
     @GET("/api/like_match_team/")
     Observable<GameLikeResponse> summitLike(@Query("game_id") String gameId, @Query("type") int type);
 
+    //获取新闻列表
+    @GET("/api/get_search_results")
+    Observable<NewListResponse> getSearchResult(@Query("search") String key,  @Query("page") int page, @Query("page") int count);
 
 }
