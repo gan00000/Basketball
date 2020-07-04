@@ -8,6 +8,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_height="30dp"
         android:gravity="center_vertical">
 
@@ -16,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
+            android:textSize="18sp"
             android:text="搜索歷史"
             android:gravity="center_vertical"
             />
@@ -26,6 +29,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginEnd="20dp"
             android:gravity="center_vertical"
+            android:textSize="18sp"
             android:text="清空"
             android:id="@+id/search_history_item_header_delete_all"
             />

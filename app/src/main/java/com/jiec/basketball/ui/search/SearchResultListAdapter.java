@@ -1,7 +1,6 @@
-package com.jiec.basketball.ui.news;
+package com.jiec.basketball.ui.search;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -28,12 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Description : 新闻列表适配器
- * Author : jiec
- * Date   : 17-1-6
- */
-public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SearchResultListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ADMOB = 2;
@@ -42,11 +38,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<NewsBean> mData = new ArrayList<>();
     private List<NewsBean> mBannerData = new ArrayList<>();
     private boolean mShowFooter = true;
+    private boolean mShowBanner = false;
+    private boolean mShowAd = false;
     private Context mContext;
 
     private OnItemClickListener mOnItemClickListener;
 
-    public NewsAdapter(Context context) {
+    public SearchResultListAdapter(Context context) {
         this.mContext = context;
     }
 
@@ -55,10 +53,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.notifyDataSetChanged();
     }
 
-    public void setBannerData(List<NewsBean> list) {
+   /* public void setBannerData(List<NewsBean> list) {
         this.mBannerData = list;
         this.notifyDataSetChanged();
-    }
+    }*/
 
     private int getBannerCount() {
         if (mBannerData != null && mBannerData.size() > 0) {
@@ -92,9 +90,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return TYPE_BANNER;
         }
 
-        if (position == 3 || (position - 3) % 8 == 0) {
+        /*if (position == 3 || (position - 3) % 8 == 0) { //不显示广告
             return TYPE_ADMOB;
-        }
+        }*/
 
         return TYPE_ITEM;
     }
@@ -187,16 +185,22 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
+        int all = 0;
         int begin = mShowFooter ? 1 : 0;
         if (mData == null) {
             return begin;
         }
 
-        int adSize = mData.size() > 2 ? ((mData.size() - 3) / 7 + 1) : 0;
+        all = all + begin;
+        if (mShowAd){
+            int adSize = mData.size() > 2 ? ((mData.size() - 3) / 7 + 1) : 0;
+            all = all + adSize;
+        }
+        if (mShowBanner){
+            all = all + getBannerCount();
+        }
 
-        int sumSize = mData.size() + begin + adSize + getBannerCount();
-
-        return sumSize;
+        return mData.size() + all;
     }
 
     public NewsBean getItem(int position) {

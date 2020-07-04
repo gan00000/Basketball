@@ -1,10 +1,12 @@
 package com.jiec.basketball.ui.search;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -35,9 +37,9 @@ public class SearchActivity  extends BaseUIActivity {
     private static final String FILE_NAME_SEARCH_HISTORY_KEY = "FILE_NAME_SEARCH_HISTORY_KEY";
     private static final String FILE_NAME_SEARCH_HISTORY_SPLITE = "&&&";
     @BindView(R.id.search_back_btn)
-    Button backButton;
+    View backView;
     @BindView(R.id.search_key_et)
-    TextView search_key_et;
+    EditText search_key_et;
 
     @BindView(R.id.search_key_delete_v)
     View search_key_delete_v;
@@ -71,12 +73,7 @@ public class SearchActivity  extends BaseUIActivity {
         refreshSearchHistoryData();
         setSearchSettingVisable(true);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        backView.setOnClickListener(v -> finish());
 
         search_key_et.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,9 +133,13 @@ public class SearchActivity  extends BaseUIActivity {
         });
 
         initSearchRecyclerView();
-
+        showSoftInputFromWindow(this, search_key_et);
     }
 
+    /**
+     * 显示历史记录与搜索结果页面切换
+     * @param visible
+     */
     private void setSearchSettingVisable(Boolean visible) {
         if (visible){
             search_content_layout.setVisibility(View.GONE);
@@ -234,7 +235,7 @@ public class SearchActivity  extends BaseUIActivity {
             public void onBindViewHolder(ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
 
-                holder.getView(R.id.search_history_delete_bt).setOnClickListener(new View.OnClickListener() {
+                holder.getView(R.id.search_history_delete_ll).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (position + 1 > searchHistoryData.size()){
@@ -249,11 +250,11 @@ public class SearchActivity  extends BaseUIActivity {
 
         mCommonAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder viewHolder, int i) {
-                if (i + 1 > searchHistoryData.size()){
+            public void onItemClick(View view, RecyclerView.ViewHolder viewHolder, int i) { //i这里从1开始
+                if (i > searchHistoryData.size()){
                     return;
                 }
-                search_key_et.setText(searchHistoryData.get(i));
+                search_key_et.setText(searchHistoryData.get(i - 1));
                 search_ok_btn.performClick();
             }
 
@@ -276,5 +277,19 @@ public class SearchActivity  extends BaseUIActivity {
         history_search_rv.setAdapter(mHeaderAndFooterWrapper);
         mHeaderAndFooterWrapper.notifyDataSetChanged();
 
+    }
+
+    /**
+     * EditText获取焦点并显示软键盘
+     */
+    public static void showSoftInputFromWindow(Activity activity, EditText editText) {
+        editText.setFocusable(true);
+        editText.setFocusableInTouchMode(true);
+        editText.requestFocus();
+        //显示软键盘
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        //如果上面的代码没有弹出软键盘 可以使用下面另一种方式
+        //InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        // imm.showSoftInput(editText, 0);
     }
 }

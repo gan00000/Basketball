@@ -126,6 +126,6 @@ public interface GameApi {
 
     //获取新闻列表
     @GET("/api/get_search_results")
-    Observable<NewListResponse> getSearchResult(@Query("search") String key,  @Query("page") int page, @Query("page") int count);
+    Observable<NewListResponse> getSearchResult(@Query("search") String key,  @Query("page") int page, @Query("count") int count);
 
 }
