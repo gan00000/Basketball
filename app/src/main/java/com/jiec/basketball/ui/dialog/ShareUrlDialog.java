@@ -37,6 +37,8 @@ public class ShareUrlDialog extends Dialog {
     private String shareUrl;
     private Bitmap bitmap;
 
+    ImageView line;
+
     public ShareUrlDialog(final Activity activity, final NewsBean newsBean) {
         this(activity,newsBean.getUrl());
     }
@@ -95,7 +97,7 @@ public class ShareUrlDialog extends Dialog {
             }
         });
 
-        ImageView line = (ImageView) findViewById(R.id.iv_line);
+        line = (ImageView) findViewById(R.id.iv_line);
         line.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +121,7 @@ public class ShareUrlDialog extends Dialog {
 
     public void setShareLocalPhoto(Bitmap bitmap){
         this.bitmap = bitmap;
+        line.setVisibility(View.GONE);
     }
     private void shareLocalPhoto(){
 
