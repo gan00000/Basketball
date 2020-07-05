@@ -109,6 +109,10 @@ public interface GameApi {
     @GET("/api/get_match_summary/")
     Observable<GameDataInfo> getGameDataInfo(@Query("game_id") String gameId);
 
+    //球员每一节数据
+    @GET("/api/get_player_match_summary/")
+    Observable<GameDataInfo> getPlayerGameDataInfo(@Query("game_id") String gameId,@Query("team_id") String team_id,@Query("player_id") String player_id);
+
     @GET("/api/get_game_schedule/")
     Observable<GameList> getGameList(@Query("date_from") String date_from, @Query("date_to") String date_to);
 

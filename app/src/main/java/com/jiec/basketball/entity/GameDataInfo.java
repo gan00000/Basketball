@@ -67,7 +67,9 @@ public class GameDataInfo extends CommResponse {
         }
 
         matchDetailsMaps.put(match1Id, matchDetails1);
-        matchDetailsMaps.put(matchDetails2.get(0).getTeamId(), matchDetails2);
+        if (!matchDetails2.isEmpty()) {
+            matchDetailsMaps.put(matchDetails2.get(0).getTeamId(), matchDetails2);
+        }
 
     }
 }

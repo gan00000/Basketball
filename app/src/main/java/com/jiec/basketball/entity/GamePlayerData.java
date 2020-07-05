@@ -51,7 +51,8 @@ public class GamePlayerData {
      * officialImagesrc : https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nba/low-res/20001829.png
      * isStarter : 1
      */
-
+    private String plName = "";
+    private String quarter = "";
     private String gameId;
     private String playerId;
     private String teamId;
@@ -450,6 +451,22 @@ public class GamePlayerData {
 
     public void setFt(String ft) {
         this.ft = ft;
+    }
+
+    public String getPlName() {
+        return plName;
+    }
+
+    public void setPlName(String plName) {
+        this.plName = plName;
+    }
+
+    public String getQuarter() {
+        return quarter;
+    }
+
+    public void setQuarter(String quarter) {
+        this.quarter = quarter;
     }
 }
 

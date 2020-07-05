@@ -426,7 +426,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             }
         });
 
-        mFragments.add(mGameSummaryFragment);//队长
+        mFragments.add(mGameSummaryFragment);//对阵
         mFragments.add(mGameStatisticMainFragment);//数据统计
         mFragments.add(mGameLiveFragment);//文字直播
 

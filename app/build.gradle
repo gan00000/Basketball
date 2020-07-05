@@ -162,4 +162,9 @@ dependencies {
 //    //# Other ABIs: optional
 //    implementation 'com.github.ctiao:ndkbitmap-armv5:0.9.21'
 //    implementation 'com.github.ctiao:ndkbitmap-x86:0.9.21'
+
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    implementation 'com.zhy:base-rvadapter:3.0.3'
 }

@@ -121,6 +121,9 @@
         <activity
             android:name=".ui.search.SearchActivity"
             />
+        <activity
+            android:name=".ui.game.detail.PlayerMatchSummaryActivity"
+            />
 
         <activity
             android:name=".ui.youtube.PlayerViewDemoActivity"

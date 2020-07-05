@@ -25,10 +25,12 @@ import com.bin.david.form.data.format.draw.FastTextDrawFormat;
 import com.bin.david.form.data.format.grid.BaseGridFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
+import com.bin.david.form.listener.OnColumnItemClickListener;
 import com.bin.david.form.utils.DensityUtils;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIFragment;
 import com.jiec.basketball.entity.GamePlayerData;
+import com.jiec.basketball.ui.game.detail.PlayerMatchSummaryActivity;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -134,6 +136,24 @@ public class GameStatisticFragment extends BaseUIFragment {
         smartTable.getConfig().setTableGridFormat(new BaseGridFormat() {
             @Override
             protected boolean isShowColumnTitleVerticalLine(int col, Column column) {
+                if (col == 0){
+                    column.setOnColumnItemClickListener(new OnColumnItemClickListener() {
+                        @Override
+                        public void onClick(Column column, String value, Object o, int position) {
+
+                            if (gamePlayerDatas != null && gamePlayerDatas.size() >= position + 1){
+
+                                GamePlayerData xxGamePlayerData = gamePlayerDatas.get(position);
+
+                                if (StringUtils.isNotEmpty(xxGamePlayerData.getGameId()) && StringUtils.isNotEmpty(xxGamePlayerData.getPlayerId()) && StringUtils.isNotEmpty(xxGamePlayerData.getTeamId())){
+
+                                    PlayerMatchSummaryActivity.startActivity(requireActivity(),xxGamePlayerData.getGameId(),xxGamePlayerData.getTeamId(),xxGamePlayerData.getPlayerId());
+                                }
+                            }
+
+                        }
+                });
+                }
                 return false;
             }
 
