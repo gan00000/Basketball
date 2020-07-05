@@ -106,6 +106,8 @@ public class GameStatisticMainFragment extends BaseUIFragment implements GameSta
         mAwayFragment = GameStatisticFragment.newInstance();
         mHomeFragment = GameStatisticFragment.newInstance();
 
+        mAwayFragment.setHomeTeam(false);
+        mHomeFragment.setHomeTeam(true);
 
         mFragments.add(mHomeFragment);
         mFragments.add(mAwayFragment);

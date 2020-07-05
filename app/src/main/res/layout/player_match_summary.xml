@@ -53,16 +53,35 @@
                 app:civ_border_color="@color/red"
                 app:civ_border_overlay="true" />
 
-            <TextView
-                android:id="@+id/player_match_summary_name_tv"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/player_match_summary_icon_iv"
                 android:layout_marginLeft="20dp"
-                android:textSize="@dimen/sp_20"
-                android:textColor="@color/black"
-                android:text="playername"/>
+                android:layout_toEndOf="@id/player_match_summary_icon_iv"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/player_match_summary_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_20"
+                    android:textColor="@color/black"
+                    android:text="playername"/>
+
+                <TextView
+                    android:id="@+id/player_match_summary_teamname_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_16"
+                    android:textColor="@color/black"
+                    android:text="team"/>
+
+
+            </LinearLayout>
+
 
         </RelativeLayout>
 
@@ -109,6 +128,23 @@
             android:overScrollMode="never">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingTop="10dp"
+            android:id="@+id/player_match_summary_info_label"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:textAlignment="textEnd"
+            android:text="a\nb\nc\n"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_18sp"
+            android:paddingBottom="30dp"
+            />
+
 
 
     </LinearLayout>

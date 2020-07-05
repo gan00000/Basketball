@@ -30,6 +30,8 @@ import com.bin.david.form.utils.DensityUtils;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIFragment;
 import com.jiec.basketball.entity.GamePlayerData;
+import com.jiec.basketball.entity.MatchSummary;
+import com.jiec.basketball.ui.game.detail.GameDetailActivity;
 import com.jiec.basketball.ui.game.detail.PlayerMatchSummaryActivity;
 
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +53,17 @@ public class GameStatisticFragment extends BaseUIFragment {
     @BindView(R.id.st_statistic)
     SmartTable mStStatistic;
 
+    boolean isHomeTeam = true;
+
     boolean isLiving = false;
+
+    public boolean isHomeTeam() {
+        return isHomeTeam;
+    }
+
+    public void setHomeTeam(boolean homeTeam) {
+        isHomeTeam = homeTeam;
+    }
 
     Unbinder unbinder;
 
@@ -147,7 +159,9 @@ public class GameStatisticFragment extends BaseUIFragment {
 
                                 if (StringUtils.isNotEmpty(xxGamePlayerData.getGameId()) && StringUtils.isNotEmpty(xxGamePlayerData.getPlayerId()) && StringUtils.isNotEmpty(xxGamePlayerData.getTeamId())){
 
-                                    PlayerMatchSummaryActivity.startActivity(requireActivity(),xxGamePlayerData.getGameId(),xxGamePlayerData.getTeamId(),xxGamePlayerData.getPlayerId());
+                                    GameDetailActivity gameDetailActivity = (GameDetailActivity) requireActivity();
+                                    MatchSummary matchSummary = gameDetailActivity.getMatchSummary();
+                                    PlayerMatchSummaryActivity.startActivity(matchSummary,isHomeTeam,gameDetailActivity,xxGamePlayerData.getGameId(),xxGamePlayerData.getTeamId(),xxGamePlayerData.getPlayerId());
                                 }
                             }
 

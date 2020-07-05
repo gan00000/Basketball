@@ -20,6 +20,7 @@ import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIActivity;
 import com.jiec.basketball.entity.GameDataInfo;
 import com.jiec.basketball.entity.GamePlayerData;
+import com.jiec.basketball.entity.MatchSummary;
 import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
@@ -44,6 +45,12 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
 
     @BindView(R.id.player_match_summary_name_tv)
     TextView playerNameTv;
+
+    @BindView(R.id.player_match_summary_teamname_tv)
+    TextView playerTeamnameTv;
+
+    @BindView(R.id.player_match_summary_info_label)
+    TextView matchInfoTv;
 
     @BindView(R.id.iv_share)
     PressImageView ivShare;
@@ -74,11 +81,16 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
     String TITLES[] = {"1ST","2ND","3RD","4TH","全場"};
     String TITLES_OT[] = {"1ST","2ND","3RD","4TH","加時","全場"};
 
-    public static void startActivity(Activity activity, String gameId, String teamId, String playerId){
+    MatchSummary matchSummary;
+    Boolean isHomeTeam;
+
+    public static void startActivity(MatchSummary matchSummary, boolean isHomeTeam, Activity activity, String gameId, String teamId, String playerId){
         Intent mIntent = new Intent(activity, PlayerMatchSummaryActivity.class);
         mIntent.putExtra("gameId",gameId);
         mIntent.putExtra("teamId",teamId);
         mIntent.putExtra("playerId",playerId);
+        mIntent.putExtra("isHomeTeam",isHomeTeam);
+        mIntent.putExtra("matchSummary",matchSummary);
         activity.startActivity(mIntent);
     }
 
@@ -91,12 +103,28 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
         String gameId = getIntent().getStringExtra("gameId");
         String teamId = getIntent().getStringExtra("teamId");
         String playerId = getIntent().getStringExtra("playerId");
+        isHomeTeam = getIntent().getBooleanExtra("isHomeTeam",false);
+        matchSummary = (MatchSummary) getIntent().getSerializableExtra("matchSummary");
 
         gameId = "3506275";
         teamId = "10136";
         playerId = "10723";
 
         getPlayerGameData(gameId,teamId,playerId);//获取球员数据
+
+        setTeamName("");
+        String status = "已結束";
+        if (matchSummary.getScheduleStatus().equals("Final")) {
+            status = "已結束";
+        } else if (matchSummary.getScheduleStatus().equals("InProgress")) {
+            status = "進行中";
+        } else {
+            status = "未開始";
+        }
+        matchInfoTv.setText(matchSummary.getDate() + "\n" + status + "\n" +
+                matchSummary.getHomeName() + matchSummary.getHome_pts() +
+                " - " +
+                matchSummary.getAway_pts() + matchSummary.getAwayName());
 
         initTabLayout();
 
@@ -125,6 +153,16 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
             }
         });
 
+    }
+
+    private void setTeamName(String jerseynumber) {
+        if (matchSummary != null){
+            if (isHomeTeam){
+                playerTeamnameTv.setText(matchSummary.getHomeName() + " " + jerseynumber + "號");
+            }else {
+                playerTeamnameTv.setText(matchSummary.getAwayName() + " " + jerseynumber + "號");
+            }
+        }
     }
 
     private void initTabLayout() {
@@ -191,12 +229,16 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
                         for (int i = 0; i < mGamePlayerDataList.size(); i++) {
                             GamePlayerData gamePlayerData = mGamePlayerDataList.get(i);
                             if (gamePlayerData.getQuarter().equals("1")){
+
                                 playerNameTv.setText(gamePlayerData.getPlName());//設置球員名字
                                 ImageLoaderUtils.display(getApplicationContext(),playerIconCircleSImageView,gamePlayerData.getOfficialImagesrc());//設置球員頭像
+                                setTeamName(gamePlayerData.getJerseynumber());
+
                                 changeToRvData(playerMatchInfos_quarter_1,gamePlayerData);
                                 selectMatchInfos.addAll(playerMatchInfos_quarter_1);//默認顯示第一個
                                 mCommonAdapter.notifyDataSetChanged();
                                 mTabLayout.setCurrentTab(0);
+
 
                             }else if (gamePlayerData.getQuarter().equals("2")){
                                 changeToRvData(playerMatchInfos_quarter_2,gamePlayerData);

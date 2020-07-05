@@ -143,6 +143,12 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     GameSummaryFragment mGameSummaryFragment;
     GameStatisticMainFragment mGameStatisticMainFragment;
 
+    MatchSummary matchSummary;
+
+    public MatchSummary getMatchSummary() {
+        return matchSummary;
+    }
+
     List<SwitchVideoModel> switchVideoModels = new ArrayList<>();
 
     public static void show(Context context, String game_id, String game_time) {
@@ -323,6 +329,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             @Override
             public void onUpdate(MatchSummary matchSummary, Matches matches,  ArrayList<Integer> minScoreGap) {
 
+                GameDetailActivity.this.matchSummary = matchSummary;
                 if (mGameSummaryFragment != null) {
                     mGameSummaryFragment.setSummary(matchSummary);
                     mGameSummaryFragment.showData(minScoreGap);

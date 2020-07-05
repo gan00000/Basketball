@@ -2,12 +2,14 @@ package com.jiec.basketball.entity;
 
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
+import java.io.Serializable;
+
 /**
  * Created by wangchuangjie on 2018/5/20.
  */
 
 @JsonObject(fieldDetectionPolicy = JsonObject.FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS)
-public class MatchSummary {
+public class MatchSummary implements Serializable {
     /**
      * homeLogo : https://upload.wikimedia.org/wikipedia/en/8/8f/Boston_Celtics.svg
      * homeName : 賽爾提克
