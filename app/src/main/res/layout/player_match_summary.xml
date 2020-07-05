@@ -6,6 +6,7 @@
     android:id="@+id/activity_about"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/c_fafafa"
     android:orientation="vertical">
 
     <com.wangcj.common.widget.TitleBar
@@ -33,6 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/player_match_summary_ll"
+        android:background="@color/c_fafafa"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -85,6 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
+            android:background="@color/c_fafafa"
             app:tl_indicator_color="@color/blue"
             app:tl_indicator_width="40dp"
             app:tl_tab_space_equal="true"
@@ -99,6 +102,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="6dp"
+            android:paddingBottom="20dp"
             android:background="@color/white"
             android:layout_gravity="center_horizontal"
             android:scrollbars="vertical"

@@ -24,6 +24,7 @@ import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
+import com.jiec.basketball.ui.dialog.ShareUrlDialog;
 import com.jiec.basketball.utils.ImageLoaderUtils;
 import com.wangcj.common.utils.LogUtil;
 import com.wangcj.common.widget.PressImageView;
@@ -114,12 +115,13 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
         mCommonAdapter.notifyDataSetChanged();
 
         ivShare.setOnClickListener(v -> {
-//            ShareUrlDialog dialog = new ShareUrlDialog(PlayerMatchSummaryActivity.this, "");
-//            dialog.show();
-
             Bitmap mBitmap = createBitmapFormView(player_match_summary_ll);
             if (mBitmap != null){
-                playerIconCircleSImageView.setImageBitmap(mBitmap);
+//                playerIconCircleSImageView.setImageBitmap(mBitmap);
+                ShareUrlDialog dialog = new ShareUrlDialog(PlayerMatchSummaryActivity.this, "");
+                dialog.setShareLocalPhoto(mBitmap);
+                dialog.show();
+
             }
         });
 
