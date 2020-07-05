@@ -106,9 +106,10 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
         isHomeTeam = getIntent().getBooleanExtra("isHomeTeam",false);
         matchSummary = (MatchSummary) getIntent().getSerializableExtra("matchSummary");
 
-        gameId = "3506275";
-        teamId = "10136";
-        playerId = "10723";
+        //測試數據
+//        gameId = "3506275";
+//        teamId = "10136";
+//        playerId = "10723";
 
         getPlayerGameData(gameId,teamId,playerId);//获取球员数据
 
