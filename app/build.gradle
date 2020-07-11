@@ -6,6 +6,17 @@ android {
     compileSdkVersion 29
     buildToolsVersion '29.0.2'
 
+    signingConfigs {
+        config {
+            //打包签名信息
+            keyAlias 'haters'
+            keyPassword 'woshiwbjso'
+            storeFile file('keystore.jks')
+            storePassword 'woshiwbjso'
+           // v2SigningEnabled false
+        }
+    }
+
     defaultConfig {
         applicationId "com.jiec.basketball"
 
@@ -15,6 +26,8 @@ android {
         versionName "2.2.2"
 
         multiDexEnabled true
+
+        signingConfig signingConfigs.config
 
         buildConfigField "String", "OPENID_DISCOVERY_DOCUMENT_URL", "\"https://access.line.me/.well-known/openid-configuration\""
         buildConfigField "String", "API_SERVER_BASE_URI", "\"https://api.line.me/\""
@@ -27,16 +40,6 @@ android {
         }
     }
 
-    signingConfigs {
-        config {
-            //打包签名信息
-            keyAlias 'haters'
-            keyPassword 'woshiwbjso'
-            storeFile file('keystore.jks')
-            storePassword 'woshiwbjso'
-            v2SigningEnabled false
-        }
-    }
 
     sourceSets {
         main {
