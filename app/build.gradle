@@ -38,6 +38,17 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            java {
+                srcDir 'src/main/java'
+            }
+            //定义protobuf文件夹
+            proto {
+                srcDir 'src/main/proto'
+            }
+        }
+    }
 
     buildTypes {
         release {
@@ -58,41 +69,30 @@ android {
     }
 }
 
-
 protobuf {
     protoc {
-        // You still need protoc like in the non-Android case
-        artifact = 'com.google.protobuf:protoc:3.7.0'
-    }
-    plugins {
-        javalite {
-            // The codegen for lite comes as a separate artifact
-            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
-        }
+        artifact = 'com.google.protobuf:protoc:3.8.0'
     }
     generateProtoTasks {
         all().each { task ->
             task.builtins {
-                // In most cases you don't need the full Java output
-                // if you use the lite output.
-                remove java
-            }
-            task.plugins {
-                javalite { }
+                java {
+                    option "lite"
+                }
             }
         }
     }
 }
 
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == "com.android.support") {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion "28.0.0"
-            }
-        }
-    }}
+//configurations.all {
+//    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//        def requested = details.requested
+//        if (requested.group == "com.android.support") {
+//            if (!requested.name.startsWith("multidex")) {
+//                details.useVersion "28.0.0"
+//            }
+//        }
+//    }}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -211,7 +211,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     implementation 'com.zhy:base-rvadapter:3.0.3'
-    implementation 'com.google.protobuf:protobuf-javalite:3.12.2'
+    implementation 'com.google.protobuf:protobuf-javalite:3.9.1'  //'com.google.protobuf:protobuf-javalite:3.8.0'
+//    implementation 'com.google.protobuf:protobuf-java:3.11.0'
     implementation 'org.java-websocket:Java-WebSocket:1.5.1'
 
     implementation 'com.fasterxml.jackson.core:jackson-core:2.5.1'
