@@ -1,0 +1,11 @@
+syntax = "proto3";
+option java_package = "com.message"; 
+option java_outer_classname = "InfoMessage"; 
+
+package com.messages.InfoMessage;
+
+
+//信息提示
+message Info { 
+    string content = 1; //信息内容
+}

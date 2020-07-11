@@ -1,0 +1,86 @@
+syntax = "proto3";
+option java_package = "com.messages"; 
+option java_outer_classname = "UserMessage"; 
+
+package com.messages.UserMessage;
+
+import "InfoMessage.proto";
+
+
+//******************************接口协议**********************************//
+//required：一个格式良好的消息一定要含有1个这种字段。表示该值是必须要设置的；
+//optional：消息格式中该字段可以有0个或1个值（不超过1个）。
+//repeated：在一个格式良好的消息中，这种字段可以重复任意多次（包括0次）。重复的值的顺序会被保留。表示该值可以重复，相当于java中的List。
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+//心跳消息，建议连接成功后，每隔15秒发送一次
+//如果30秒内没收到心跳包返回，代表已经和服务器的链接已经断开
+message HeartbeatConnectReq_0{
+}
+message HeartbeatConnectResp_0{
+	int64 serverTime = 1;//服务器时间戳
+}
+
+//服务器强行关闭客户端连接，提示错误后可以不需要重连
+message CloseClientResp_1{
+    InfoMessage.Info info = 1;//关闭理由
+}
+
+//错误协议
+message InfoResp_2 {
+    InfoMessage.Info info = 1;//信息提示
+}
+
+
+
+
+
+//登录
+message LoginReq_1001{
+    string token = 1;//用户token
+}
+
+//登陆成功后获得的数据
+message LoginResp_1001{
+    MsgUser msgUser = 1;//用户数据
+}
+
+
+//客户端发送聊天信息
+message SendChatReq_1002 {
+    string content = 1; //聊天内容            
+} 
+
+//客户端显示聊天
+message SendChatResp_1002 {
+    repeated MsgChatContent msgChatContent = 1;//聊天内容
+}
+
+
+
+//******************************公共数据**********************************//
+
+//用户数据
+message MsgUser{
+    string token = 1;//ID
+    string name= 2;//昵称
+    string img= 3;//头像地址
+}
+
+ 
+
+
+//聊天内容
+message MsgChatContent{
+    string fromUserName = 1;      //发送者名字
+    string fromUserImg = 2;      //发送者头像地址
+    int64 fromTime = 3;            //发送时间
+    string content = 4;             //聊天内容
+}
+
+
+
+
+
+
