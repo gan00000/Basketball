@@ -33,6 +33,7 @@ import com.jiec.basketball.network.GameApi;
 import com.jiec.basketball.network.NetSubscriber;
 import com.jiec.basketball.network.NetTransformer;
 import com.jiec.basketball.network.RetrofitClient;
+import com.jiec.basketball.ui.game.detail.im.GameIMFragment;
 import com.jiec.basketball.ui.game.detail.live.GameLiveFragment;
 import com.jiec.basketball.ui.game.detail.statistic.GameStatisticMainFragment;
 import com.jiec.basketball.ui.game.detail.summary.GameSummaryFragment;
@@ -58,7 +59,7 @@ import butterknife.ButterKnife;
 public class GameDetailActivity extends BaseUIActivity implements GameDetailContract.View {
 
 
-    private static final String[] TITLES = { "對陣", "數據統計","文字直播"};
+    private static final String[] TITLES = {"聊球", "對陣", "數據統計","文字直播"};
     private static final String TAG = "player";
     private static final String SP_DATA_FILE_NAME = "SP_DATA_FILE_NAME.xml";
     private static final String SP_DATA_GAME_LIKE_KEY = "SP_DATA_GAME_LIKE_KEY_";
@@ -142,6 +143,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     GameLiveFragment mGameLiveFragment;
     GameSummaryFragment mGameSummaryFragment;
     GameStatisticMainFragment mGameStatisticMainFragment;
+    GameIMFragment mGameIMFragment;
 
     MatchSummary matchSummary;
 
@@ -433,6 +435,9 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             }
         });
 
+        mGameIMFragment = GameIMFragment.newInstance();
+
+        mFragments.add(mGameIMFragment);//聊球
         mFragments.add(mGameSummaryFragment);//对阵
         mFragments.add(mGameStatisticMainFragment);//数据统计
         mFragments.add(mGameLiveFragment);//文字直播

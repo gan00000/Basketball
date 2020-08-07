@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:gravity="center_vertical"
+        android:id="@+id/talk_im_show_et"/>
+
+</LinearLayout>

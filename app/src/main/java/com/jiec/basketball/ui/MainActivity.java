@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,7 +14,6 @@ import com.blankj.utilcode.util.LogUtils;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
-import com.gan.http.WebSocketHelper2;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseActivity;
 import com.jiec.basketball.core.ServerTimeManager;
@@ -30,17 +28,16 @@ import com.jiec.basketball.ui.game.GameMainFragment;
 import com.jiec.basketball.ui.mine.MineActivity;
 import com.jiec.basketball.ui.news.NewsListFragment;
 import com.jiec.basketball.ui.news.detail.DetaillWebActivity;
+import com.jiec.basketball.ui.search.SearchActivity;
 import com.jiec.basketball.utils.EmptyUtils;
 import com.jiec.basketball.utils.EventBusEvent;
 import com.jiec.basketball.utils.EventBusUtils;
 import com.jiec.basketball.utils.ImageLoaderUtils;
-import com.messages.UserMessage;
 import com.wangcj.common.widget.CircleSImageView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import kr.co.namee.permissiongen.PermissionGen;
@@ -156,24 +153,7 @@ public class MainActivity extends BaseActivity {
         start_search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, SearchActivity.class));
-                if (WebSocketHelper2.getInstance().isOpen()){
-                    Log.i("WebSocketHelper2", "isOpen true");
-
-                    try {
-                        UserMessage.HeartbeatConnectReq_0 heartbeatConnectReq_0;
-                        heartbeatConnectReq_0 = UserMessage.HeartbeatConnectReq_0.newBuilder().build();
-                        WebSocketHelper2.getInstance().sendMessage(heartbeatConnectReq_0.toByteArray());
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else{
-//                    WebSocketHelper2.getInstance().close();
-                    WebSocketHelper2.getInstance().connect();
-                    Log.i("WebSocketHelper2", "connect");
-                }
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
 
             }
         });
