@@ -2,8 +2,6 @@ package com.gan.ctools.tool;
 
 import android.content.Context;
 
-import androidx.core.content.ContextCompat;
-
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
@@ -13,7 +11,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.jiec.basketball.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +113,8 @@ public class BarChartUtil2 {
 //     * @param xValues x轴上显示的数据
      */
 //    public void showData(List<BarEntry> yValues, String lable, int color, ArrayList<String> xValues){
-    public void showData(List<BarEntry> yValues, String lable, int maxGrap, int minGrap){
+    public void showData(List<BarEntry> yValues, String lable, int maxGrap, int minGrap, List<Integer> colors){
+
 
        if(Math.abs(maxGrap) - Math.abs(minGrap) >= 0){
 
@@ -141,10 +139,9 @@ public class BarChartUtil2 {
 
         //装载显示数据
         BarDataSet barDataSet = new BarDataSet(yValues,lable);
-        int endColor4 = ContextCompat.getColor(mContext, R.color.c_5c8fd3);
-//        int endColor5 = ContextCompat.getColor(mContext, R.color.c_d84a7e);
 
-        barDataSet.setColors(endColor4);
+
+        barDataSet.setColors(colors);
 //        barDataSet.setValueTextSize(14f);//设置柱子上字体大小
         barDataSet.setDrawValues(false);//设置是否显示柱子上的文字
 //        barDataSet.setHighLightAlpha(37);//设置点击后柱子透明度改变

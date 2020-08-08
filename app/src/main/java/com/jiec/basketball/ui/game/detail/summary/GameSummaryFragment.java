@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.gan.ctools.tool.BarChartUtil2;
@@ -286,18 +287,28 @@ public class GameSummaryFragment extends BaseUIFragment {
     }
     public void showData(ArrayList<Integer> minScoreGap){
 
-        List<BarEntry> yValuesTest = new ArrayList<>();
+        List<BarEntry> yValuesEntries = new ArrayList<>();
         ArrayList<String> xValuesTest = new ArrayList<>();
 
         int maxGrap = 0;
         int minGrap = 0;
+        List<Integer> colors = new ArrayList<>();
+        int endColor4 = ContextCompat.getColor(requireContext(), R.color.c_5c8fd3);
+        int endColor5 = ContextCompat.getColor(requireContext(), R.color.red);
+
         for (int i = 0; i < minScoreGap.size(); i++) {
             int mgrap = minScoreGap.get(i);
             if (mgrap > maxGrap) maxGrap = mgrap;
             if (mgrap < minGrap) minGrap = mgrap;
             BarEntry barEntry = new BarEntry(i + 1, minScoreGap.get(i));
-            yValuesTest.add(barEntry);
+            yValuesEntries.add(barEntry);
             xValuesTest.add(i + 1 + "");
+
+            // specific colors
+            if (minScoreGap.get(i) >= 0)
+                colors.add(endColor4);
+            else
+                colors.add(endColor5);
         }
 
 //        maxGrap = maxGrap + 1;
@@ -306,7 +317,7 @@ public class GameSummaryFragment extends BaseUIFragment {
         String lable = "ScoreGrap";
 
 
-        mBarChartUtil2.showData(yValuesTest, lable, maxGrap, minGrap);
+        mBarChartUtil2.showData(yValuesEntries, lable, maxGrap, minGrap, colors);
     }
 
 
