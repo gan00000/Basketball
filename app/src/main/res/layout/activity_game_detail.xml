@@ -290,7 +290,8 @@
                 <Button
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:background="@drawable/ic_zan"
+                    android:background="@drawable/selector_like_left"
+                    android:enabled="false"
                     android:id="@+id/btn_zan_ke"
                     />
 
@@ -353,7 +354,7 @@
                 <Button
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:background="@drawable/ic_zan"
+                    android:background="@drawable/selector_like_right"
                     android:id="@+id/btn_zan_zhu"
                     />
 

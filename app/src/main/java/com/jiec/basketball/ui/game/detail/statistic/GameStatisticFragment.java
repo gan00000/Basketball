@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -36,6 +37,8 @@ import com.jiec.basketball.ui.game.detail.PlayerMatchSummaryActivity;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -229,6 +232,38 @@ public class GameStatisticFragment extends BaseUIFragment {
         if (gamePlayerDatas == null){
             return;
         }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//对时间进行排序
+
+            List<GamePlayerData> firstData = new ArrayList<>();
+            List<GamePlayerData> asData = new ArrayList<>();
+            for (int i = 0; i < gamePlayerDatas.size(); i++) {
+                if (i < 5){
+                    firstData.add(gamePlayerDatas.get(i));
+                }else{
+                    asData.add(gamePlayerDatas.get(i));
+                }
+            }
+            firstData.sort(new Comparator<GamePlayerData>() {
+                @Override
+                public int compare(GamePlayerData o1, GamePlayerData o2) {
+                    return Integer.parseInt(o2.getMinseconds()) - Integer.parseInt(o1.getMinseconds());
+                }
+            });
+            asData.sort(new Comparator<GamePlayerData>() {
+                @Override
+                public int compare(GamePlayerData o1, GamePlayerData o2) {
+                    return Integer.parseInt(o2.getMinseconds()) - Integer.parseInt(o1.getMinseconds());
+                }
+            });
+
+            gamePlayerDatas.clear();
+
+            gamePlayerDatas.addAll(firstData);
+            gamePlayerDatas.addAll(asData);
+        }
+
         this.isLiving = isLiving;
 
         float all_3ptatt = 0;

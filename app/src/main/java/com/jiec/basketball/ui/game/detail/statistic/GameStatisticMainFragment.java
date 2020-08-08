@@ -46,7 +46,8 @@ public class GameStatisticMainFragment extends BaseUIFragment implements GameSta
 
     private ArrayList<Fragment> mFragments;
 
-    private static final String[] TITLES = {"主隊", "客隊"};
+//    private static final String[] TITLES = {"主隊", "客隊"};
+    private static final String[] TITLES = {"客隊", "主隊"};
 
 
     GameStatisticFragment mHomeFragment, mAwayFragment;
@@ -109,8 +110,8 @@ public class GameStatisticMainFragment extends BaseUIFragment implements GameSta
         mAwayFragment.setHomeTeam(false);
         mHomeFragment.setHomeTeam(true);
 
+        mFragments.add(mAwayFragment);//位置对调
         mFragments.add(mHomeFragment);
-        mFragments.add(mAwayFragment);
 
         ArrayList<CustomTabEntity> tabEntities = new ArrayList<>();
 

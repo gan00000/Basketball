@@ -58,7 +58,7 @@ public class GameDataInfo extends CommResponse {
 
         String match1Id = matchDetails.get(0).getTeamId();
 
-        for (GamePlayerData info : matchDetails) {
+        for (GamePlayerData info : matchDetails) {  //划分主队 客队
             if (info.getTeamId().equals(match1Id)) {
                 matchDetails1.add(info);
             } else {

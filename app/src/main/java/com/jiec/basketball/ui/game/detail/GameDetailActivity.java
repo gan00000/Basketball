@@ -373,7 +373,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                     mTvTime.setText(gameTime);
                 }
 
-                mTitleBar.setTitle(matchSummary.getHomeName() + " vs " + matchSummary.getAwayName());
+                mTitleBar.setTitle(matchSummary.getAwayName() + " vs " + matchSummary.getHomeName());
                 mTvTimeName_1.setText(matchSummary.getHomeName());
                 mTvTimeName_2.setText(matchSummary.getAwayName());
                 //mGameLiveFragment.loadVideoLiveData();//放此處測試
@@ -475,6 +475,14 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 summitLike(game_id,1);
             }
         });
+
+        if (checkIsLike(game_id)){
+            btn_zan_zhu_btn.setSelected(true);
+            btn_zan_ke_btn.setSelected(true);
+        }else{
+            btn_zan_zhu_btn.setSelected(false);
+            btn_zan_ke_btn.setSelected(false);
+        }
 
     }
 
@@ -648,6 +656,8 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                             mZanCompareIndicator.updateView(Integer.parseInt(info.getTeam_like().getAwayTeamLike()), Integer.parseInt(info.getTeam_like().getHomeTeamLike()));
 
                             SPUtil.saveSimpleInfo(GameDetailActivity.this,SP_DATA_FILE_NAME, SP_DATA_GAME_LIKE_KEY + gameId, true);
+                            btn_zan_zhu_btn.setSelected(true);
+                            btn_zan_ke_btn.setSelected(true);
                         }
                     }
 

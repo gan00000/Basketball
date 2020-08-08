@@ -300,8 +300,8 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
         playerMatchInfos.add(new PlayerMatchInfo(""+gamePlayerData.getShoot(),"投籃"));
         playerMatchInfos.add(new PlayerMatchInfo(""+gamePlayerData.getFg3pt(),"3分"));
         playerMatchInfos.add(new PlayerMatchInfo(""+gamePlayerData.getFt(),"罰球"));
-        playerMatchInfos.add(new PlayerMatchInfo(""+gamePlayerData.getOffreb(),"前場"));
-        playerMatchInfos.add(new PlayerMatchInfo(""+gamePlayerData.getDefreb(),"後場"));
+        playerMatchInfos.add(new PlayerMatchInfo(""+gamePlayerData.getOffreb(),"前板"));
+        playerMatchInfos.add(new PlayerMatchInfo(""+gamePlayerData.getDefreb(),"後板"));
         playerMatchInfos.add(new PlayerMatchInfo(""+gamePlayerData.getFouls(),"犯規"));
         playerMatchInfos.add(new PlayerMatchInfo(""+gamePlayerData.getStl(),"抄截"));
         playerMatchInfos.add(new PlayerMatchInfo(""+gamePlayerData.getBlkagainst(),"失誤"));
@@ -316,8 +316,8 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
         playerMatchInfos.add(new PlayerMatchInfo(fgmade+" - "+ fgatt,"投籃"));
         playerMatchInfos.add(new PlayerMatchInfo(fg3ptmade+" - "+ fg3ptatt,"3分"));
         playerMatchInfos.add(new PlayerMatchInfo(ftmade+" - "+ ftatt,"罰球"));
-        playerMatchInfos.add(new PlayerMatchInfo(offreb+"","前場"));
-        playerMatchInfos.add(new PlayerMatchInfo(""+defreb,"後場"));
+        playerMatchInfos.add(new PlayerMatchInfo(offreb+"","前板"));
+        playerMatchInfos.add(new PlayerMatchInfo(""+defreb,"後板"));
         playerMatchInfos.add(new PlayerMatchInfo(""+fouls,"犯規"));
         playerMatchInfos.add(new PlayerMatchInfo(""+stl,"抄截"));
         playerMatchInfos.add(new PlayerMatchInfo(""+blkgainst,"失誤"));

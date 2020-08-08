@@ -95,6 +95,9 @@ public class GameIMFragment extends BaseUIFragment {
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == 1){
                     List<UserMessage.MsgChatContent> msgChatContents = (List<UserMessage.MsgChatContent> ) msg.obj;
+                    if (msgChatContents == null){
+                        return;
+                    }
                     for (UserMessage.MsgChatContent mMsgChatContent : msgChatContents) {
 
                         Log.i(TAG,"mMsgChatContent content =" + mMsgChatContent.getContent());

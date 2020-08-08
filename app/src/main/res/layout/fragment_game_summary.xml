@@ -544,7 +544,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:text="搶斷"
+                    android:text="阻攻"
                     android:id="@+id/compareIndicator_centerValue_qiangduan"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/black"
@@ -603,7 +603,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:text="封蓋"
+                    android:text="抄截"
                     android:id="@+id/compareIndicator_centerValue_fenggai"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/black"
@@ -654,6 +654,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -690,6 +691,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -726,6 +728,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -762,6 +765,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -798,6 +802,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -834,9 +839,191 @@
 
         <include layout="@layout/layout_divider" />
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="投籃命中率"
+                    android:id="@+id/compareIndicator_centerValue_toulan"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/compareIndicator_leftValue_toulan"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40dp"
+                    android:layout_toStartOf="@id/compareIndicator_centerValue_toulan"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/compareIndicator_rightValue_toulan"
+                    android:layout_toEndOf="@id/compareIndicator_centerValue_toulan"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    />
+
+            </RelativeLayout>
+
+            <com.gan.widget.CompareIndicatorView2
+
+                android:layout_below="@id/compareIndicator_centerValue_toulan"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:id="@+id/compareIndicator2_toulan"
+                app:lineMarginWidth = "8dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="3分投籃命中率"
+                    android:id="@+id/compareIndicator_centerValue_sanfen"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/compareIndicator_leftValue_sanfen"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40dp"
+                    android:layout_toStartOf="@id/compareIndicator_centerValue_sanfen"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/compareIndicator_rightValue_sanfen"
+                    android:layout_toEndOf="@id/compareIndicator_centerValue_sanfen"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    />
+
+            </RelativeLayout>
+
+            <com.gan.widget.CompareIndicatorView2
+
+                android:layout_below="@id/compareIndicator_centerValue_sanfen"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:id="@+id/compareIndicator2_sanfen"
+                app:lineMarginWidth = "8dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="罰籃命中率"
+                    android:id="@+id/compareIndicator_centerValue_faqiu"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/compareIndicator_leftValue_faqiu"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40dp"
+                    android:layout_toStartOf="@id/compareIndicator_centerValue_faqiu"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/compareIndicator_rightValue_faqiu"
+                    android:layout_toEndOf="@id/compareIndicator_centerValue_faqiu"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    />
+
+            </RelativeLayout>
+
+            <com.gan.widget.CompareIndicatorView2
+
+                android:layout_below="@id/compareIndicator_centerValue_faqiu"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:id="@+id/compareIndicator2_faqiu"
+                app:lineMarginWidth = "8dp"
+                />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -873,6 +1060,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -910,6 +1098,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -1000,8 +1189,8 @@
                     android:layout_centerVertical="true">
 
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:id="@+id/compare_player_lefticon"
                         android:scaleType="fitCenter"
                         />
@@ -1028,8 +1217,8 @@
                     android:layout_centerVertical="true">
 
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:scaleType="fitCenter"
                         android:id="@+id/compare_player_righticon"
                         />
@@ -1094,8 +1283,8 @@
                     android:layout_centerVertical="true">
 
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:id="@+id/compare_player_reb_lefticon"
                         android:scaleType="fitCenter"
                         />
@@ -1122,8 +1311,8 @@
                     android:layout_centerVertical="true">
 
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:scaleType="fitCenter"
                         android:id="@+id/compare_player_reb_righticon"
                         />
@@ -1187,8 +1376,8 @@
                     android:layout_centerVertical="true">
 
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:id="@+id/compare_player_ass_lefticon"
                         android:scaleType="fitCenter"
                         />
@@ -1215,8 +1404,8 @@
                     android:layout_centerVertical="true">
 
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:scaleType="fitCenter"
                         android:id="@+id/compare_player_ass_righticon"
                         />
@@ -1248,6 +1437,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -1285,6 +1475,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -1315,6 +1506,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -1352,6 +1544,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -1382,6 +1575,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 
@@ -1419,6 +1613,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
 

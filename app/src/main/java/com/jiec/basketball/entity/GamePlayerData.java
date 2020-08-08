@@ -77,9 +77,9 @@ public class GamePlayerData {
     private int ftmade;
     @SmartColumn(id = 9, name = "罰球")
     private String ft;
-    @SmartColumn(id = 10, name = "前場", autoCount = true)
+    @SmartColumn(id = 10, name = "前板", autoCount = true)
     private int offreb;
-    @SmartColumn(id = 11, name = "後場", autoCount = true)
+    @SmartColumn(id = 11, name = "後板", autoCount = true)
     private int defreb;
     @SmartColumn(id = 12, name = "犯規", autoCount = true)
     private int fouls;
@@ -193,7 +193,23 @@ public class GamePlayerData {
     public void setMinseconds(String minseconds) {
         this.minseconds = minseconds;
         int _seconds = Integer.parseInt(minseconds);
-        this.seconds = formate(_seconds / 60) + ":" + formate(_seconds % 60);
+       // this.seconds = formate(_seconds / 60) + ":" + formate(_seconds % 60);
+        this.seconds = formate2(_seconds);
+    }
+
+    private String formate2(int minseconds) {//超过30秒算一分钟
+
+        int num = minseconds / 60;
+        int sec = minseconds % 60;
+        if (sec > 30){
+            num = num + 1;
+        }
+
+        if (num < 10) {
+            return "0" + num;
+        }
+
+        return num + "";
     }
 
     private String formate(int num) {

@@ -177,6 +177,29 @@ public class GameSummaryFragment extends BaseUIFragment {
     @BindView(R.id.compareIndicator_rightValue_fenggai)
     TextView tvRightFenggai;
 
+
+    @BindView(R.id.compareIndicator2_toulan)
+    CompareIndicatorView2 compareIndicator2_Toulan;
+    @BindView(R.id.compareIndicator_leftValue_toulan)
+    TextView tvLeftToulan;
+    @BindView(R.id.compareIndicator_rightValue_toulan)
+    TextView tvRightToulan;
+
+    @BindView(R.id.compareIndicator2_sanfen)
+    CompareIndicatorView2 compareIndicator2_Sanfen;
+    @BindView(R.id.compareIndicator_leftValue_sanfen)
+    TextView tvLeftSanfen;
+    @BindView(R.id.compareIndicator_rightValue_sanfen)
+    TextView tvRightSanfen;
+
+
+    @BindView(R.id.compareIndicator2_faqiu)
+    CompareIndicatorView2 compareIndicator2_Faqiu;
+    @BindView(R.id.compareIndicator_leftValue_faqiu)
+    TextView tvLeftFaqiu;
+    @BindView(R.id.compareIndicator_rightValue_faqiu)
+    TextView tvRightFaqiu;
+
     @BindView(R.id.compare_player_lefticon)
     ImageView compare_player_lefticon;
     @BindView(R.id.compare_player_righticon)
@@ -406,18 +429,18 @@ public class GameSummaryFragment extends BaseUIFragment {
 
         //球員主柱狀圖對比
         Glide.with(this).load(homePlayer_maxPts.getOfficialImagesrc()).into(compare_player_lefticon);
-        compare_player_leftname.setText(homePlayer_maxPts.getFirstname() + homePlayer_maxPts.getLastname());
+        compare_player_leftname.setText(homePlayer_maxPts.getFirstname().substring(0,1).toUpperCase() + "." + homePlayer_maxPts.getLastname());
         Glide.with(this).load(homePlayer_maxReb.getOfficialImagesrc()).into(compare_player_reb_lefticon);
-        compare_player_reb_leftname.setText(homePlayer_maxReb.getFirstname() + homePlayer_maxReb.getLastname());
+        compare_player_reb_leftname.setText(homePlayer_maxReb.getFirstname().substring(0,1).toUpperCase() + "." + homePlayer_maxReb.getLastname());
         Glide.with(this).load(homePlayer_maxAss.getOfficialImagesrc()).into(compare_player_ass_lefticon);
-        compare_player_ass_leftname.setText(homePlayer_maxAss.getFirstname() + homePlayer_maxAss.getLastname());
+        compare_player_ass_leftname.setText(homePlayer_maxAss.getFirstname().substring(0,1).toUpperCase() + "." + homePlayer_maxAss.getLastname());
 
         Glide.with(this).load(awayPlayer_maxPts.getOfficialImagesrc()).into(compare_player_righticon);
-        compare_player_rightname.setText(awayPlayer_maxPts.getFirstname() + awayPlayer_maxPts.getLastname());
+        compare_player_rightname.setText(awayPlayer_maxPts.getFirstname().substring(0,1).toUpperCase() + "." + awayPlayer_maxPts.getLastname());
         Glide.with(this).load(awayPlayer_maxReb.getOfficialImagesrc()).into(compare_player_reb_righticon);
-        compare_player_reb_rightname.setText(awayPlayer_maxReb.getFirstname() + awayPlayer_maxReb.getLastname());
+        compare_player_reb_rightname.setText(awayPlayer_maxReb.getFirstname().substring(0,1).toUpperCase() + "." + awayPlayer_maxReb.getLastname());
         Glide.with(this).load(awayPlayer_maxAss.getOfficialImagesrc()).into(compare_player_ass_righticon);
-        compare_player_ass_rightname.setText(awayPlayer_maxAss.getFirstname() + awayPlayer_maxAss.getLastname());
+        compare_player_ass_rightname.setText(awayPlayer_maxAss.getFirstname().substring(0,1).toUpperCase() + "." + awayPlayer_maxAss.getLastname());
 
         List<BarEntry> yValues = new ArrayList<>();
         BarEntry homePtsBarEntry = new BarEntry(1, homePlayer_maxPts.getPts());
@@ -439,12 +462,30 @@ public class GameSummaryFragment extends BaseUIFragment {
         yAssValues.add(homeAssBarEntry);
         yAssValues.add(awayAssBarEntry);
         mBarChartUtils_smmaryBarChartComparePlayer_ass.showData(yAssValues,"ass");
+
+        //投籃數據
+        tvLeftToulan.setText(leftToulan + "");
+        tvRightToulan.setText(rightToulan + "");
+        compareIndicator2_Toulan.updateView(leftToulan, rightToulan);
+
+        tvLeftSanfen.setText(leftSanfen + "");
+        tvRightSanfen.setText(rightSanfen + "");
+        compareIndicator2_Sanfen.updateView(leftSanfen, rightSanfen);
+
+        tvLeftFaqiu.setText(leftFaqiu + "");
+        tvRightFaqiu.setText(rightFaqiu + "");
+        compareIndicator2_Faqiu.updateView(leftFaqiu, rightFaqiu);
     }
 
     GamePlayerData homePlayer_maxPts, homePlayer_maxAss, homePlayer_maxReb;
     GamePlayerData awayPlayer_maxPts, awayPlayer_maxAss, awayPlayer_maxReb;
 
+    int leftToulan,rightToulan, leftSanfen,rightSanfen,leftFaqiu,rightFaqiu;
+
     private void updateHomeDataView(List<GamePlayerData> homeData) {
+        if (homeData == null || homeData.isEmpty()){
+            return;
+        }
         int homeAss = 0, homeReb = 0, homeStl = 0, homeblk = 0, homemake = 0, homeatt = 0;
         int home3make = 0, home3att = 0, homeftmake = 0, homeftatt = 0;
         GamePlayerData maxPts = homeData.get(0), maxAss = homeData.get(0), maxReb = homeData.get(0);
@@ -490,6 +531,9 @@ public class GameSummaryFragment extends BaseUIFragment {
         mTvHomeMaxReb.setText(maxReb.getReb() + "");
         mTvHomeMaxRebName.setText(maxReb.getFirstname() + maxReb.getLastname() + "\n位置：" + maxReb.getPosition());
 
+        leftToulan = (homemake * 100) / homeatt;
+        leftSanfen = (home3make * 100) / home3att;
+        leftFaqiu = (homeftmake * 100) / homeftatt;
     }
 
     private void updateAwayDataView(List<GamePlayerData> homeData) {
@@ -537,6 +581,10 @@ public class GameSummaryFragment extends BaseUIFragment {
 
         mTvAwayMaxReb.setText(maxReb.getReb() + "");
         mTvAwayMaxRebName.setText(maxReb.getFirstname() + maxReb.getLastname() + "\n位置：" + maxReb.getPosition());
+
+        rightToulan = (homemake * 100) / homeatt;
+        rightSanfen = (home3make * 100) / home3att;
+        rightFaqiu = (homeftmake * 100) / homeftatt;
 
     }
 
