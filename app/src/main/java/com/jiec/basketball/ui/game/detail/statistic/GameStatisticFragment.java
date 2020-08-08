@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +55,7 @@ public class GameStatisticFragment extends BaseUIFragment {
     private static final int MSG_UPDATE_COUNT = 727;
 
     @BindView(R.id.st_statistic)
-    SmartTable mStStatistic;
+    SmartTable mStStatisticSmartTable;
 
     boolean isHomeTeam = true;
 
@@ -224,7 +225,7 @@ public class GameStatisticFragment extends BaseUIFragment {
     }
 
     private void initView() {
-        initTable(mStStatistic);
+        initTable(mStStatisticSmartTable);
     }
 
     public void setData(List<GamePlayerData> gamePlayerDatas, boolean isLiving) {
@@ -296,30 +297,47 @@ public class GameStatisticFragment extends BaseUIFragment {
             mmGamePlayerData.setFg3pt("0");
         }else {
             float m =  (Math.round(all_3pmade/all_3ptatt * 10000) / 10000f) * 100;
-            mmGamePlayerData.setFg3pt(m + "%");
+            mmGamePlayerData.setFg3pt((int)m + "%");
         }
 
         if (all_fgatt==0 || all_fgmade == 0){
             mmGamePlayerData.setShoot("0");
         }else {
             float m =  (Math.round(all_fgmade/all_fgatt * 10000) / 10000f) * 100;
-            mmGamePlayerData.setShoot(m + "%");
+            mmGamePlayerData.setShoot((int)m + "%");
         }
 
         if (all_ftatt==0 || all_ftmade == 0){
             mmGamePlayerData.setFt("0");
         }else {
             float m =  (Math.round(all_ftmade / all_ftatt * 10000) / 10000f) * 100;
-            mmGamePlayerData.setFt(m + "%");
+            mmGamePlayerData.setFt((int)m + "%");
         }
 
         gamePlayerDatas.add(mmGamePlayerData);
 
         this.gamePlayerDatas = gamePlayerDatas;
-        mStStatistic.setData(gamePlayerDatas);
+        mStStatisticSmartTable.setData(gamePlayerDatas);
 
-        if (mStStatistic.getTableData() != null)
-            mStStatistic.getTableData().setShowCount(true);
+        if (mStStatisticSmartTable.getTableData() != null)
+            mStStatisticSmartTable.getTableData().setShowCount(true);
+
+//        List<GamePlayerData> shootRate = new ArrayList<>();
+//        shootRate.add(mmGamePlayerData);
+//
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mStStatisticSmartTable.addData(shootRate, true);
+//            }
+//        }, 2000);
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mStStatisticSmartTable.addData(shootRate, true);
+//            }
+//        });
+
 
         Message msg = Message.obtain();
         msg.what = MSG_UPDATE_COUNT;
@@ -350,15 +368,15 @@ public class GameStatisticFragment extends BaseUIFragment {
             }
         }
 
-        if (mStStatistic.getTableData() != null) {
+        if (mStStatisticSmartTable.getTableData() != null) {
 
 
             final String fgStr = fgMakeSum + " - " + fgAttSum;
 
-            if (mStStatistic.getTableData().getColumnByID(7) != null) {
+            if (mStStatisticSmartTable.getTableData().getColumnByID(7) != null) {
 
 
-                mStStatistic.getTableData().getColumnByID(7).setCountFormat(new ICountFormat() {
+                mStStatisticSmartTable.getTableData().getColumnByID(7).setCountFormat(new ICountFormat() {
                     @Override
                     public void count(Object o) {
                     }
@@ -382,10 +400,10 @@ public class GameStatisticFragment extends BaseUIFragment {
 
 
             final String fg3Str = fg3makeSum + " - " + fg3attSum;
-            if (mStStatistic.getTableData().getColumnByID(8) != null) {
+            if (mStStatisticSmartTable.getTableData().getColumnByID(8) != null) {
 
 
-                mStStatistic.getTableData().getColumnByID(8).setCountFormat(new ICountFormat() {
+                mStStatisticSmartTable.getTableData().getColumnByID(8).setCountFormat(new ICountFormat() {
                     @Override
                     public void count(Object o) {
                     }
@@ -410,10 +428,10 @@ public class GameStatisticFragment extends BaseUIFragment {
 
             final String ftString = ftmakeSum + " - " + ftattSum;
 
-            if (mStStatistic.getTableData().getColumnByID(9) != null) {
+            if (mStStatisticSmartTable.getTableData().getColumnByID(9) != null) {
 
 
-                mStStatistic.getTableData().getColumnByID(9).setCountFormat(new ICountFormat() {
+                mStStatisticSmartTable.getTableData().getColumnByID(9).setCountFormat(new ICountFormat() {
                     @Override
                     public void count(Object o) {
                     }
