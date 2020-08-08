@@ -140,8 +140,8 @@
             android:layout_marginEnd="10dp"
             android:textAlignment="textEnd"
             android:text="a\nb\nc\n"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_18sp"
+            android:textColor="@color/c_88000000"
+            android:textSize="@dimen/text_14sp"
             android:paddingBottom="30dp"
             />
 

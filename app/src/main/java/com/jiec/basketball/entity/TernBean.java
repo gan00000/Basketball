@@ -53,7 +53,7 @@ public class TernBean {
     private String season_name;
     private String id;
     private String name;
-    @SmartColumn(id = 1, name = "隊名", fixed = true, width = 100, align = Paint.Align.LEFT)
+    @SmartColumn(id = 1, name = "隊名", fixed = true, width = 100, minHeight = 40, align = Paint.Align.LEFT)
     private String ch_name;
     private String city;
     private Object ch_city;
@@ -94,7 +94,12 @@ public class TernBean {
     }
 
     public void setStreakDescription(String streakDescription) {
-        this.streakDescription = streakDescription;
+        if ("0".equals(streakDescription)){
+            this.streakDescription = "-";
+        }else{
+
+            this.streakDescription = streakDescription;
+        }
     }
 
     public String getGamesBack() {

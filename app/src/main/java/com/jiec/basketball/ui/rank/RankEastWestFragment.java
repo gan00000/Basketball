@@ -137,8 +137,9 @@ public class RankEastWestFragment extends Fragment {
             }
         });
 
-        int imgSize = DensityUtils.dp2px(this.getContext(),16);
+        int imgSize = DensityUtils.dp2px(this.getContext(),20);//球队icon图片
         int pading = DensityUtils.dp2px(this.getContext(),4);
+        //自定义的format
         final KKTextImageDrawFormat mTextImageDrawFormat = new KKTextImageDrawFormat<String>(imgSize,imgSize,TextImageDrawFormat.LEFT, pading) {
 
             @Override

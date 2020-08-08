@@ -154,6 +154,7 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
             }
         });
 
+        mTabLayout.setCurrentTab(TITLES.length - 1);
     }
 
     private void setTeamName(String jerseynumber) {
@@ -258,6 +259,8 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
                             mCommonAdapter.notifyDataSetChanged();
                         }
                     }
+
+                    mTabLayout.setCurrentTab(TITLES.length - 1);
                 }
 
                 @Override
