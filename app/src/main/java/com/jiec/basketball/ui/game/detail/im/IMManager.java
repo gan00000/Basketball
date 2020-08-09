@@ -22,6 +22,9 @@ public class IMManager {
 
     public static final int IM_OPENED = 1;
     public static final int IM_LOGINED = 2;
+    public static final int IM_CLOSE = 3;//断线
+    public static final int IM_RECONNECT_SUCCESS = 4;//重连成功
+    public static final int IM_MESSAGE_ON = 5;//重连成功
 
     public static final String TAG = "IMManager";
     private static final IMManager ourInstance = new IMManager();
@@ -61,6 +64,8 @@ public class IMManager {
         }
     }
 
+    private boolean reconnect = false;
+
     public void initSocketClient(){
 
         if (mWebSocketClient != null){
@@ -84,31 +89,43 @@ public class IMManager {
             @Override
             public void run() {
 
-                try {
-                    if (mWebSocketClient != null && mWebSocketClient.isClosed()){
-                        for (int i = 0; i < 5; i++) {//重连次数
-
-                          boolean success = mWebSocketClient.reconnectBlocking();
-                          if (success){
-                              break;
-                          }
-                        }
-                        if (!mWebSocketClient.isOpen()){//重连不成功，重置
-                            initSocketClient();
-                            return;
-                        }
-                    }
-                    if (mWebSocketClient.isOpen()){
-
-                        sendHeartbeatMessage();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                tryReconnect();
 
             }
         },30 * 1000,15 * 1000);
     }
+
+    private void tryReconnect() {
+        try {
+            if (mWebSocketClient != null && mWebSocketClient.isClosed()){
+                for (int i = 0; i < 5; i++) {//重连次数
+                    Log.i(TAG,"重连中... " + i);
+                  boolean success = mWebSocketClient.reconnectBlocking();
+                    Log.i(TAG,"重连中... " + i + "  " + success);
+                  if (success){
+                      if (mHandler != null){
+                          Message message = new Message();
+                          message.what = IM_RECONNECT_SUCCESS;
+                          mHandler.sendMessage(message);
+                      }
+                      break;
+                  }
+                }
+//                if (!mWebSocketClient.isOpen()){//重连不成功，重置
+//                    initSocketClient();
+//                    return;
+//                }
+            }
+            if (mWebSocketClient != null && mWebSocketClient.isOpen()){
+
+                sendHeartbeatMessage();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     //发送心跳信息
     public boolean sendHeartbeatMessage() {
@@ -271,7 +288,7 @@ public class IMManager {
 
                     if (!msgChatContents.isEmpty() && mHandler != null){
                         Message message = new Message();
-                        message.what = 1;
+                        message.what = IM_MESSAGE_ON;
                         message.obj = msgChatContents;
                         mHandler.sendMessage(message);
                     }
@@ -287,6 +304,12 @@ public class IMManager {
         public void onClose(int code, String reason, boolean remote) {
             Log.i(TAG,"onClose code=" + code + ",reason="+reason + ",remote="+remote);
             loginFinish = false;
+            if (mHandler != null){
+                Message message = new Message();
+                message.what = IM_CLOSE;
+                mHandler.sendMessage(message);
+            }
+            tryReconnect();
         }
 
         @Override

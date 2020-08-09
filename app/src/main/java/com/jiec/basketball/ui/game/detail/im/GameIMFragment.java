@@ -75,6 +75,10 @@ public class GameIMFragment extends BaseUIFragment {
                     ToastUtil.showMsg("請輸入內容");
                     return;
                 }
+                if (msg.length() > 200){
+                    ToastUtil.showMsg("輸入內容太長，最大200個字符");
+                    return;
+                }
                 hideSoftInput(requireContext());
                 if (!UserManager.instance().isLogin() || !StringUtils.isNotEmpty(UserManager.instance().getToken())){//app帳號還沒登入
                     ToastUtil.showMsg("請先登入帳號");
@@ -105,7 +109,7 @@ public class GameIMFragment extends BaseUIFragment {
             @SuppressLint("HandlerLeak")
             @Override
             public void handleMessage(@NonNull Message msg) {
-                if (msg.what == 1){
+                if (msg.what == IMManager.IM_MESSAGE_ON){
                     List<UserMessage.MsgChatContent> msgChatContents = (List<UserMessage.MsgChatContent> ) msg.obj;
                     if (msgChatContents == null){
                         return;
@@ -115,6 +119,7 @@ public class GameIMFragment extends BaseUIFragment {
                         Log.i(TAG,"mMsgChatContent content =" + mMsgChatContent.getContent());
                         Log.i(TAG,"mMsgChatContent userName =" + mMsgChatContent.getFromUserName());
                         Log.i(TAG,"mMsgChatContent image =" + mMsgChatContent.getFromUserImg());
+                        Log.i(TAG,"mMsgChatContent gameId =" + mMsgChatContent.getGameId());
                         ChatData mChatData = new ChatData();
                         mChatData.setMsg(mMsgChatContent.getContent());
                         mChatData.setUserName(mMsgChatContent.getFromUserName());
@@ -126,6 +131,14 @@ public class GameIMFragment extends BaseUIFragment {
                         commonAdapter.notifyDataSetChanged();
                         imRecyclerView.scrollToPosition(chatDataList.size() - 1);
                     }
+                }else if (msg.what == IMManager.IM_LOGINED){
+
+                }else if (msg.what == IMManager.IM_OPENED){
+
+                }else if (msg.what == IMManager.IM_CLOSE){
+
+                }else if (msg.what == IMManager.IM_RECONNECT_SUCCESS){
+
                 }
 
             }

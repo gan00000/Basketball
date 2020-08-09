@@ -49,7 +49,8 @@ message LoginResp_1001{
 
 //客户端发送聊天信息
 message SendChatReq_1002 {
-    string content = 1; //聊天内容            
+    string content = 1; //聊天内容
+    int64 gameId = 2;    //赛程id
 } 
 
 //客户端显示聊天
@@ -77,6 +78,7 @@ message MsgChatContent{
     string fromUserImg = 2;      //发送者头像地址
     int64 fromTime = 3;            //发送时间
     string content = 4;             //聊天内容
+    int64 gameId = 5;    //赛程id
 }
 
 
