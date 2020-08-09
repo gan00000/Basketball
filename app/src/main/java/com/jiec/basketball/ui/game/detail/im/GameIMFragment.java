@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIFragment;
 import com.jiec.basketball.core.UserManager;
+import com.jiec.basketball.entity.MatchSummary;
+import com.jiec.basketball.entity.Matches;
 import com.jiec.basketball.ui.game.detail.GameDetailActivity;
 import com.messages.UserMessage;
 import com.wangcj.common.utils.ToastUtil;
@@ -26,8 +29,11 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,8 +53,57 @@ public class GameIMFragment extends BaseUIFragment {
     @BindView(R.id.st_im_rv)
     RecyclerView imRecyclerView;
 
+    @BindView(R.id.match_status_tv)
+    TextView gameStatus;
+
     private List<ChatData>  chatDataList;
     private CommonAdapter commonAdapter;
+
+    boolean isSetGameInfo = false;
+    public boolean canTalk = false;
+
+    public void setGameInfo(String xxGameTime, MatchSummary matchSummary, Matches matches){
+
+        if (isSetGameInfo){
+            return;
+        }
+        isSetGameInfo = true;
+        String data = matches.getGamedate();
+        String gameTime = matches.getGametime();
+       String mmTime = matches.getTime().toUpperCase();
+
+        String formatTime = "";
+
+        if (StringUtils.isEmpty(mmTime) || StringUtils.isEmpty(data)){
+            return;
+        }
+
+        //获取指定时间的时间戳，除以1000说明得到的是秒级别的时间戳（10位）
+
+        long xxxTime = (new SimpleDateFormat("yyyy-MM-dd HH:mm aa", Locale.ENGLISH)).parse(data + " " + mmTime, new ParsePosition(0)).getTime();
+
+        if (xxxTime > (System.currentTimeMillis() + 1 * 60 * 60 * 1000)){
+            gameStatus.setText("比賽未開始");
+            canTalk = false;
+        }else if ((xxxTime + 1 * 60 * 60 * 1000) < System.currentTimeMillis()){
+            gameStatus.setText("比賽已結束");
+            canTalk = false;
+        }else{
+            gameStatus.setVisibility(View.GONE);
+            imRecyclerView.setVisibility(View.VISIBLE);
+            initIm();
+            canTalk = true;
+        }
+//        if (matchSummary.getScheduleStatus().equals("Final")) {
+//
+//
+//        } else if (matchSummary.getScheduleStatus().equals("InProgress")) {
+//
+//        } else {
+//
+//        }
+
+    }
 
 
     public static GameIMFragment newInstance() {
@@ -65,34 +120,6 @@ public class GameIMFragment extends BaseUIFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        GameDetailActivity mGameDetailActivity = (GameDetailActivity)requireActivity();
-        EditText appCompatEditText = mGameDetailActivity.getAppCompatEditText();
-        mGameDetailActivity.getSendMsgBtn().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg = appCompatEditText.getText().toString();
-                if (StringUtils.isEmpty(msg)){
-                    ToastUtil.showMsg("請輸入內容");
-                    return;
-                }
-                if (msg.length() > 200){
-                    ToastUtil.showMsg("輸入內容太長，最大200個字符");
-                    return;
-                }
-                hideSoftInput(requireContext());
-                if (!UserManager.instance().isLogin() || !StringUtils.isNotEmpty(UserManager.instance().getToken())){//app帳號還沒登入
-                    ToastUtil.showMsg("請先登入帳號");
-                    return;
-                }
-                if (IMManager.getInstance().loginFinish){ //聊天服務還沒登陸成功
-
-                    IMManager.getInstance().sendChatMessage(msg);
-                    appCompatEditText.setText("");
-                }else{
-                    ToastUtil.showMsg("重新連接中...");
-                }
-            }
-        });
 
     }
 
@@ -102,8 +129,10 @@ public class GameIMFragment extends BaseUIFragment {
         View view = inflater.inflate(R.layout.fragment_game_im, container, false);
         unbinder = ButterKnife.bind(this, view);
 
+        return view;
+    }
 
-
+    private void initIm() {
         IMManager.getInstance().mHandler = new Handler(){
 
             @SuppressLint("HandlerLeak")
@@ -159,7 +188,38 @@ public class GameIMFragment extends BaseUIFragment {
         };
 
         imRecyclerView.setAdapter(commonAdapter);
-        return view;
+
+
+
+        GameDetailActivity mGameDetailActivity = (GameDetailActivity)requireActivity();
+        EditText appCompatEditText = mGameDetailActivity.getAppCompatEditText();
+        mGameDetailActivity.getSendMsgBtn().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String msg = appCompatEditText.getText().toString();
+                if (StringUtils.isEmpty(msg)){
+                    ToastUtil.showMsg("請輸入內容");
+                    return;
+                }
+                if (msg.length() > 200){
+                    ToastUtil.showMsg("輸入內容太長，最大200個字符");
+                    return;
+                }
+                hideSoftInput(requireContext());
+                if (!UserManager.instance().isLogin() || !StringUtils.isNotEmpty(UserManager.instance().getToken())){//app帳號還沒登入
+                    ToastUtil.showMsg("請先登入帳號");
+                    return;
+                }
+                if (IMManager.getInstance().loginFinish){ //聊天服務還沒登陸成功
+
+                    IMManager.getInstance().sendChatMessage(msg);
+                    appCompatEditText.setText("");
+                }else{
+                    ToastUtil.showMsg("重新連接中...");
+                }
+            }
+        });
+
     }
 
     private void initWebSocket() {
@@ -172,6 +232,9 @@ public class GameIMFragment extends BaseUIFragment {
     public void onDestroy() {
         super.onDestroy();
         IMManager.getInstance().release();
-        chatDataList.clear();
+        if (chatDataList != null) {
+            chatDataList.clear();
+        }
+        isSetGameInfo = false;
     }
 }

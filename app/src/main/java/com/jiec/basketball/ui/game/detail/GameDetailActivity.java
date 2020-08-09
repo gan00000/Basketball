@@ -396,6 +396,9 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                     mTvTime.setText(gameTime);
                 }
 
+                if (mGameIMFragment != null){
+                    mGameIMFragment.setGameInfo(gameTime, matchSummary, matches);
+                }
                 mTitleBar.setTitle(matchSummary.getAwayName() + " vs " + matchSummary.getHomeName());
                 mTvTimeName_1.setText(matchSummary.getHomeName());
                 mTvTimeName_2.setText(matchSummary.getAwayName());
@@ -475,7 +478,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int i) {
-                if (i == 0){
+                if (i == 0 && mGameIMFragment.canTalk){
 
                     talkInputView.setVisibility(View.VISIBLE);//聊天显示输入框，否则不显示
 

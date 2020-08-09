@@ -548,6 +548,9 @@ public class GameSummaryFragment extends BaseUIFragment {
     }
 
     private void updateAwayDataView(List<GamePlayerData> homeData) {
+        if (homeData == null || homeData.isEmpty()){
+            return;
+        }
         int ass = 0, reb = 0, stl = 0, blk = 0, homemake = 0, homeatt = 0;
         int home3make = 0, home3att = 0, homeftmake = 0, homeftatt = 0;
         GamePlayerData maxPts = homeData.get(0), maxAss = homeData.get(0), maxReb = homeData.get(0);

@@ -409,6 +409,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="2dp"
         android:layout_height="50dp"
+        android:visibility="gone"
         android:background="@color/white"
         android:orientation="horizontal">
 
