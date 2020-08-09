@@ -62,11 +62,16 @@ public class GameIMFragment extends BaseUIFragment {
     boolean isSetGameInfo = false;
     public boolean canTalk = false;
 
+    MatchSummary currentMatchSummary;
+    Matches currenMatches;
+
     public void setGameInfo(String xxGameTime, MatchSummary matchSummary, Matches matches){
 
         if (isSetGameInfo){
             return;
         }
+        this.currentMatchSummary = matchSummary;
+        this.currenMatches = matches;
         isSetGameInfo = true;
         String data = matches.getGamedate();
         String gameTime = matches.getGametime();
@@ -132,10 +137,11 @@ public class GameIMFragment extends BaseUIFragment {
         return view;
     }
 
+    @SuppressLint("HandlerLeak")
     private void initIm() {
+
         IMManager.getInstance().mHandler = new Handler(){
 
-            @SuppressLint("HandlerLeak")
             @Override
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == IMManager.IM_MESSAGE_ON){
@@ -149,11 +155,14 @@ public class GameIMFragment extends BaseUIFragment {
                         Log.i(TAG,"mMsgChatContent userName =" + mMsgChatContent.getFromUserName());
                         Log.i(TAG,"mMsgChatContent image =" + mMsgChatContent.getFromUserImg());
                         Log.i(TAG,"mMsgChatContent gameId =" + mMsgChatContent.getGameId());
-                        ChatData mChatData = new ChatData();
-                        mChatData.setMsg(mMsgChatContent.getContent());
-                        mChatData.setUserName(mMsgChatContent.getFromUserName());
-                        //mChatData.setMsg(mMsgChatContent.getContent());
-                        chatDataList.add(mChatData);
+                        if (currenMatches != null && currenMatches.getId().equals(mMsgChatContent.getGameId())){ //属于本赛程id的 才显示
+
+                            ChatData mChatData = new ChatData();
+                            mChatData.setMsg(mMsgChatContent.getContent());
+                            mChatData.setUserName(mMsgChatContent.getFromUserName());
+                            //mChatData.setMsg(mMsgChatContent.getContent());
+                            chatDataList.add(mChatData);
+                        }
                     }
 
                     if (commonAdapter != null){
