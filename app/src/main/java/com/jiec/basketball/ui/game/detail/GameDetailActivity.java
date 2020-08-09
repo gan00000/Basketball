@@ -3,12 +3,15 @@ package com.jiec.basketball.ui.game.detail;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.gan.ctools.tool.SPUtil;
 import com.gan.video.SampleVideo;
 import com.gan.video.model.SwitchVideoModel;
@@ -128,6 +132,25 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
     @BindView(R.id.zan_like_ke_layout)
     View zan_like_ke_layout;
+
+    //聊天键盘输入，放在这个layout是为了不被键盘遮挡输入框
+
+    @BindView(R.id.talk_input_ll)
+    View talkInputView;
+
+    @BindView(R.id.sendMsgBtn)
+    TextView sendMsgBtn;
+
+    @BindView(R.id.talk_input_et)
+    EditText appCompatEditText;
+
+    public TextView getSendMsgBtn() {
+        return sendMsgBtn;
+    }
+
+    public EditText getAppCompatEditText() {
+        return appCompatEditText;
+    }
 
     private OrientationUtils orientationUtils;
     private MediaMetadataRetriever mCoverMedia;
@@ -449,6 +472,23 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         }
 
         mTabLayout.setTabData(tabEntities, this, R.id.fl_layout, mFragments);
+        mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelect(int i) {
+                if (i == 0){
+
+                    talkInputView.setVisibility(View.VISIBLE);//聊天显示输入框，否则不显示
+
+                }else{
+                    talkInputView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onTabReselect(int i) {
+
+            }
+        });
 
         mZanCompareIndicator.updateView(0, 0);
 
@@ -483,6 +523,8 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             btn_zan_zhu_btn.setSelected(false);
             btn_zan_ke_btn.setSelected(false);
         }
+
+//        getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(mGlobalLayoutListener);
 
     }
 
@@ -557,6 +599,8 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+//        getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(mGlobalLayoutListener);
         isRelease = true;
         if (isPlay) {
             getCurPlay().release();
@@ -668,4 +712,27 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 });
     }
 
+
+    //记录原始窗口高度
+    private int mWindowHeight = 0;
+
+    private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            Rect r = new Rect();
+            //获取当前窗口实际的可见区域
+            getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+            int height = r.height();
+            if (mWindowHeight == 0) {
+                //一般情况下，这是原始的窗口高度
+                mWindowHeight = height;
+            } else {
+                if (mWindowHeight != height) {
+                    //两次窗口高度相减，就是软键盘高度
+                    int softKeyboardHeight = mWindowHeight - height;
+                    Log.i(GameIMFragment.TAG,"SoftKeyboard height = " + softKeyboardHeight);
+                }
+            }
+        }
+    };
 }
