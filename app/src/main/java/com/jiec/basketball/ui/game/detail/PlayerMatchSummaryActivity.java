@@ -237,9 +237,9 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
                                 setTeamName(gamePlayerData.getJerseynumber());
 
                                 changeToRvData(playerMatchInfos_quarter_1,gamePlayerData);
-                                selectMatchInfos.addAll(playerMatchInfos_quarter_1);//默認顯示第一個
-                                mCommonAdapter.notifyDataSetChanged();
-                                mTabLayout.setCurrentTab(0);
+//                                selectMatchInfos.addAll(playerMatchInfos_quarter_1);//默認顯示第一個
+//                                mCommonAdapter.notifyDataSetChanged();
+//                                mTabLayout.setCurrentTab(0);
 
 
                             }else if (gamePlayerData.getQuarter().equals("2")){
@@ -260,6 +260,7 @@ public class PlayerMatchSummaryActivity extends BaseUIActivity {
                         }
                     }
 
+                    selectMatchInfos.addAll(playerMatchInfos_quarter_all);//默認顯示全場
                     mTabLayout.setCurrentTab(TITLES.length - 1);
                 }
 
