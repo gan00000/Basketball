@@ -177,13 +177,13 @@ public class IMManager {
         return false;
     }
 
-    public boolean sendChatMessage(String msg) {
+    public boolean sendChatMessage(long gameId, String msg) {
 
         if (!loginFinish){
             return false;
         }
         Log.i(TAG,"send chat msg : " + msg);
-        UserMessage.SendChatReq_1002 sendChatReq_1002 = UserMessage.SendChatReq_1002.newBuilder().setContent(msg).build();
+        UserMessage.SendChatReq_1002 sendChatReq_1002 = UserMessage.SendChatReq_1002.newBuilder().setContent(msg).setGameId(gameId).build();
         byte[] msgArray = sendChatReq_1002.toByteArray();
 
         ByteBuffer bb = ByteBuffer.allocate(14 + msgArray.length);
@@ -251,7 +251,6 @@ public class IMManager {
             Log.i(TAG,"onMessage key=" + key);
             Log.i(TAG,"onMessage type=" + type);
             Log.i(TAG,"onMessage serverId=" + serverId);
-            Log.i(TAG,"onMessage data=" + serverId);
             if (msgId == 0){
 
                 try {

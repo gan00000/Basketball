@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIFragment;
 import com.jiec.basketball.core.UserManager;
+import com.jiec.basketball.entity.GameInfo;
 import com.jiec.basketball.entity.MatchSummary;
-import com.jiec.basketball.entity.Matches;
 import com.jiec.basketball.ui.game.detail.GameDetailActivity;
 import com.messages.UserMessage;
 import com.wangcj.common.utils.ToastUtil;
@@ -63,19 +63,22 @@ public class GameIMFragment extends BaseUIFragment {
     public boolean canTalk = false;
 
     MatchSummary currentMatchSummary;
-    Matches currenMatches;
+    GameInfo gameInfo;
 
-    public void setGameInfo(String xxGameTime, MatchSummary matchSummary, Matches matches){
+    public void setGameInfo(String xxGameTime, MatchSummary matchSummary, GameInfo gameInfo){
+
+        GameDetailActivity mGameDetailActivity = (GameDetailActivity) getActivity();
 
         if (isSetGameInfo){
             return;
         }
         this.currentMatchSummary = matchSummary;
-        this.currenMatches = matches;
+        this.gameInfo = gameInfo;
         isSetGameInfo = true;
-        String data = matches.getGamedate();
-        String gameTime = matches.getGametime();
-       String mmTime = matches.getTime().toUpperCase();
+
+        String data = gameInfo.getGamedate();
+        String gameTime = gameInfo.getGametime();
+       String mmTime = gameInfo.getTime().toUpperCase();//.replace("AM","上午").replace("PM","下午");
 
         String formatTime = "";
 
@@ -90,12 +93,14 @@ public class GameIMFragment extends BaseUIFragment {
         if (xxxTime > (System.currentTimeMillis() + 1 * 60 * 60 * 1000)){
             gameStatus.setText("比賽未開始");
             canTalk = false;
-        }else if ((xxxTime + 1 * 60 * 60 * 1000) < System.currentTimeMillis()){
+
+        }else if ((xxxTime + 5 * 60 * 60 * 1000) < System.currentTimeMillis()){
             gameStatus.setText("比賽已結束");
             canTalk = false;
         }else{
             gameStatus.setVisibility(View.GONE);
             imRecyclerView.setVisibility(View.VISIBLE);
+            mGameDetailActivity.getTalkInputView().setVisibility(View.VISIBLE);
             initIm();
             canTalk = true;
         }
@@ -155,12 +160,15 @@ public class GameIMFragment extends BaseUIFragment {
                         Log.i(TAG,"mMsgChatContent userName =" + mMsgChatContent.getFromUserName());
                         Log.i(TAG,"mMsgChatContent image =" + mMsgChatContent.getFromUserImg());
                         Log.i(TAG,"mMsgChatContent gameId =" + mMsgChatContent.getGameId());
-                        if (currenMatches != null && currenMatches.getId().equals(mMsgChatContent.getGameId())){ //属于本赛程id的 才显示
+                        if (gameInfo != null && gameInfo.getId().equals(String.valueOf(mMsgChatContent.getGameId()))){ //属于本赛程id的 才显示
 
                             ChatData mChatData = new ChatData();
                             mChatData.setMsg(mMsgChatContent.getContent());
                             mChatData.setUserName(mMsgChatContent.getFromUserName());
                             //mChatData.setMsg(mMsgChatContent.getContent());
+                            if (chatDataList.size() > 1000){ //最多1000条数据
+                                chatDataList.remove(chatDataList.size() - 1);
+                            }
                             chatDataList.add(mChatData);
                         }
                     }
@@ -221,8 +229,13 @@ public class GameIMFragment extends BaseUIFragment {
                 }
                 if (IMManager.getInstance().loginFinish){ //聊天服務還沒登陸成功
 
-                    IMManager.getInstance().sendChatMessage(msg);
-                    appCompatEditText.setText("");
+                    try {
+                        IMManager.getInstance().sendChatMessage(Long.parseLong(gameInfo.getId()), msg);
+                        appCompatEditText.setText("");
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        ToastUtil.showMsg("發送失敗");
+                    }
                 }else{
                     ToastUtil.showMsg("重新連接中...");
                 }

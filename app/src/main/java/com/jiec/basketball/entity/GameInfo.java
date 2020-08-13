@@ -2,12 +2,14 @@ package com.jiec.basketball.entity;
 
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
+import java.io.Serializable;
+
 /**
  * Created by wangchuangjie on 2018/4/21.
  */
 
 @JsonObject(fieldDetectionPolicy = JsonObject.FieldDetectionPolicy.NONPRIVATE_FIELDS_AND_ACCESSORS)
-public class GameInfo {
+public class GameInfo implements Serializable {
 
     /**
      * id : 12468

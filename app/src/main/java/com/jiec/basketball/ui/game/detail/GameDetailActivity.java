@@ -28,6 +28,7 @@ import com.gan.video.model.SwitchVideoModel;
 import com.gan.widget.CompareIndicator;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIActivity;
+import com.jiec.basketball.entity.GameInfo;
 import com.jiec.basketball.entity.GameLivePost;
 import com.jiec.basketball.entity.GamePlayerData;
 import com.jiec.basketball.entity.MatchSummary;
@@ -138,6 +139,10 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     @BindView(R.id.talk_input_ll)
     View talkInputView;
 
+    public View getTalkInputView() {
+        return talkInputView;
+    }
+
     @BindView(R.id.sendMsgBtn)
     TextView sendMsgBtn;
 
@@ -170,6 +175,12 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
     MatchSummary matchSummary;
 
+    GameInfo mGameInfo;
+
+    public GameInfo getGameInfo() {
+        return mGameInfo;
+    }
+
     public MatchSummary getMatchSummary() {
         return matchSummary;
     }
@@ -183,6 +194,12 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         context.startActivity(intent);
     }
 
+    public static void show(Context context, GameInfo gameInfo) {
+        Intent intent = new Intent(context, GameDetailActivity.class);
+        intent.putExtra("game_info", gameInfo);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,8 +207,13 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         setContentView(R.layout.activity_game_detail);
         ButterKnife.bind(this);
 
-        String game_id = getIntent().getStringExtra("game_id");
-        String gameTime = getIntent().getStringExtra("game_time");
+//        String game_id = getIntent().getStringExtra("game_id");
+//        String gameTime = getIntent().getStringExtra("game_time");
+
+        mGameInfo = (GameInfo) getIntent().getSerializableExtra("game_info");
+
+        String game_id = mGameInfo.getId();
+        String gameTime = mGameInfo.getGametime();
 
         //===================播放器start======================
 //        String source1 = "http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8";
@@ -397,7 +419,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 }
 
                 if (mGameIMFragment != null){
-                    mGameIMFragment.setGameInfo(gameTime, matchSummary, matches);
+                    mGameIMFragment.setGameInfo(gameTime, matchSummary, getGameInfo());
                 }
                 mTitleBar.setTitle(matchSummary.getAwayName() + " vs " + matchSummary.getHomeName());
                 mTvTimeName_1.setText(matchSummary.getHomeName());
