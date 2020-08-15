@@ -67,7 +67,9 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     private static final String[] TITLES = {"聊球", "對陣", "數據統計","文字直播"};
     private static final String TAG = "player";
     private static final String SP_DATA_FILE_NAME = "SP_DATA_FILE_NAME.xml";
-    private static final String SP_DATA_GAME_LIKE_KEY = "SP_DATA_GAME_LIKE_KEY_";
+//    private static final String SP_DATA_GAME_LIKE_KEY = "SP_DATA_GAME_LIKE_KEY_";
+    private static final String SP_DATA_GAME_LIKE_KEY_ZHU = "SP_DATA_GAME_LIKE_KEY_ZHU_";
+    private static final String SP_DATA_GAME_LIKE_KEY_KE = "SP_DATA_GAME_LIKE_KEY_KE_";
 
     GameDetailContract.Presenter mPresenter;
     @BindView(R.id.iv_team_1)
@@ -479,7 +481,8 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         mGameStatisticMainFragment.setOnDataUpdateListener(new GameStatisticMainFragment.OnDataUpdateListener() {
             @Override
             public void onUpdate(List<GamePlayerData> homeData, List<GamePlayerData> awayData) {
-                mGameSummaryFragment.refreshData(homeData, awayData);
+                //mGameSummaryFragment.refreshData(homeData, awayData);
+                mGameSummaryFragment.refreshData(awayData, homeData);//主客場數據對換
             }
         });
 
@@ -517,7 +520,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
         mZanCompareIndicator.updateView(0, 0);
 
-        zan_like_ke_layout.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener mOnClickListener_ke = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -527,7 +530,9 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 }
                 summitLike(game_id,2);
             }
-        });
+        };
+        zan_like_ke_layout.setOnClickListener(mOnClickListener_ke);
+        btn_zan_ke_btn.setOnClickListener(mOnClickListener_ke);
 
         zan_like_zhu_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -540,9 +545,23 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 summitLike(game_id,1);
             }
         });
+        btn_zan_zhu_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        if (checkIsLike(game_id)){
+                if (checkIsLike(game_id)){
+                    ToastUtil.showMsg("您已經點讚過了");
+                    return;
+                }
+                summitLike(game_id,1);
+            }
+        });
+
+        if (checkIsLike_zhu(game_id)){
             btn_zan_zhu_btn.setSelected(true);
+            btn_zan_ke_btn.setSelected(false);
+        }else if (checkIsLike_ke(game_id)){
+            btn_zan_zhu_btn.setSelected(false);
             btn_zan_ke_btn.setSelected(true);
         }else{
             btn_zan_zhu_btn.setSelected(false);
@@ -554,7 +573,16 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     }
 
     private boolean checkIsLike(String gameId) {
-        return SPUtil.getSimpleBoolean(this,SP_DATA_FILE_NAME,SP_DATA_GAME_LIKE_KEY + gameId);
+        //return SPUtil.getSimpleBoolean(this,SP_DATA_FILE_NAME,SP_DATA_GAME_LIKE_KEY + gameId);
+        return checkIsLike_zhu(gameId) || checkIsLike_ke(gameId);
+    }
+
+    private boolean checkIsLike_zhu(String gameId) {
+        return SPUtil.getSimpleBoolean(this,SP_DATA_FILE_NAME,SP_DATA_GAME_LIKE_KEY_ZHU + gameId);
+    }
+
+    private boolean checkIsLike_ke(String gameId) {
+        return SPUtil.getSimpleBoolean(this,SP_DATA_FILE_NAME,SP_DATA_GAME_LIKE_KEY_KE + gameId);
     }
 
     /**
@@ -724,9 +752,17 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
 
                             mZanCompareIndicator.updateView(Integer.parseInt(info.getTeam_like().getAwayTeamLike()), Integer.parseInt(info.getTeam_like().getHomeTeamLike()));
 
-                            SPUtil.saveSimpleInfo(GameDetailActivity.this,SP_DATA_FILE_NAME, SP_DATA_GAME_LIKE_KEY + gameId, true);
-                            btn_zan_zhu_btn.setSelected(true);
-                            btn_zan_ke_btn.setSelected(true);
+                            if (type == 1){//主队
+
+                                SPUtil.saveSimpleInfo(GameDetailActivity.this,SP_DATA_FILE_NAME, SP_DATA_GAME_LIKE_KEY_ZHU + gameId, true);
+                                btn_zan_zhu_btn.setSelected(true);
+                            }else if (type == 2){//客队
+                                SPUtil.saveSimpleInfo(GameDetailActivity.this,SP_DATA_FILE_NAME, SP_DATA_GAME_LIKE_KEY_KE + gameId, true);
+                                btn_zan_ke_btn.setSelected(true);
+                            }
+//                            SPUtil.saveSimpleInfo(GameDetailActivity.this,SP_DATA_FILE_NAME, SP_DATA_GAME_LIKE_KEY + gameId, true);
+
+
                         }
                     }
 

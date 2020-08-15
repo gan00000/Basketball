@@ -91,8 +91,8 @@ public class CompareIndicatorView2 extends View {
     private void init(AttributeSet attrs, int defStyle) {
         this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.compareindicator);
-        leftLineColor = typedArray.getColor(R.styleable.compareindicator_left_line_color, getResources().getColor(R.color.good));
-        rightLineColor = typedArray.getColor(R.styleable.compareindicator_right_line_color, getResources().getColor(R.color.bad));
+        leftLineColor = typedArray.getColor(R.styleable.compareindicator_left_line_color, getResources().getColor(R.color.c_608FD4_ke));
+        rightLineColor = typedArray.getColor(R.styleable.compareindicator_right_line_color, getResources().getColor(R.color.c_F35930_zhu));
 
         leftLineBackgroundColor = typedArray.getColor(R.styleable.compareindicator_left_line_bg_color, getResources().getColor(R.color.gray_light));
         rightLineBackgroundColor = typedArray.getColor(R.styleable.compareindicator_right_line_bg_color, getResources().getColor(R.color.gray_light));
@@ -102,11 +102,11 @@ public class CompareIndicatorView2 extends View {
 
         //左边线
         leftLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        leftLinePaint.setColor(rightLineColor);
+        leftLinePaint.setColor(leftLineColor);
 
         //右边线
         rightLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        rightLinePaint.setColor(leftLineColor);
+        rightLinePaint.setColor(rightLineColor);
         float lineWidth = DisplayUtils.dp2px(context, lineWidthDimen);
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

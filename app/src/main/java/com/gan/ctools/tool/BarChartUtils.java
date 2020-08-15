@@ -126,8 +126,8 @@ public class BarChartUtils {
 
         //装载显示数据
         BarDataSet barDataSet = new BarDataSet(yValues,lable);
-        int endColor4 = ContextCompat.getColor(mContext, R.color.c_5c8fd3);
-        int endColor5 = ContextCompat.getColor(mContext, R.color.c_d84a7e);
+        int endColor4 = ContextCompat.getColor(mContext, R.color.c_608FD4_ke);
+        int endColor5 = ContextCompat.getColor(mContext, R.color.c_F35930_zhu);
 
         barDataSet.setColors(endColor4, endColor5);
         barDataSet.setValueTextSize(14f);//设置柱子上字体大小

@@ -156,7 +156,7 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
                         GameLiveInfo.LiveFeedBean liveFeedBean = beans.get(beans.size() - 1);
                         int homePts = Integer.valueOf(liveFeedBean.getHomePts());
                         int awayPts = Integer.valueOf(liveFeedBean.getAwayPts());
-                        minScoreGap.add(homePts - awayPts);
+                        minScoreGap.add(awayPts - homePts);
                     }else{
 
                         for (GameLiveInfo.LiveFeedBean liveFeedBean: beans) {
@@ -164,7 +164,7 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
                             if (Integer.valueOf(min) == i){
                                 int homePts = Integer.valueOf(liveFeedBean.getHomePts());
                                 int awayPts = Integer.valueOf(liveFeedBean.getAwayPts());
-                                minScoreGap.add(homePts - awayPts);
+                                minScoreGap.add(awayPts - homePts);
                                 break;
 
                             }

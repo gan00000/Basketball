@@ -19,16 +19,16 @@ public class CompareIndicator extends View {
 //    private Bitmap mApproveBitmap;
     private Context context;
 //    private Paint BitmapPaint;
-    private Paint mOppositePaint;
-    private Paint mApprovePaint;
+    private Paint rightPaint;
+    private Paint leftPaint;
     private int rightValue = 0;
     private int leftValue = 0;
     private float marginLeft_16dp;
     private float marginTop_12dp;
     private float Start_down_cx;
     private float Start_down_cy;
-    private int approveLineColor;
-    private int oppositeLineColor;
+    private int leftLineColor;
+    private int rightLineColor;
 
 //    public Bitmap getOppositeBitmap() {
 //        return mOppositeBitmap;
@@ -47,19 +47,19 @@ public class CompareIndicator extends View {
 //    }
 
     public Paint getOppositePaint() {
-        return mOppositePaint;
+        return rightPaint;
     }
 
     public void setOppositePaint(Paint oppositePaint) {
-        mOppositePaint = oppositePaint;
+        rightPaint = oppositePaint;
     }
 
     public Paint getApprovePaint() {
-        return mApprovePaint;
+        return leftPaint;
     }
 
     public void setApprovePaint(Paint approvePaint) {
-        mApprovePaint = approvePaint;
+        leftPaint = approvePaint;
     }
 
     public float getStart_down_cx() {
@@ -134,18 +134,18 @@ public class CompareIndicator extends View {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.compareindicator);
 //        int approveIconId = typedArray.getResourceId(R.styleable.compareindicator_approve_res, R.mipmap.good);
 //        int oppositeIconId = typedArray.getResourceId(R.styleable.compareindicator_opposite_res, R.mipmap.bad);
-         approveLineColor = typedArray.getColor(R.styleable.compareindicator_left_line_color, getResources().getColor(R.color.good));
-         oppositeLineColor = typedArray.getColor(R.styleable.compareindicator_right_line_color, getResources().getColor(R.color.bad));
+         leftLineColor = typedArray.getColor(R.styleable.compareindicator_left_line_color, getResources().getColor(R.color.good));
+         rightLineColor = typedArray.getColor(R.styleable.compareindicator_right_line_color, getResources().getColor(R.color.bad));
         float lineWidthDimen = typedArray.getDimension(R.styleable.compareindicator_lineWidth, 6f);
         typedArray.recycle();
 //        mOppositeBitmap = BitmapFactory.decodeResource(getResources(), approveIconId);
 //        mApproveBitmap = BitmapFactory.decodeResource(getResources(), oppositeIconId);
 //        BitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        mOppositePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mOppositePaint.setColor(oppositeLineColor);
-        mApprovePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mApprovePaint.setColor(approveLineColor);
+        rightPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        rightPaint.setColor(rightLineColor);
+        leftPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        leftPaint.setColor(leftLineColor);
         float lineWidth = DisplayUtils.dp2px(context, lineWidthDimen);
         /**
          * 此处不能开启canvas绘图硬件加速 会导致部分api 显示不正常
@@ -158,13 +158,13 @@ public class CompareIndicator extends View {
         /**
          * 画涨直线
          */
-        mApprovePaint.setStrokeWidth(lineWidth);
-        mApprovePaint.setStrokeCap(Paint.Cap.SQUARE);
+        leftPaint.setStrokeWidth(lineWidth);
+        leftPaint.setStrokeCap(Paint.Cap.SQUARE);
         /**
          * 画 跌直线
          */
-        mOppositePaint.setStrokeWidth(lineWidth);
-        mOppositePaint.setStrokeCap(Paint.Cap.SQUARE);
+        rightPaint.setStrokeWidth(lineWidth);
+        rightPaint.setStrokeCap(Paint.Cap.SQUARE);
         /**
          * 画左右涨跌图
          */
@@ -212,9 +212,9 @@ public class CompareIndicator extends View {
 //        canvas.drawBitmap(mApproveBitmap, getWidth() - marginLeft_16dp - mApproveBitmap.getWidth(), marginTop_12dp, BitmapPaint);
 
 
-        canvas.drawLine(Start_down_cx, Start_down_cy, end_down_cx, Start_down_cy, mOppositePaint);
+        canvas.drawLine(Start_down_cx, Start_down_cy, end_down_cx, Start_down_cy, leftPaint);
 
-        canvas.drawLine(end_down_cx, end_down_cy, width, end_down_cy, mApprovePaint);
+        canvas.drawLine(end_down_cx, end_down_cy, width, end_down_cy, rightPaint);
         /**
          * 画 第四个圆弧
          */

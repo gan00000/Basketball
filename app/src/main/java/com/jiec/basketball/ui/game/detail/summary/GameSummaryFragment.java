@@ -269,20 +269,20 @@ public class GameSummaryFragment extends BaseUIFragment {
         mBarChartUtils_smmaryBarChartComparePlayer_reb = new BarChartUtils(requireContext(),smmaryBarChartComparePlayerReb);
         mBarChartUtils_smmaryBarChartComparePlayer_ass = new BarChartUtils(requireContext(),smmaryBarChartComparePlayerAss);
 
-        compareIndicator2Score.setBigCountColor(getResources().getColor(R.color.af3138));
-        compareIndicator2Score.setLessCountColor(getResources().getColor(R.color.c_939aa0));
-
-        compareIndicator2Lanban.setBigCountColor(getResources().getColor(R.color.af3138));
-        compareIndicator2Lanban.setLessCountColor(getResources().getColor(R.color.c_939aa0));
-
-        compareIndicator2Fenggai.setBigCountColor(getResources().getColor(R.color.af3138));
-        compareIndicator2Fenggai.setLessCountColor(getResources().getColor(R.color.c_939aa0));
-
-        compareIndicator2Qiangduan.setBigCountColor(getResources().getColor(R.color.af3138));
-        compareIndicator2Qiangduan.setLessCountColor(getResources().getColor(R.color.c_939aa0));
-
-        compareIndicator2Zhugong.setBigCountColor(getResources().getColor(R.color.af3138));
-        compareIndicator2Zhugong.setLessCountColor(getResources().getColor(R.color.c_939aa0));
+//        compareIndicator2Score.setBigCountColor(getResources().getColor(R.color.af3138));
+//        compareIndicator2Score.setLessCountColor(getResources().getColor(R.color.c_939aa0));
+//
+//        compareIndicator2Lanban.setBigCountColor(getResources().getColor(R.color.af3138));
+//        compareIndicator2Lanban.setLessCountColor(getResources().getColor(R.color.c_939aa0));
+//
+//        compareIndicator2Fenggai.setBigCountColor(getResources().getColor(R.color.af3138));
+//        compareIndicator2Fenggai.setLessCountColor(getResources().getColor(R.color.c_939aa0));
+//
+//        compareIndicator2Qiangduan.setBigCountColor(getResources().getColor(R.color.af3138));
+//        compareIndicator2Qiangduan.setLessCountColor(getResources().getColor(R.color.c_939aa0));
+//
+//        compareIndicator2Zhugong.setBigCountColor(getResources().getColor(R.color.af3138));
+//        compareIndicator2Zhugong.setLessCountColor(getResources().getColor(R.color.c_939aa0));
         return view;
     }
     public void showData(ArrayList<Integer> minScoreGap){
@@ -293,8 +293,8 @@ public class GameSummaryFragment extends BaseUIFragment {
         int maxGrap = 0;
         int minGrap = 0;
         List<Integer> colors = new ArrayList<>();
-        int endColor4 = ContextCompat.getColor(requireContext(), R.color.c_5c8fd3);
-        int endColor5 = ContextCompat.getColor(requireContext(), R.color.red);
+        int endColor4 = ContextCompat.getColor(requireContext(), R.color.c_608FD4_ke);
+        int endColor5 = ContextCompat.getColor(requireContext(), R.color.c_F35930_zhu);
 
         for (int i = 0; i < minScoreGap.size(); i++) {
             int mgrap = minScoreGap.get(i);
@@ -395,11 +395,14 @@ public class GameSummaryFragment extends BaseUIFragment {
         mTvAwaySum.setText(matchSummary.getAway_pts());
         mTvAwayPts.setText(matchSummary.getAway_pts());
 
-        tvLeftScore.setText(matchSummary.getHome_pts());
-        tvRightScore.setText(matchSummary.getAway_pts());
+//        tvLeftScore.setText(matchSummary.getHome_pts());
+//        tvRightScore.setText(matchSummary.getAway_pts());
+
+        tvRightScore.setText(matchSummary.getHome_pts());//主客數據對換
+        tvLeftScore.setText(matchSummary.getAway_pts());
         int homePts = stringToInt(matchSummary.getHome_pts());
         int awayPts = stringToInt(matchSummary.getAway_pts());
-        compareIndicator2Score.updateView(homePts, awayPts);
+        compareIndicator2Score.updateView(awayPts, homePts);
 
     }
 
