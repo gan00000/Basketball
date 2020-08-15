@@ -141,10 +141,13 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
                 for (GameLiveInfo.LiveFeedBean gameInfo: beans) {//判断是否得分
 
                     if (currentGameInfo != null) {
-                        if(Util.stringToInt(gameInfo.getHomePts()) >  Util.stringToInt(currentGameInfo.getHomePts()) ||
+                        if(Util.stringToInt(gameInfo.getHomePts()) >  Util.stringToInt(currentGameInfo.getHomePts()) ||  //比赛结束后，数据升序
                                 Util.stringToInt(gameInfo.getAwayPts()) >  Util.stringToInt(currentGameInfo.getAwayPts()) ){
                             gameInfo.setGetPts(true);
 
+                        }else if (Util.stringToInt(gameInfo.getHomePts()) <  Util.stringToInt(currentGameInfo.getHomePts()) || //比赛进行中，数据倒序
+                                Util.stringToInt(gameInfo.getAwayPts()) <  Util.stringToInt(currentGameInfo.getAwayPts()) ){
+                            currentGameInfo.setGetPts(true);
                         }
                     }
                     currentGameInfo = gameInfo;

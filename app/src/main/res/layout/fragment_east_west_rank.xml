@@ -32,7 +32,7 @@
         <com.bin.david.form.core.SmartTable
             android:id="@+id/st_team_rank_east"
             android:layout_width="match_parent"
-            android:layout_height="520dp" />
+            android:layout_height="640dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -49,7 +49,7 @@
         <com.bin.david.form.core.SmartTable
             android:id="@+id/st_team_rank_west"
             android:layout_width="match_parent"
-            android:layout_height="520dp" />
+            android:layout_height="660dp" />
 
     </LinearLayout>
 </ScrollView>

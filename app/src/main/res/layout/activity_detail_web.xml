@@ -142,7 +142,7 @@
                 android:maxLines="2"
                 android:padding="@dimen/page_padding"
                 android:textColor="@color/black"
-                android:textSize="@dimen/sp_20"
+                android:textSize="@dimen/sp_18"
                 android:textStyle="bold" />
 
             <LinearLayout

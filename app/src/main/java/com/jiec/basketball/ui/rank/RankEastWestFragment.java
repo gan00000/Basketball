@@ -82,7 +82,6 @@ public class RankEastWestFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         initView();
         loadData();
-
         return view;
     }
 
