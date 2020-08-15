@@ -29,6 +29,7 @@ import com.gan.widget.CompareIndicator;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIActivity;
 import com.jiec.basketball.entity.GameInfo;
+import com.jiec.basketball.entity.GameLiveInfo;
 import com.jiec.basketball.entity.GameLivePost;
 import com.jiec.basketball.entity.GamePlayerData;
 import com.jiec.basketball.entity.MatchSummary;
@@ -376,12 +377,13 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         mGameLiveFragment = GameLiveFragment.newInstance(game_id);//文字直播
         mGameLiveFragment.setGameLiveUpdateListener(new GameLiveFragment.GameLiveUpdateListener() {
             @Override
-            public void onUpdate(MatchSummary matchSummary, Matches matches,  ArrayList<Integer> minScoreGap) {
+            public void onUpdate(MatchSummary matchSummary, Matches matches,  ArrayList<Integer> minScoreGap, GameLiveInfo gameLiveInfo) {
 
                 GameDetailActivity.this.matchSummary = matchSummary;
                 if (mGameSummaryFragment != null) {
                     mGameSummaryFragment.setSummary(matchSummary);
-                    mGameSummaryFragment.showData(minScoreGap);
+                    mGameSummaryFragment.showLineChatData(matchSummary, gameLiveInfo);
+                   // mGameSummaryFragment.showBarChatData(minScoreGap);
                 }
 
                 ImageLoaderUtils.display(GameDetailActivity.this, mIvTeam1, matchSummary.getHomeLogo());

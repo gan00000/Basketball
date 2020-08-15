@@ -34,12 +34,20 @@ public class AppUtil {
         String videoUrl = "";
         if(content.indexOf("iframe") != -1){
             //iframe标签的直接获取src值
-            Elements links = doc.select("iframe[src]");
-            videoUrl = links.attr("src");
+            try {
+                Elements links = doc.select("iframe[src]");
+                videoUrl = links.attr("src");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }else {
             //twitter视频获取第三个超链接
-            Element link = doc.select("a").get(2);//查找第2个a元素
-            videoUrl = link.attr("href");
+            try {
+                Element link = doc.select("a").get(2);//查找第2个a元素
+                videoUrl = link.attr("href");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if(!EmptyUtils.emptyOfString(videoUrl)){
 //            LogUtils.e("Jsoup解析视频地址："+videoUrl);

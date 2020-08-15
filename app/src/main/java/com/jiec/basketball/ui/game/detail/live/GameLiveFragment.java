@@ -37,7 +37,7 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
     GameLiveUpdateListener mGameLiveUpdateListener;
 
     public interface GameLiveUpdateListener {
-        void onUpdate(MatchSummary matchSummary, Matches matches,  ArrayList<Integer> minScoreGap);
+        void onUpdate(MatchSummary matchSummary, Matches matches,  ArrayList<Integer> minScoreGap, GameLiveInfo gameLiveInfo);
 
         void onUpdateLiveVideo(GameLivePost gameLivePost);
     }
@@ -129,16 +129,16 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
     public void loadLiveSuccess(GameLiveInfo gameLiveInfo) {
         if (gameLiveInfo == null) return;
 
-        if (gameLiveInfo.getLive_feed() != null) {
+        List<GameLiveInfo.LiveFeedBean> liveFeedBeans = new ArrayList<>();
 
-            List<GameLiveInfo.LiveFeedBean> liveFeedBeans = new ArrayList<>();
+        if (gameLiveInfo.getLive_feed() != null) {
 
             GameLiveInfo.LiveFeedBean currentGameInfo = null;
 
             for (List<GameLiveInfo.LiveFeedBean> beans : gameLiveInfo.getLive_feed()) {
                 liveFeedBeans.addAll(beans);
 
-                for (GameLiveInfo.LiveFeedBean gameInfo: beans) {//判断是否得分
+                for (GameLiveInfo.LiveFeedBean gameInfo: beans) {//判断是否得分,得分文字颜色改变
 
                     if (currentGameInfo != null) {
                         if(Util.stringToInt(gameInfo.getHomePts()) >  Util.stringToInt(currentGameInfo.getHomePts()) ||  //比赛结束后，数据升序
@@ -153,7 +153,7 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
                     currentGameInfo = gameInfo;
                 }
 
-                for (int i = 10; i >= -1; i--) {//计算每分钟分差
+               /* for (int i = 10; i >= -1; i--) {//计算每分钟分差
 
                     if (i == -1){
                         GameLiveInfo.LiveFeedBean liveFeedBean = beans.get(beans.size() - 1);
@@ -176,7 +176,7 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
 
                     }
 
-                }
+                }*/
 
             }
             mGameLiveAdapter.setGameLiveInfo(gameLiveInfo);
@@ -186,15 +186,11 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
             showEmpty();
         }
 
-//        for (int i = 0; i < minScoreGap.size(); i++) {
-//            Log.i("minScoreGap","minScoreGap:" + minScoreGap.size() + " -- " + minScoreGap.get(i));
-//        }
-
         if (mGameLiveUpdateListener != null
                 && gameLiveInfo.getMatch_summary() != null
                 && gameLiveInfo.getMatches() != null) {
             mGameLiveUpdateListener.onUpdate(
-                    gameLiveInfo.getMatch_summary().get(0), gameLiveInfo.getMatches().get(0),  minScoreGap);
+                    gameLiveInfo.getMatch_summary().get(0), gameLiveInfo.getMatches().get(0),  minScoreGap,gameLiveInfo );
         }
 
         if (gameLiveInfo.getMatch_summary() != null

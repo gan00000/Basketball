@@ -14,11 +14,15 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.gan.ctools.tool.BarChartUtil2;
 import com.gan.ctools.tool.BarChartUtils;
+import com.gan.ctools.tool.CombinedChartUtil;
 import com.gan.widget.CompareIndicatorView2;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseUIFragment;
+import com.jiec.basketball.entity.GameLiveInfo;
 import com.jiec.basketball.entity.GamePlayerData;
 import com.jiec.basketball.entity.MatchSummary;
 import com.jiec.basketball.utils.NumberUtils;
@@ -246,6 +250,11 @@ public class GameSummaryFragment extends BaseUIFragment {
     BarChartUtils mBarChartUtils_smmaryBarChartComparePlayer_reb;//籃板
     BarChartUtils mBarChartUtils_smmaryBarChartComparePlayer_ass;//助攻
 
+    @BindView(R.id.score_grap_lineChart)
+    CombinedChart scoreGrapCombinedChart;
+
+    //LineChartUtil scoreLineChartUtil;
+    CombinedChartUtil combinedChartUtil;
 
     public static GameSummaryFragment newInstance() {
 
@@ -283,10 +292,68 @@ public class GameSummaryFragment extends BaseUIFragment {
 //
 //        compareIndicator2Zhugong.setBigCountColor(getResources().getColor(R.color.af3138));
 //        compareIndicator2Zhugong.setLessCountColor(getResources().getColor(R.color.c_939aa0));
+
+//        scoreLineChartUtil = new LineChartUtil(requireContext(),scoreGrapLineChart);
+
+        combinedChartUtil = new CombinedChartUtil(requireContext(),scoreGrapCombinedChart);
         return view;
     }
-    public void showData(ArrayList<Integer> minScoreGap){
 
+    ArrayList<Entry> awayPtsValues = new ArrayList<>();
+    ArrayList<Entry> homePtsValues = new ArrayList<>();
+
+    public void showLineChatData(MatchSummary matchSummary,GameLiveInfo gameLiveInfo){
+
+        if (gameLiveInfo == null){
+            return;
+        }
+        ArrayList<GameLiveInfo.LiveFeedBean> xxAllBean = new ArrayList<>();
+        List<List<GameLiveInfo.LiveFeedBean>> allLiveFeedBeans = gameLiveInfo.getLive_feed();
+
+        if (allLiveFeedBeans != null && !allLiveFeedBeans.isEmpty()) {
+
+            awayPtsValues.clear();
+            homePtsValues.clear();
+            xxAllBean.clear();
+            for (int i = 0; i < allLiveFeedBeans.size(); i++) {
+                List<GameLiveInfo.LiveFeedBean> liveFeedBeans = allLiveFeedBeans.get(i);
+                xxAllBean.addAll(liveFeedBeans);
+
+                for (GameLiveInfo.LiveFeedBean scoreBean: liveFeedBeans) {
+                    int minutes =Integer.parseInt(scoreBean.getMinutes());
+                    int seconds =Integer.parseInt(scoreBean.getSeconds());
+
+                    //int playMinutes = 12 - minutes;
+                    int playSeconds = 12 * 60 - (seconds + minutes * 60) + (i * 12 * 60); //x 数据使用秒
+
+                    awayPtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getAwayPts())));
+                    homePtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getHomePts())));
+                }
+            }
+
+            if (xxAllBean.isEmpty()){
+                return;
+            }
+
+            int awayPts_Max = Integer.parseInt(xxAllBean.get(xxAllBean.size() - 1).getAwayPts());
+            int homePts_Max = Integer.parseInt(xxAllBean.get(xxAllBean.size() - 1).getHomePts());
+            int maxValue = awayPts_Max;
+            if (awayPts_Max > homePts_Max){
+                maxValue = awayPts_Max;
+            }else{
+                maxValue = homePts_Max;
+            }
+            int xx = maxValue / 30;
+            maxValue = (xx + 1) * 30;
+            combinedChartUtil.showData(awayPtsValues,homePtsValues,matchSummary.getAwayName(), matchSummary.getHomeName(),maxValue,0);
+        }
+
+    }
+    public void showBarChatData(ArrayList<Integer> minScoreGap){
+
+        if (minScoreGap == null || minScoreGap.isEmpty()){
+            return;
+        }
         List<BarEntry> yValuesEntries = new ArrayList<>();
         ArrayList<String> xValuesTest = new ArrayList<>();
 
