@@ -28,7 +28,6 @@ import java.util.List;
 public class CombinedChartUtil {
     private static final String TAG = "BarChartUtils";
     private CombinedChart chart;
-    private XAxis xAxis;
     private Context mContext;
     public CombinedChartUtil(Context mContext, CombinedChart chart){
         this.chart = chart;
@@ -79,7 +78,7 @@ public class CombinedChartUtil {
             xAxis = chart.getXAxis();
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置XAxis应该出现的位置。可以选择TOP，BOTTOM，BOTH_SIDED，TOP_INSIDE或者BOTTOM_INSIDE。
             xAxis.setDrawGridLines(false);//设置为true绘制网格线。
-            xAxis.setDrawLabels(true);//设置为true打开绘制轴的标签。
+            xAxis.setDrawLabels(false);//设置为true打开绘制轴的标签。
             xAxis.setGranularity(1f); // only intervals of 1 day //设置最小的区间，避免标签的迅速增多
             xAxis.setCenterAxisLabels(true);
             // vertical grid lines
@@ -88,8 +87,7 @@ public class CombinedChartUtil {
             xAxis.setAxisMinimum(0f);
             xAxis.setAxisMaximum(48 * 60);
             xAxis.setLabelCount(5,true);
-            float barWidth = 12 * 60f;
-            xAxis.setValueFormatter(new ValueFormatter() {
+            /*xAxis.setValueFormatter(new ValueFormatter() {
 
                 boolean is1 = false;
                 boolean is2 = false;
@@ -115,7 +113,7 @@ public class CombinedChartUtil {
                     return "";
 
                 }
-            });
+            });*/
         }
 
         YAxis yAxis_left;
@@ -128,6 +126,8 @@ public class CombinedChartUtil {
             // axis range
             yAxis_left.setAxisMaximum(120f);
             yAxis_left.setAxisMinimum(0f);
+            yAxis_left.setGranularity(30);
+//            yAxis_left.setGranularityEnabled(true);
         }
 
         YAxis yAxis_right;
@@ -195,8 +195,16 @@ public class CombinedChartUtil {
     }
 
 
-    public synchronized void showData(List<Entry> values, List<Entry> values2, String lable1, String lable2, int maxGrap, int minGrap){
+    public synchronized void showData(List<Entry> values, List<Entry> values2, String lable1, String lable2, int maxGrap, int toCount){
 
+        XAxis xAxis = chart.getXAxis();
+        if (toCount > 0){
+            int gameSeconds = 48 * 60 + 5 * 60 * toCount;
+            xAxis.setAxisMaximum(gameSeconds);
+//            xAxis.setLabelCount(5,true);
+        }else {
+//            xAxis.setLabelCount(5,true);
+        }
 
         YAxis yAxis = chart.getAxisLeft();
 
@@ -277,13 +285,36 @@ public class CombinedChartUtil {
             barEntriesValues.add(mBarEntry3);
             barEntriesValues.add(mBarEntry4);
 
+            List<Integer> colors = new ArrayList<>();
+            int endColor1 = ContextCompat.getColor(mContext, R.color.c_33ffffff);
+            int endColor2 = Color.TRANSPARENT;
+            colors.add(endColor1);
+            colors.add(endColor2);
+            colors.add(endColor1);
+            colors.add(endColor2);
+
+            if (toCount > 0){
+                /*for (int i = 0; i < toCount; i++) {
+                    BarEntry mBarEntryto = new BarEntry((i * 5 * 60 + 48 * 60)  - 5 * 60 / 2, maxGrap);
+                    barEntriesValues.add(mBarEntryto);
+                    if ((i + 1) % 2 == 0){
+                        colors.add(endColor2);
+                    }else{
+                        colors.add(endColor1);
+                    }
+
+                }*/
+
+                BarEntry mBarEntryto = new BarEntry(5 * 12 * 60  - barWidth / 2, maxGrap);
+                barEntriesValues.add(mBarEntryto);
+                colors.add(endColor1);
+            }
+
 
             //装载显示数据
             BarDataSet barDataSet = new BarDataSet(barEntriesValues,"");
-            int endColor1 = ContextCompat.getColor(mContext, R.color.c_33ffffff);
-            int endColor2 = Color.TRANSPARENT;
 
-            barDataSet.setColors(endColor1, endColor2, endColor1, endColor2);
+            barDataSet.setColors(colors);
             barDataSet.setValueTextSize(14f);//设置柱子上字体大小
             barDataSet.setDrawValues(false);//设置是否显示柱子上的文字
             barDataSet.setDrawIcons(false);

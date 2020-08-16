@@ -145,6 +145,9 @@ public class GameSummaryFragment extends BaseUIFragment {
     @BindView(R.id.tv_away_ot3)
     TextView mTvAwayOt3;
 
+    @BindView(R.id.game_chart_jiashi_tv)
+    TextView mJiaShiTv;
+
     @BindView(R.id.compareIndicator2_score)
     CompareIndicatorView2 compareIndicator2Score;
     @BindView(R.id.compareIndicator_leftValue_score)
@@ -309,25 +312,39 @@ public class GameSummaryFragment extends BaseUIFragment {
         }
         ArrayList<GameLiveInfo.LiveFeedBean> xxAllBean = new ArrayList<>();
         List<List<GameLiveInfo.LiveFeedBean>> allLiveFeedBeans = gameLiveInfo.getLive_feed();
-
+        int toCount = 0;//加時次數
         if (allLiveFeedBeans != null && !allLiveFeedBeans.isEmpty()) {
-
+            if (allLiveFeedBeans.size() > 4) {
+                toCount = allLiveFeedBeans.size() - 4;
+            }
             awayPtsValues.clear();
             homePtsValues.clear();
             xxAllBean.clear();
             for (int i = 0; i < allLiveFeedBeans.size(); i++) {
+
                 List<GameLiveInfo.LiveFeedBean> liveFeedBeans = allLiveFeedBeans.get(i);
                 xxAllBean.addAll(liveFeedBeans);
-
                 for (GameLiveInfo.LiveFeedBean scoreBean: liveFeedBeans) {
                     int minutes =Integer.parseInt(scoreBean.getMinutes());
                     int seconds =Integer.parseInt(scoreBean.getSeconds());
 
-                    //int playMinutes = 12 - minutes;
-                    int playSeconds = 12 * 60 - (seconds + minutes * 60) + (i * 12 * 60); //x 数据使用秒
+                    if (i > 3){//加時
 
-                    awayPtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getAwayPts())));
-                    homePtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getHomePts())));
+                        //int playMinutes = 12 - minutes;
+                        int playSeconds = 5 * 60 - (seconds + minutes * 60) + (4 * 12 * 60); //x 数据使用秒
+
+                        awayPtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getAwayPts())));
+                        homePtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getHomePts())));
+
+                    }else{
+
+                        //int playMinutes = 12 - minutes;
+                        int playSeconds = 12 * 60 - (seconds + minutes * 60) + (i * 12 * 60); //x 数据使用秒
+
+                        awayPtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getAwayPts())));
+                        homePtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getHomePts())));
+                    }
+
                 }
             }
 
@@ -345,7 +362,12 @@ public class GameSummaryFragment extends BaseUIFragment {
             }
             int xx = maxValue / 30;
             maxValue = (xx + 1) * 30;
-            combinedChartUtil.showData(awayPtsValues,homePtsValues,matchSummary.getAwayName(), matchSummary.getHomeName(),maxValue,0);
+            if (toCount > 0){
+                mJiaShiTv.setVisibility(View.VISIBLE);
+            }else{
+                mJiaShiTv.setVisibility(View.GONE);
+            }
+            combinedChartUtil.showData(awayPtsValues,homePtsValues,matchSummary.getAwayName(), matchSummary.getHomeName(),maxValue,toCount);
         }
 
     }
