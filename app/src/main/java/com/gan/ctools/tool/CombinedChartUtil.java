@@ -71,6 +71,8 @@ public class CombinedChartUtil {
             chart.setDrawOrder(new CombinedChart.DrawOrder[]{
                     CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.LINE
             });
+
+            //chart.setNoDataText("數據加載中...");
         }
 
         XAxis xAxis;
@@ -194,6 +196,8 @@ public class CombinedChartUtil {
         l.setDrawInside(false);
     }
 
+    float barWidth = 12 * 60f;
+    List<BarEntry> barEntriesValues = new ArrayList<>();
 
     public synchronized void showData(List<Entry> values, List<Entry> values2, String lable1, String lable2, int maxGrap, int toCount){
 
@@ -210,25 +214,75 @@ public class CombinedChartUtil {
 
         if (maxGrap < 120){
             maxGrap = 120;
+        }else{
+            yAxis.setAxisMaximum(maxGrap);
         }
-        yAxis.setAxisMaximum(maxGrap);
-        yAxis.setAxisMinimum(0f);
+//        yAxis.setAxisMinimum(0f);
 
         LineDataSet set1;
         LineDataSet set2;
 
-        if (chart.getData() != null && chart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet) chart.getData().getDataSetByIndex(0);
+        if (chart.getData() != null && chart.getData().getDataSetCount() > 0 && chart.getData().getLineData().getDataSetCount() > 0) {
+
+            //更新數據
+            LineData xxxLineData = chart.getData().getLineData();
+            set1 = (LineDataSet) xxxLineData.getDataSetByIndex(0);
             set1.setValues(values);
             set1.notifyDataSetChanged();
 
-            set2 = (LineDataSet) chart.getData().getDataSetByIndex(1);
+            set2 = (LineDataSet) xxxLineData.getDataSetByIndex(1);
             set2.setValues(values2);
             set2.notifyDataSetChanged();
 
+            xxxLineData.notifyDataChanged();
+
+            barEntriesValues.clear();
+            BarEntry mBarEntry1 = new BarEntry(12 * 60 - barWidth / 2, maxGrap);
+            BarEntry mBarEntry2 = new BarEntry(2 * 12 * 60  - barWidth / 2, maxGrap);
+            BarEntry mBarEntry3 = new BarEntry(3 * 12 * 60  - barWidth / 2, maxGrap);
+            BarEntry mBarEntry4 = new BarEntry(4 * 12 * 60  - barWidth / 2, maxGrap);
+            barEntriesValues.add(mBarEntry1);
+            barEntriesValues.add(mBarEntry2);
+            barEntriesValues.add(mBarEntry3);
+            barEntriesValues.add(mBarEntry4);
+
+            List<Integer> colors = new ArrayList<>();
+            int endColor1 = ContextCompat.getColor(mContext, R.color.c_33ffffff);
+            int endColor2 = Color.TRANSPARENT;
+            colors.add(endColor1);
+            colors.add(endColor2);
+            colors.add(endColor1);
+            colors.add(endColor2);
+
+            if (toCount > 0){
+                /*for (int i = 0; i < toCount; i++) {
+                    BarEntry mBarEntryto = new BarEntry((i * 5 * 60 + 48 * 60)  - 5 * 60 / 2, maxGrap);
+                    barEntriesValues.add(mBarEntryto);
+                    if ((i + 1) % 2 == 0){
+                        colors.add(endColor2);
+                    }else{
+                        colors.add(endColor1);
+                    }
+
+                }*/
+
+                BarEntry mBarEntryto = new BarEntry(5 * 12 * 60  - barWidth / 2, maxGrap);
+                barEntriesValues.add(mBarEntryto);
+                colors.add(endColor1);
+            }
+
+
+            BarData xxbarData = chart.getData().getBarData();
+            BarDataSet barDataSet = (BarDataSet) xxbarData.getDataSetByIndex(0);
+            barDataSet.setColors(colors);
+            barDataSet.setValues(barEntriesValues);
+            barDataSet.notifyDataSetChanged();
+
+            xxbarData.notifyDataChanged();
+
             chart.getData().notifyDataChanged();
             chart.notifyDataSetChanged();
-
+            chart.postInvalidate();
 
         } else {
             // create a dataset and give it a type
@@ -274,8 +328,8 @@ public class CombinedChartUtil {
             //============================================
             //============================================
 
-             float barWidth = 12 * 60f;
-            List<BarEntry> barEntriesValues = new ArrayList<>();
+            //List<BarEntry> barEntriesValues = new ArrayList<>();
+            barEntriesValues.clear();
             BarEntry mBarEntry1 = new BarEntry(12 * 60 - barWidth / 2, maxGrap);
             BarEntry mBarEntry2 = new BarEntry(2 * 12 * 60  - barWidth / 2, maxGrap);
             BarEntry mBarEntry3 = new BarEntry(3 * 12 * 60  - barWidth / 2, maxGrap);
@@ -341,7 +395,7 @@ public class CombinedChartUtil {
             mCombinedData.setData(mLineData);
 
             chart.setData(mCombinedData);
-            chart.invalidate();
+            chart.postInvalidate();
         }
     }
 

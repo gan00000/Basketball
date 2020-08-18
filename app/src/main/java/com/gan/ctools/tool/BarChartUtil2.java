@@ -132,8 +132,11 @@ public class BarChartUtil2 {
                 bar_chart.getData().getDataSetCount() > 0) {
             set = (BarDataSet) bar_chart.getData().getDataSetByIndex(0);
             set.setValues(yValues);
+            set.notifyDataSetChanged();
             bar_chart.getData().notifyDataChanged();
             bar_chart.notifyDataSetChanged();
+
+            bar_chart.postInvalidate();
             return;
         }
 

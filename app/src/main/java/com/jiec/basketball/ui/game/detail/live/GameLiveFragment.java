@@ -135,7 +135,9 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
 
             GameLiveInfo.LiveFeedBean currentGameInfo = null;
 
+//            Collections.reverse(gameLiveInfo.getLive_feed());
             for (List<GameLiveInfo.LiveFeedBean> beans : gameLiveInfo.getLive_feed()) {
+//                Collections.reverse(beans);
                 liveFeedBeans.addAll(beans);
 
                 for (GameLiveInfo.LiveFeedBean gameInfo: beans) {//判断是否得分,得分文字颜色改变

@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -305,24 +306,37 @@ public class GameSummaryFragment extends BaseUIFragment {
     ArrayList<Entry> awayPtsValues = new ArrayList<>();
     ArrayList<Entry> homePtsValues = new ArrayList<>();
 
-    public void showLineChatData(MatchSummary matchSummary,GameLiveInfo gameLiveInfo){
+    public void showLineChatData(MatchSummary matchSummary,GameLiveInfo gameLiveInfo, boolean isGmaeInProgress){
 
         if (gameLiveInfo == null){
             return;
         }
+
         ArrayList<GameLiveInfo.LiveFeedBean> xxAllBean = new ArrayList<>();
-        List<List<GameLiveInfo.LiveFeedBean>> allLiveFeedBeans = gameLiveInfo.getLive_feed();
+
+        List<List<GameLiveInfo.LiveFeedBean>> liveData = new ArrayList<>();
+        List<List<GameLiveInfo.LiveFeedBean>> tempLiveFeedBeans = gameLiveInfo.getLive_feed();
+
+        liveData.addAll(tempLiveFeedBeans);
+
         int toCount = 0;//加時次數
-        if (allLiveFeedBeans != null && !allLiveFeedBeans.isEmpty()) {
-            if (allLiveFeedBeans.size() > 4) {
-                toCount = allLiveFeedBeans.size() - 4;
+        if (liveData != null && !liveData.isEmpty()) {
+            if (liveData.size() > 4) {
+                toCount = liveData.size() - 4;
             }
             awayPtsValues.clear();
             homePtsValues.clear();
             xxAllBean.clear();
-            for (int i = 0; i < allLiveFeedBeans.size(); i++) {
 
-                List<GameLiveInfo.LiveFeedBean> liveFeedBeans = allLiveFeedBeans.get(i);
+            if (isGmaeInProgress) {
+                Collections.reverse(liveData);
+            }
+            for (int i = 0; i < liveData.size(); i++) {
+
+                List<GameLiveInfo.LiveFeedBean> liveFeedBeans = liveData.get(i);
+                if (isGmaeInProgress) {
+                    Collections.reverse(liveFeedBeans);
+                }
                 xxAllBean.addAll(liveFeedBeans);
                 for (GameLiveInfo.LiveFeedBean scoreBean: liveFeedBeans) {
                     int minutes =Integer.parseInt(scoreBean.getMinutes());
@@ -699,5 +713,6 @@ public class GameSummaryFragment extends BaseUIFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+
     }
 }

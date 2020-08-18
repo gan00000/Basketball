@@ -168,7 +168,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
     private boolean isRelease;
 
     private boolean gameNeedPlay = false;
-
+    private boolean isGmaeInProgress = false;
     private ArrayList<Fragment> mFragments;
 
     GameLiveFragment mGameLiveFragment;
@@ -380,22 +380,17 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             public void onUpdate(MatchSummary matchSummary, Matches matches,  ArrayList<Integer> minScoreGap, GameLiveInfo gameLiveInfo) {
 
                 GameDetailActivity.this.matchSummary = matchSummary;
-                if (mGameSummaryFragment != null) {
-                    mGameSummaryFragment.setSummary(matchSummary);
-                    mGameSummaryFragment.showLineChatData(matchSummary, gameLiveInfo);
-                   // mGameSummaryFragment.showBarChatData(minScoreGap);
-                }
 
                 ImageLoaderUtils.display(GameDetailActivity.this, mIvTeam1, matchSummary.getHomeLogo());
                 ImageLoaderUtils.display(GameDetailActivity.this, mIvTeam2, matchSummary.getAwayLogo());
 //                mTvScore.setText(matchSummary.getHome_pts() + "-" + matchSummary.getAway_pts());
-
 
                 if (matchSummary.getScheduleStatus().equals("Final")) {
                     mTvStatus.setText(R.string.game_state_final);
                     mTvTime.setVisibility(View.INVISIBLE);
                     mTvScoreHome.setText(matchSummary.getHome_pts());
                     mTvScoreAway.setText(matchSummary.getAway_pts());
+                    isGmaeInProgress = false;
 
                 } else if (matchSummary.getScheduleStatus().equals("InProgress")) {
                     mTvStatus.setVisibility(View.INVISIBLE);
@@ -410,6 +405,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                     }
 
                     gameNeedPlay = true;//需要進行播放
+                    isGmaeInProgress = true;
 
                     if (switchVideoModels.isEmpty()){
 
@@ -420,6 +416,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                     mTvStatus.setText(R.string.game_state_unstart);
                     mTvTime.setVisibility(View.VISIBLE);
                     mTvTime.setText(gameTime);
+                    isGmaeInProgress = false;
                 }
 
                 if (mGameIMFragment != null){
@@ -434,6 +431,12 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                 zan_ke_count_tv.setText(matchSummary.getAwayTeamLike());
 
                 mZanCompareIndicator.updateView(Integer.parseInt(matchSummary.getAwayTeamLike()), Integer.parseInt(matchSummary.getHomeTeamLike()));
+
+                if (mGameSummaryFragment != null) {
+                    mGameSummaryFragment.setSummary(matchSummary);
+                    mGameSummaryFragment.showLineChatData(matchSummary, gameLiveInfo, isGmaeInProgress);
+                    // mGameSummaryFragment.showBarChatData(minScoreGap);
+                }
             }
 
             @Override
