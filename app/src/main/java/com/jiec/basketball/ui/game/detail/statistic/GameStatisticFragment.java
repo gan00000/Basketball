@@ -1,7 +1,6 @@
 package com.jiec.basketball.ui.game.detail.statistic;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -184,7 +183,7 @@ public class GameStatisticFragment extends BaseUIFragment {
                             if (isLiving){
 
                                 paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                                paint.setColor(Color.RED);
+//                                paint.setColor(Color.RED);//根據需求去掉顏色
 
                             }else {
 
