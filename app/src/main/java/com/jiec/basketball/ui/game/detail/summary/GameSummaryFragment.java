@@ -331,6 +331,7 @@ public class GameSummaryFragment extends BaseUIFragment {
             if (isGmaeInProgress) {
                 Collections.reverse(liveData);
             }
+            int tempTime = 0;
             for (int i = 0; i < liveData.size(); i++) {
 
                 List<GameLiveInfo.LiveFeedBean> liveFeedBeans = liveData.get(i);
@@ -346,17 +347,23 @@ public class GameSummaryFragment extends BaseUIFragment {
 
                         //int playMinutes = 12 - minutes;
                         int playSeconds = 5 * 60 - (seconds + minutes * 60) + (4 * 12 * 60); //x 数据使用秒
-
-                        awayPtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getAwayPts())));
-                        homePtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getHomePts())));
+                        if (playSeconds >= tempTime){
+                            awayPtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getAwayPts())));
+                            homePtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getHomePts())));
+                            tempTime = playSeconds;
+                        }
 
                     }else{
 
                         //int playMinutes = 12 - minutes;
                         int playSeconds = 12 * 60 - (seconds + minutes * 60) + (i * 12 * 60); //x 数据使用秒
 
-                        awayPtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getAwayPts())));
-                        homePtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getHomePts())));
+                        if (playSeconds >= tempTime) {
+                            awayPtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getAwayPts())));
+                            homePtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getHomePts())));
+
+                            tempTime = playSeconds;
+                        }
                     }
 
                 }
@@ -581,16 +588,16 @@ public class GameSummaryFragment extends BaseUIFragment {
         mBarChartUtils_smmaryBarChartComparePlayer_ass.showData(yAssValues,"ass");
 
         //投籃數據
-        tvLeftToulan.setText(leftToulan + "");
-        tvRightToulan.setText(rightToulan + "");
+        tvLeftToulan.setText(leftToulan + "%");
+        tvRightToulan.setText(rightToulan + "%");
         compareIndicator2_Toulan.updateView(leftToulan, rightToulan);
 
-        tvLeftSanfen.setText(leftSanfen + "");
-        tvRightSanfen.setText(rightSanfen + "");
+        tvLeftSanfen.setText(leftSanfen + "%");
+        tvRightSanfen.setText(rightSanfen + "%");
         compareIndicator2_Sanfen.updateView(leftSanfen, rightSanfen);
 
-        tvLeftFaqiu.setText(leftFaqiu + "");
-        tvRightFaqiu.setText(rightFaqiu + "");
+        tvLeftFaqiu.setText(leftFaqiu + "%");
+        tvRightFaqiu.setText(rightFaqiu + "%");
         compareIndicator2_Faqiu.updateView(leftFaqiu, rightFaqiu);
     }
 
