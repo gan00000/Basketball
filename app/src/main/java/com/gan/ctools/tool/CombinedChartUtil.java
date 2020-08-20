@@ -288,6 +288,8 @@ public class CombinedChartUtil {
             // create a dataset and give it a type
             set1 = createDataSet(values,lable1);
             set2 = createDataSet(values2,lable2);
+            set1.setDrawValues(false); //不显示值
+            set2.setDrawValues(false);
 
             // black lines and points
             set1.setColor(mContext.getResources().getColor(R.color.c_608FD4_ke));

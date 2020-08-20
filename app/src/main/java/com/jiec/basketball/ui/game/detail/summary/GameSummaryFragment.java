@@ -358,7 +358,7 @@ public class GameSummaryFragment extends BaseUIFragment {
                         //int playMinutes = 12 - minutes;
                         int playSeconds = 12 * 60 - (seconds + minutes * 60) + (i * 12 * 60); //x 数据使用秒
 
-                        if (playSeconds >= tempTime) {
+                        if (playSeconds >= tempTime) { //此处为防止时间数据出现问题，时间突然变小
                             awayPtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getAwayPts())));
                             homePtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getHomePts())));
 
@@ -391,7 +391,31 @@ public class GameSummaryFragment extends BaseUIFragment {
             combinedChartUtil.showData(awayPtsValues,homePtsValues,matchSummary.getAwayName(), matchSummary.getHomeName(),maxValue,toCount);
         }
 
+        /*awayPtsValues.clear();
+        homePtsValues.clear();
+        xxTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        awayPtsValues.add(new Entry(xxx, xxx + 3));
+                        homePtsValues.add(new Entry(xxx, xxx + 8));
+                        combinedChartUtil.showData(awayPtsValues,homePtsValues,matchSummary.getAwayName(), matchSummary.getHomeName(),120,0);
+                        xxx = xxx + 1;
+                    }
+                });
+
+            }
+        }, 1000, 2000);*/
+
     }
+//    int xxx = 0;
+//    Timer xxTimer = new Timer();
+
+
     public void showBarChatData(ArrayList<Integer> minScoreGap){
 
         if (minScoreGap == null || minScoreGap.isEmpty()){
