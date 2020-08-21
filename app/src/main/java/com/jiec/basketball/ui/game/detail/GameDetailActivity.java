@@ -480,6 +480,8 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             }
         });
 
+        mGameLiveFragment.loadLiveData(game_id);//直接加载一次数据
+
         mGameSummaryFragment = GameSummaryFragment.newInstance();
 
         mGameStatisticMainFragment = GameStatisticMainFragment.newInstance(game_id);

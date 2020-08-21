@@ -86,6 +86,10 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
         getPresenter().loadLive(mGameId);
     }
 
+    public void loadLiveData(String gameId) {
+        getPresenter().getLivePost(gameId);
+    }
+
     public void loadVideoLiveData() {
         getPresenter().getLivePost(mGameId);
     }
