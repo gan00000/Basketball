@@ -2,6 +2,7 @@ package com.jiec.basketball.ui.game.detail.statistic;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -183,7 +184,11 @@ public class GameStatisticMainFragment extends BaseUIFragment implements GameSta
             mIsLiving = false;
             removeUiMessage(MSG_REFRESH);
         }
-
+        Log.d("GameDetailActivity","get_match_summary loadDataSuccess");
+        if (gameDataInfo.getMatchDetailsMaps() == null || gameDataInfo.getMatchDetailsMaps().isEmpty()){
+            Log.d("GameDetailActivity","get_match_summary getMatchDetailsMaps null or isEmpty");
+            return;
+        }
         mHomeFragment.setData(gameDataInfo.getMatchDetailsMaps().get(homeId), mIsLiving);
         mAwayFragment.setData(gameDataInfo.getMatchDetailsMaps().get(awayId), mIsLiving);
 

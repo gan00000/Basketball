@@ -2,6 +2,7 @@ package com.jiec.basketball.ui.game.detail.live;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,7 +133,7 @@ public class GameLiveFragment extends BaseListFragment implements GameLiveContra
     @Override
     public void loadLiveSuccess(GameLiveInfo gameLiveInfo) {
         if (gameLiveInfo == null) return;
-
+        Log.d("GameDetailActivity","get_live_post_from_game loadLiveSuccess");
         List<GameLiveInfo.LiveFeedBean> liveFeedBeans = new ArrayList<>();
 
         if (gameLiveInfo.getLive_feed() != null) {

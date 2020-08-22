@@ -47,12 +47,17 @@ public class NumberUtils {
      * @return
      */
     public static String formatAmount(String arg, int mode, int quality) {
-        BigDecimal bd = new BigDecimal(arg);
-        double fAmount = bd.setScale(quality, mode).doubleValue();
-        String format = String.format("%1$,f", fAmount);
-        String formatAmount = format.substring(0, format.lastIndexOf(".") + quality + 1);
+        try {
+            BigDecimal bd = new BigDecimal(arg);
+            double fAmount = bd.setScale(quality, mode).doubleValue();
+            String format = String.format("%1$,f", fAmount);
+            String formatAmount = format.substring(0, format.lastIndexOf(".") + quality + 1);
 
-        return formatAmount;
+            return formatAmount;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return arg;
     }
 
     /**

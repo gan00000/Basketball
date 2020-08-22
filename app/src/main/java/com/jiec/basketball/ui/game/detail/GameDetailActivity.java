@@ -489,6 +489,7 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
             @Override
             public void onUpdate(List<GamePlayerData> homeData, List<GamePlayerData> awayData) {
                 //mGameSummaryFragment.refreshData(homeData, awayData);
+                Log.d("GameDetailActivity","get_match_summary refreshData");
                 mGameSummaryFragment.refreshData(awayData, homeData);//主客場數據對換
             }
         });

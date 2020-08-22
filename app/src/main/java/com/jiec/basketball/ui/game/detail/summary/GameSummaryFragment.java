@@ -2,6 +2,7 @@ package com.jiec.basketball.ui.game.detail.summary;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -308,15 +309,18 @@ public class GameSummaryFragment extends BaseUIFragment {
 
     public void showLineChatData(MatchSummary matchSummary,GameLiveInfo gameLiveInfo, boolean isGmaeInProgress){
 
+        Log.d("GameDetailActivity","get_live_post_from_game showLineChatData");
         if (gameLiveInfo == null){
             return;
         }
-
         ArrayList<GameLiveInfo.LiveFeedBean> xxAllBean = new ArrayList<>();
 
         List<List<GameLiveInfo.LiveFeedBean>> liveData = new ArrayList<>();
         List<List<GameLiveInfo.LiveFeedBean>> tempLiveFeedBeans = gameLiveInfo.getLive_feed();
-
+        if (tempLiveFeedBeans == null){
+            Log.d("GameDetailActivity","get_live_post_from_game gameLiveInfo.getLive_feed() null");
+            return;
+        }
         liveData.addAll(tempLiveFeedBeans);
 
         int toCount = 0;//加時次數
@@ -455,9 +459,9 @@ public class GameSummaryFragment extends BaseUIFragment {
     }
 
 
-    public void setSummary(MatchSummary matchSummary) {
+    public void setSummary(MatchSummary matchSummary) {//数据来自livefragment
         if (matchSummary == null) return;
-
+        Log.d("GameDetailActivity","get_live_post_from_game setSummary");
         mTvHome.setText(matchSummary.getHomeName());
 
         if (!TextUtils.isEmpty(matchSummary.getHome_quarter_scores())) {
@@ -553,9 +557,17 @@ public class GameSummaryFragment extends BaseUIFragment {
         }
     }
 
-    public void refreshData(List<GamePlayerData> homeData, List<GamePlayerData> awayDat) {
-        updateHomeDataView(homeData);
-        updateAwayDataView(awayDat);
+    public void refreshData(List<GamePlayerData> homeData, List<GamePlayerData> awayDat) { //数据来自数据统计fragment
+        try {
+            updateHomeDataView(homeData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            updateAwayDataView(awayDat);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         tvLeftLanban.setText(mTvHomeReb.getText());
         tvRightLanban.setText(mTvAwayReb.getText());
@@ -576,37 +588,49 @@ public class GameSummaryFragment extends BaseUIFragment {
 
 
         //球員主柱狀圖對比
-        Glide.with(this).load(homePlayer_maxPts.getOfficialImagesrc()).into(compare_player_lefticon);
-        compare_player_leftname.setText(homePlayer_maxPts.getFirstname().substring(0,1).toUpperCase() + "." + homePlayer_maxPts.getLastname());
-        Glide.with(this).load(homePlayer_maxReb.getOfficialImagesrc()).into(compare_player_reb_lefticon);
-        compare_player_reb_leftname.setText(homePlayer_maxReb.getFirstname().substring(0,1).toUpperCase() + "." + homePlayer_maxReb.getLastname());
-        Glide.with(this).load(homePlayer_maxAss.getOfficialImagesrc()).into(compare_player_ass_lefticon);
-        compare_player_ass_leftname.setText(homePlayer_maxAss.getFirstname().substring(0,1).toUpperCase() + "." + homePlayer_maxAss.getLastname());
+        if (homePlayer_maxPts != null) {
+            Glide.with(this).load(homePlayer_maxPts.getOfficialImagesrc()).into(compare_player_lefticon);
+            compare_player_leftname.setText(homePlayer_maxPts.getFirstname().substring(0,1).toUpperCase() + "." + homePlayer_maxPts.getLastname());
+        }
+        if (homePlayer_maxReb != null) {
+            Glide.with(this).load(homePlayer_maxReb.getOfficialImagesrc()).into(compare_player_reb_lefticon);
+            compare_player_reb_leftname.setText(homePlayer_maxReb.getFirstname().substring(0,1).toUpperCase() + "." + homePlayer_maxReb.getLastname());
+        }
+        if (homePlayer_maxAss != null) {
+            Glide.with(this).load(homePlayer_maxAss.getOfficialImagesrc()).into(compare_player_ass_lefticon);
+            compare_player_ass_leftname.setText(homePlayer_maxAss.getFirstname().substring(0,1).toUpperCase() + "." + homePlayer_maxAss.getLastname());
+        }
 
-        Glide.with(this).load(awayPlayer_maxPts.getOfficialImagesrc()).into(compare_player_righticon);
-        compare_player_rightname.setText(awayPlayer_maxPts.getFirstname().substring(0,1).toUpperCase() + "." + awayPlayer_maxPts.getLastname());
-        Glide.with(this).load(awayPlayer_maxReb.getOfficialImagesrc()).into(compare_player_reb_righticon);
-        compare_player_reb_rightname.setText(awayPlayer_maxReb.getFirstname().substring(0,1).toUpperCase() + "." + awayPlayer_maxReb.getLastname());
-        Glide.with(this).load(awayPlayer_maxAss.getOfficialImagesrc()).into(compare_player_ass_righticon);
-        compare_player_ass_rightname.setText(awayPlayer_maxAss.getFirstname().substring(0,1).toUpperCase() + "." + awayPlayer_maxAss.getLastname());
+        if (awayPlayer_maxPts != null) {
+            Glide.with(this).load(awayPlayer_maxPts.getOfficialImagesrc()).into(compare_player_righticon);
+            compare_player_rightname.setText(awayPlayer_maxPts.getFirstname().substring(0,1).toUpperCase() + "." + awayPlayer_maxPts.getLastname());
+        }
+        if (awayPlayer_maxReb != null) {
+            Glide.with(this).load(awayPlayer_maxReb.getOfficialImagesrc()).into(compare_player_reb_righticon);
+            compare_player_reb_rightname.setText(awayPlayer_maxReb.getFirstname().substring(0,1).toUpperCase() + "." + awayPlayer_maxReb.getLastname());
+        }
+        if (awayPlayer_maxAss != null) {
+            Glide.with(this).load(awayPlayer_maxAss.getOfficialImagesrc()).into(compare_player_ass_righticon);
+            compare_player_ass_rightname.setText(awayPlayer_maxAss.getFirstname().substring(0,1).toUpperCase() + "." + awayPlayer_maxAss.getLastname());
+        }
 
         List<BarEntry> yValues = new ArrayList<>();
-        BarEntry homePtsBarEntry = new BarEntry(1, homePlayer_maxPts.getPts());
-        BarEntry awayPtsBarEntry = new BarEntry(3, awayPlayer_maxPts.getPts());
+        BarEntry homePtsBarEntry = new BarEntry(1, homePlayer_maxPts != null ? homePlayer_maxPts.getPts() : 0);
+        BarEntry awayPtsBarEntry = new BarEntry(3, awayPlayer_maxPts != null ? awayPlayer_maxPts.getPts() : 0);
         yValues.add(homePtsBarEntry);
         yValues.add(awayPtsBarEntry);
         mBarChartUtils_smmaryBarChartComparePlayer.showData(yValues,"pts");
 
         List<BarEntry> yRebValues = new ArrayList<>();//籃板
-        BarEntry homeRebBarEntry = new BarEntry(1, homePlayer_maxReb.getReb());
-        BarEntry awayRebBarEntry = new BarEntry(3, awayPlayer_maxReb.getReb());
+        BarEntry homeRebBarEntry = new BarEntry(1, homePlayer_maxReb != null ? homePlayer_maxReb.getReb() : 0);
+        BarEntry awayRebBarEntry = new BarEntry(3, awayPlayer_maxReb != null ? awayPlayer_maxReb.getReb() : 0);
         yRebValues.add(homeRebBarEntry);
         yRebValues.add(awayRebBarEntry);
         mBarChartUtils_smmaryBarChartComparePlayer_reb.showData(yRebValues,"reb");
 
         List<BarEntry> yAssValues = new ArrayList<>();//助攻
-        BarEntry homeAssBarEntry = new BarEntry(1, homePlayer_maxAss.getAst());
-        BarEntry awayAssBarEntry = new BarEntry(3, awayPlayer_maxAss.getAst());
+        BarEntry homeAssBarEntry = new BarEntry(1, homePlayer_maxAss != null ? homePlayer_maxAss.getAst() : 0);
+        BarEntry awayAssBarEntry = new BarEntry(3, awayPlayer_maxAss != null ? awayPlayer_maxAss.getAst() : 0);
         yAssValues.add(homeAssBarEntry);
         yAssValues.add(awayAssBarEntry);
         mBarChartUtils_smmaryBarChartComparePlayer_ass.showData(yAssValues,"ass");
@@ -663,12 +687,24 @@ public class GameSummaryFragment extends BaseUIFragment {
         homePlayer_maxAss = maxAss;
         homePlayer_maxReb = maxReb;
 
-        mTvHomeRateShoot.setText(NumberUtils.formatAmount(String.valueOf(
-                (float) (homemake * 100) / homeatt), BigDecimal.ROUND_HALF_UP, 2) + "%");
-        mTvHomeRate3shoot.setText(NumberUtils.formatAmount(String.valueOf(
-                (float) (home3make * 100) / home3att), BigDecimal.ROUND_HALF_UP, 2) + "%");
-        mTvHomeRateFshoot.setText(NumberUtils.formatAmount(String.valueOf(
-                (float) (homeftmake * 100) / homeftatt), BigDecimal.ROUND_HALF_UP, 2) + "%");
+        if (homeatt != 0) {
+            mTvHomeRateShoot.setText(NumberUtils.formatAmount(String.valueOf(
+                    (float) (homemake * 100) / homeatt), BigDecimal.ROUND_HALF_UP, 2) + "%");
+        }else{
+            mTvHomeRateShoot.setText("0%");
+        }
+        if (home3att != 0) {
+            mTvHomeRate3shoot.setText(NumberUtils.formatAmount(String.valueOf(
+                    (float) (home3make * 100) / home3att), BigDecimal.ROUND_HALF_UP, 2) + "%");
+        }else{
+            mTvHomeRate3shoot.setText("0%");
+        }
+        if (homeftatt != 0) {
+            mTvHomeRateFshoot.setText(NumberUtils.formatAmount(String.valueOf(
+                    (float) (homeftmake * 100) / homeftatt), BigDecimal.ROUND_HALF_UP, 2) + "%");
+        }else{
+            mTvHomeRateFshoot.setText("0%");
+        }
 
         mTvHomeMaxPts.setText(maxPts.getPts() + "");
         mTvHomeMaxPtsName.setText(maxPts.getFirstname() + maxPts.getLastname() + "\n位置：" + maxPts.getPosition());
@@ -679,9 +715,21 @@ public class GameSummaryFragment extends BaseUIFragment {
         mTvHomeMaxReb.setText(maxReb.getReb() + "");
         mTvHomeMaxRebName.setText(maxReb.getFirstname() + maxReb.getLastname() + "\n位置：" + maxReb.getPosition());
 
-        leftToulan = (homemake * 100) / homeatt;
-        leftSanfen = (home3make * 100) / home3att;
-        leftFaqiu = (homeftmake * 100) / homeftatt;
+        if (homeatt != 0) {
+            leftToulan = (homemake * 100) / homeatt;
+        }else{
+            leftToulan = 0;
+        }
+        if (home3att == 0) {
+            leftSanfen = 0;
+        }else {
+            leftSanfen = (home3make * 100) / home3att;
+        }
+        if (homeftatt != 0) {
+            leftFaqiu = (homeftmake * 100) / homeftatt;
+        }else{
+            leftFaqiu = 0;
+        }
     }
 
     private void updateAwayDataView(List<GamePlayerData> homeData) {
@@ -717,12 +765,24 @@ public class GameSummaryFragment extends BaseUIFragment {
         awayPlayer_maxAss = maxAss;
         awayPlayer_maxReb = maxReb;
 
-        mTvAwayRateShoot.setText(NumberUtils.formatAmount(String.valueOf(
-                (float) (homemake * 100) / homeatt), BigDecimal.ROUND_HALF_UP, 2) + "%");
-        mTvAwayRate3shoot.setText(NumberUtils.formatAmount(String.valueOf(
-                (float) (home3make * 100) / home3att), BigDecimal.ROUND_HALF_UP, 2) + "%");
-        mTvAwayRateFshoot.setText(NumberUtils.formatAmount(String.valueOf(
-                (float) (homeftmake * 100) / homeftatt), BigDecimal.ROUND_HALF_UP, 2) + "%");
+        if (homeatt != 0) {
+            mTvAwayRateShoot.setText(NumberUtils.formatAmount(String.valueOf(
+                    (float) (homemake * 100) / homeatt), BigDecimal.ROUND_HALF_UP, 2) + "%");
+        }else {
+            mTvAwayRateShoot.setText("0%");
+        }
+        if (home3att != 0) {
+            mTvAwayRate3shoot.setText(NumberUtils.formatAmount(String.valueOf(
+                    (float) (home3make * 100) / home3att), BigDecimal.ROUND_HALF_UP, 2) + "%");
+        }else{
+            mTvAwayRate3shoot.setText("0%");
+        }
+        if (homeftatt != 0) {
+            mTvAwayRateFshoot.setText(NumberUtils.formatAmount(String.valueOf(
+                    (float) (homeftmake * 100) / homeftatt), BigDecimal.ROUND_HALF_UP, 2) + "%");
+        }else{
+            mTvAwayRateFshoot.setText("0%");
+        }
 
         mTvAwayMaxPts.setText(maxPts.getPts() + "");
         mTvAwayMaxPtsName.setText(maxPts.getFirstname() + maxPts.getLastname() + "\n位置：" + maxPts.getPosition());
@@ -733,9 +793,21 @@ public class GameSummaryFragment extends BaseUIFragment {
         mTvAwayMaxReb.setText(maxReb.getReb() + "");
         mTvAwayMaxRebName.setText(maxReb.getFirstname() + maxReb.getLastname() + "\n位置：" + maxReb.getPosition());
 
-        rightToulan = (homemake * 100) / homeatt;
-        rightSanfen = (home3make * 100) / home3att;
-        rightFaqiu = (homeftmake * 100) / homeftatt;
+        if (homeatt != 0) {
+            rightToulan = (homemake * 100) / homeatt;
+        }else{
+            rightToulan = 0;
+        }
+        if (home3att != 0) {
+            rightSanfen = (home3make * 100) / home3att;
+        }else{
+            rightSanfen = 0;
+        }
+        if (homeftatt != 0) {
+            rightFaqiu = (homeftmake * 100) / homeftatt;
+        }else {
+            rightFaqiu = 0;
+        }
 
     }
 
