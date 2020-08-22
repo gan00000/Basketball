@@ -63,7 +63,7 @@ public class CompareIndicatorView2 extends View {
 
     public void updateView(int leftCount, int rightCount){
         this.leftValue = leftCount;
-        this.rightValue =rightCount;
+        this.rightValue = rightCount;
         postInvalidate();
     }
 
@@ -145,8 +145,8 @@ public class CompareIndicatorView2 extends View {
             leftLineWidth = leftLineBgWidth;
 
         } else if (rightValue != 0 && leftValue == 0) {
-            leftLineWidth = rightLineBgWidth;
-            rightLineWidth = 0;
+            leftLineWidth = 0;
+            rightLineWidth = rightLineBgWidth;
         } else {
             leftLineWidth = 0;
             rightLineWidth = 0;
