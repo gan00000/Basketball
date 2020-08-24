@@ -638,15 +638,15 @@ public class GameSummaryFragment extends BaseUIFragment {
         //投籃數據
         tvLeftToulan.setText(leftToulan + "%");
         tvRightToulan.setText(rightToulan + "%");
-        compareIndicator2_Toulan.updateView(leftToulan, rightToulan);
+        compareIndicator2_Toulan.updateViewPercent(leftToulan / 100.0f, rightToulan / 100.0f);
 
         tvLeftSanfen.setText(leftSanfen + "%");
         tvRightSanfen.setText(rightSanfen + "%");
-        compareIndicator2_Sanfen.updateView(leftSanfen, rightSanfen);
+        compareIndicator2_Sanfen.updateViewPercent(leftSanfen / 100.0f, rightSanfen / 100.0f);
 
         tvLeftFaqiu.setText(leftFaqiu + "%");
         tvRightFaqiu.setText(rightFaqiu + "%");
-        compareIndicator2_Faqiu.updateView(leftFaqiu, rightFaqiu);
+        compareIndicator2_Faqiu.updateViewPercent(leftFaqiu / 100.0f, rightFaqiu / 100.0f);
     }
 
     GamePlayerData homePlayer_maxPts, homePlayer_maxAss, homePlayer_maxReb;

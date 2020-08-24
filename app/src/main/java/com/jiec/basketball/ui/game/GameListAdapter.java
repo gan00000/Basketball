@@ -1,13 +1,14 @@
 package com.jiec.basketball.ui.game;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jiec.basketball.R;
 import com.jiec.basketball.base.BaseListAdapter;
@@ -84,8 +85,14 @@ public class GameListAdapter extends BaseListAdapter<GameInfo> {
                 ((ItemViewHolder) holder).mTvTime.setVisibility(View.GONE);
 
                 if (startedGame.containsKey(gameInfo.getId())) {
-                    ((ItemViewHolder) holder).mTvStatus.setText(
-                            "第" + startedGame.get(gameInfo.getId()).getQuarter() + "節");
+
+                    if ("0".equals(startedGame.get(gameInfo.getId()).getQuarter())){
+                        ((ItemViewHolder) holder).mTvStatus.setText("即將開始");
+                    }else{
+                        ((ItemViewHolder) holder).mTvStatus.setText(
+                                "第" + startedGame.get(gameInfo.getId()).getQuarter() + "節");
+                    }
+
                     ((ItemViewHolder) holder).mTvTime.setText(startedGame.get(gameInfo.getId()).getTime());
                 } else {
                     ((ItemViewHolder) holder).mTvStatus.setText(R.string.game_state_playing);

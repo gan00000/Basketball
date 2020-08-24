@@ -401,7 +401,12 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
                     if (matchSummary.getQuarter().contains("OT")) {
                         livingStatus.setText(matchSummary.getQuarter());
                     } else {
-                        livingStatus.setText("第" + matchSummary.getQuarter() + "节\n" + matchSummary.getTime());
+                        if ("0".equals(matchSummary.getQuarter())){
+                            livingStatus.setText("即將開始\n" + matchSummary.getTime());
+                        }else{
+
+                            livingStatus.setText("第" + matchSummary.getQuarter() + "节\n" + matchSummary.getTime());
+                        }
                     }
 
                     gameNeedPlay = true;//需要進行播放

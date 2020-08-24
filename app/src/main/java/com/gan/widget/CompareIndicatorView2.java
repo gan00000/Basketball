@@ -37,6 +37,9 @@ public class CompareIndicatorView2 extends View {
     private boolean isLineBackgroundColor = true;
     private int lineMarginWidth;
 
+    float leftPercent;
+    float rightPercent;
+
     public int getLessCountColor() {
         return lessCountColor;
     }
@@ -64,6 +67,12 @@ public class CompareIndicatorView2 extends View {
     public void updateView(int leftCount, int rightCount){
         this.leftValue = leftCount;
         this.rightValue = rightCount;
+        postInvalidate();
+    }
+
+    public void updateViewPercent(float leftPercent, float rightPercent){
+        this.leftPercent = leftPercent;
+        this.rightPercent = rightPercent;
         postInvalidate();
     }
 
@@ -137,19 +146,24 @@ public class CompareIndicatorView2 extends View {
         float leftLineWidth;
         float rightLineWidth;
 
-        if (rightValue != 0 && leftValue != 0) {
-            leftLineWidth = leftLineBgWidth / (rightValue + leftValue) * leftValue;
-            rightLineWidth = rightLineBgWidth / (rightValue + leftValue) * rightValue;
-        } else if (rightValue == 0 && leftValue != 0) {
-            rightLineWidth = 0;
-            leftLineWidth = leftLineBgWidth;
+        if (this.leftPercent == 0 && this.rightPercent == 0) {
+            if (rightValue != 0 && leftValue != 0) {
+                leftLineWidth = leftLineBgWidth * leftValue/ (rightValue + leftValue);
+                rightLineWidth = rightLineBgWidth * rightValue / (rightValue + leftValue);
+            } else if (rightValue == 0 && leftValue != 0) {
+                rightLineWidth = 0;
+                leftLineWidth = leftLineBgWidth;
 
-        } else if (rightValue != 0 && leftValue == 0) {
-            leftLineWidth = 0;
-            rightLineWidth = rightLineBgWidth;
-        } else {
-            leftLineWidth = 0;
-            rightLineWidth = 0;
+            } else if (rightValue != 0 && leftValue == 0) {
+                leftLineWidth = 0;
+                rightLineWidth = rightLineBgWidth;
+            } else {
+                leftLineWidth = 0;
+                rightLineWidth = 0;
+            }
+        }else{
+            leftLineWidth = leftLineBgWidth * this.leftPercent;
+            rightLineWidth = rightLineBgWidth * this.rightPercent;
         }
 
         leftLinePaint.setColor(leftLineBackgroundColor);
