@@ -349,7 +349,7 @@ public class GameSummaryFragment extends BaseUIFragment {
 
                     if (i > 3){//加時
 
-                        //int playMinutes = 12 - minutes;
+                        //int playMinutes = 12 - minutes;  //此处发现问题，只做了一节的加时处理
                         int playSeconds = 5 * 60 - (seconds + minutes * 60) + (4 * 12 * 60); //x 数据使用秒
                         if (playSeconds >= tempTime){
                             awayPtsValues.add(new Entry(playSeconds, Integer.parseInt(scoreBean.getAwayPts())));

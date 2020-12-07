@@ -104,14 +104,12 @@ public class GameIMFragment extends BaseUIFragment {
             initIm();
             canTalk = true;
         }
-//        if (matchSummary.getScheduleStatus().equals("Final")) {
-//
-//
-//        } else if (matchSummary.getScheduleStatus().equals("InProgress")) {
-//
-//        } else {
-//
-//        }
+
+//        gameStatus.setVisibility(View.GONE);
+//        imRecyclerView.setVisibility(View.VISIBLE);
+//        mGameDetailActivity.getTalkInputView().setVisibility(View.VISIBLE);
+//        initIm();
+//        canTalk = true;
 
     }
 
@@ -167,7 +165,7 @@ public class GameIMFragment extends BaseUIFragment {
                             mChatData.setUserName(mMsgChatContent.getFromUserName());
                             //mChatData.setMsg(mMsgChatContent.getContent());
                             if (chatDataList.size() > 1000){ //最多1000条数据
-                                chatDataList.remove(chatDataList.size() - 1);
+                                chatDataList.remove(0);
                             }
                             chatDataList.add(mChatData);
                         }
