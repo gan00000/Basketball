@@ -93,7 +93,7 @@ public class VideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             webSettings.setJavaScriptEnabled(true);
             webSettings.setSupportZoom(false);
             webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-            webSettings.setAppCacheEnabled(true);
+//            webSettings.setAppCacheEnabled(true);
             webView.setWebViewClient(new WebViewClient());
         }
     }

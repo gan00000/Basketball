@@ -39,6 +39,7 @@ import com.wangcj.common.widget.TitleBar;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -403,7 +404,11 @@ public class GameDetailActivity extends BaseUIActivity implements GameDetailCont
         if (orientationUtils != null)
             orientationUtils.releaseListener();
         if (mCoverMedia != null) {
-            mCoverMedia.release();
+            try {
+                mCoverMedia.release();
+            } catch (IOException e) {
+
+            }
             mCoverMedia = null;
         }
     }

@@ -69,14 +69,14 @@ public class BaseWebActivity extends BaseActivity {
 
         // mSet.setRenderPriority(RenderPriority.HIGH);
 
-        try {
-            // 设置H5缓存可用
-            mWebSettings.setAppCacheEnabled(true);
-            String appCachePath = getApplication().getDir("cache", MODE_PRIVATE).getAbsolutePath();
-            mWebSettings.setAppCachePath(appCachePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            // 设置H5缓存可用
+//            mWebSettings.setAppCacheEnabled(true);
+//            String appCachePath = getApplication().getDir("cache", MODE_PRIVATE).getAbsolutePath();
+//            mWebSettings.setAppCachePath(appCachePath);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         try {
             // 应用开启数据库缓存
